@@ -1,0 +1,301 @@
+business_name,industry,employees,lead_date,total_score,stage,strategy_avg,management_avg,systems_avg,people_avg,finance_avg,strategy_stage,management_stage,systems_stage,people_stage,finance_stage,pains,pipeline_status,deal_value,fictional
+תמר ייעוץ משפטי,משרד עורכי דין,54,2025-11-04,,,,,,,,,,,,,כל מחלקה עם מערכת משלה,contacted,13500,true
+נחל מכללה,חינוך והדרכה,156,2025-11-05,,,,,,,,,,,,,אין תוכנית עבודה שנתית,meeting,64500,true
+שחר מפעלים,ייצור ותעשייה קלה,14,2025-11-05,,,,,,,,,,,,,אין מסלול צמיחה לעובדים,meeting,8000,true
+נוף ביטוח,סוכנות ביטוח,9,2025-11-08,45,builder,1.3,2.3,3.0,2.5,2.3,firefighter,builder,inspector,inspector,builder,כל שבוע עדיפות אחרת; אין ישיבות בקרה קבועות,diagnosed,16500,true
+סלע קליניקה,קליניקות ובריאות,39,2025-11-08,43,builder,2.3,2.0,1.8,2.0,2.8,builder,builder,builder,builder,inspector,מלאי וניהול באקסל; אין ישיבות בקרה קבועות,proposal,15500,true
+שחר ייעוץ משפטי,משרד עורכי דין,69,2025-11-08,38,builder,1.8,2.8,1.8,2.0,1.3,builder,inspector,builder,builder,firefighter,לא יודעים מה הרווחיות לפי מוצר; כל שבוע עדיפות אחרת,won,31000,true
+שקד בוטיק,קמעונאות,35,2025-11-09,22,firefighter,1.0,1.3,1.3,1.0,1.0,firefighter,firefighter,firefighter,firefighter,firefighter,אין תוכנית עבודה שנתית; אין מסלול צמיחה לעובדים,lost,23000,true
+דרום בריאות,קליניקות ובריאות,31,2025-11-10,,,,,,,,,,,,,"החלטות נתקעות אצל המנכ""ל",contacted,23000,true
+"זית נדל""ן","נדל""ן",20,2025-11-11,41,builder,2.3,2.3,2.3,2.3,1.3,builder,builder,builder,builder,firefighter,תקציב לא מוגדר למחלקות; כל שבוע עדיפות אחרת,proposal,25000,true
+תמר שיפוצים,בנייה ושיפוצים,3,2025-11-11,,,,,,,,,,,,,הבעלים עונה לכל טלפון,meeting,17500,true
+תמר מטבח,מסעדנות,60,2025-11-12,,,,,,,,,,,,,אין יעדים כתובים,meeting,34000,true
+לוטם מכללה,חינוך והדרכה,4,2025-11-13,29,firefighter,1.5,1.8,1.8,1.0,1.3,firefighter,builder,builder,firefighter,firefighter,תחלופת עובדים גבוהה; לא יודעים מה הרווחיות לפי מוצר,proposal,16000,true
+"לוטם שיפוצים בע""מ",בנייה ושיפוצים,51,2025-11-15,30,firefighter,1.0,2.0,1.8,1.5,1.3,firefighter,builder,builder,firefighter,firefighter,כל שבוע עדיפות אחרת; לא יודעים מה הרווחיות לפי מוצר,lost,28000,true
+אופק משפטים,משרד עורכי דין,9,2025-11-18,24,firefighter,1.0,1.0,1.5,1.0,1.5,firefighter,firefighter,firefighter,firefighter,firefighter,"אין יעדים כתובים; החלטות נתקעות אצל המנכ""ל",proposal,10000,true
+"שחר שיפוצים בע""מ",בנייה ושיפוצים,33,2025-11-18,,,,,,,,,,,,,תחלופת עובדים גבוהה,contacted,18000,true
+"שקד ייעוץ משפטי בע""מ",משרד עורכי דין,9,2025-11-19,37,builder,2.3,2.3,1.5,2.0,1.3,builder,builder,firefighter,builder,firefighter,לא יודעים מה הרווחיות לפי מוצר; מלאי וניהול באקסל,diagnosed,16000,true
+אופק סוכנות,סוכנות ביטוח,38,2025-11-21,51,inspector,3.0,1.5,3.0,2.5,2.8,inspector,firefighter,inspector,inspector,inspector,אין ישיבות בקרה קבועות; תחלופת עובדים גבוהה,proposal,19500,true
+רימון שילוח,הובלה ולוגיסטיקה,25,2025-11-21,31,firefighter,1.5,1.8,1.5,1.8,1.3,firefighter,builder,firefighter,builder,firefighter,לא יודעים מה הרווחיות לפי מוצר; אין יעדים כתובים,proposal,26000,true
+כרמל שיפוצים,בנייה ושיפוצים,35,2025-11-23,24,firefighter,1.3,1.3,1.3,1.3,1.0,firefighter,firefighter,firefighter,firefighter,firefighter,לא יודעים מה הרווחיות לפי מוצר; אין תוכנית עבודה שנתית,diagnosed,30500,true
+דקל הנהלת חשבונות,משרד רואי חשבון,9,2025-11-24,42,builder,2.8,2.3,1.8,1.5,2.3,inspector,builder,builder,firefighter,builder,אין מסלול צמיחה לעובדים; מלאי וניהול באקסל,lost,7000,true
+נחל שיפוצים,בנייה ושיפוצים,90,2025-11-24,,,,,,,,,,,,,אין יעדים כתובים,new,17500,true
+"שקד מרפאה בע""מ",קליניקות ובריאות,21,2025-11-26,25,firefighter,1.8,1.0,1.0,1.3,1.3,builder,firefighter,firefighter,firefighter,firefighter,הבעלים עונה לכל טלפון; ידע נשאר בראש של עובד אחד,proposal,12500,true
+אורן מרפאה,קליניקות ובריאות,31,2025-11-28,24,firefighter,1.0,1.3,1.8,1.0,1.0,firefighter,firefighter,builder,firefighter,firefighter,אין תוכנית עבודה שנתית; עובדים לא יודעים למי לפנות,diagnosed,24500,true
+גבעה חשבונאות,משרד רואי חשבון,9,2025-11-28,38,builder,2.0,1.8,2.0,1.3,2.5,builder,builder,builder,firefighter,inspector,עובדים לא יודעים למי לפנות; הבעלים עונה לכל טלפון,won,16500,true
+זית ייצור,ייצור ותעשייה קלה,18,2025-11-28,36,builder,1.8,1.8,1.3,1.8,2.5,builder,builder,firefighter,builder,inspector,ידע נשאר בראש של עובד אחד; אין תוכנית עבודה שנתית,diagnosed,23500,true
+שקד בריאות,קליניקות ובריאות,14,2025-11-28,27,firefighter,1.0,1.3,1.3,1.8,1.5,firefighter,firefighter,firefighter,builder,firefighter,כל שבוע עדיפות אחרת; הבעלים עונה לכל טלפון,diagnosed,8000,true
+תמר ביסטרו,מסעדנות,27,2025-11-28,36,builder,2.0,1.3,1.5,1.8,2.5,builder,firefighter,firefighter,builder,inspector,"החלטות נתקעות אצל המנכ""ל; כל מחלקה עם מערכת משלה",proposal,22500,true
+ערבה ביטוח,סוכנות ביטוח,6,2025-11-29,45,builder,1.8,2.3,2.5,2.8,2.0,builder,builder,inspector,inspector,builder,כל שבוע עדיפות אחרת; תקציב לא מוגדר למחלקות,won,17000,true
+אלון פיננסים,סוכנות ביטוח,25,2025-11-30,36,builder,2.3,1.3,2.0,2.3,1.3,builder,firefighter,builder,builder,firefighter,הבעלים עונה לכל טלפון; תקציב לא מוגדר למחלקות,won,13500,true
+רימון בוטיק,קמעונאות,22,2025-11-30,,,,,,,,,,,,,תזרים מזומנים לוחץ,contacted,19500,true
+"כרמל קייטרינג בע""מ",מסעדנות,33,2025-12-01,25,firefighter,2.0,1.0,1.0,1.0,1.3,builder,firefighter,firefighter,firefighter,firefighter,הבעלים עונה לכל טלפון; מלאי וניהול באקסל,proposal,15000,true
+דרום לוגיסטיקה,הובלה ולוגיסטיקה,13,2025-12-02,36,builder,1.8,1.3,2.3,1.8,2.0,builder,firefighter,builder,builder,builder,"החלטות נתקעות אצל המנכ""ל; כל שבוע עדיפות אחרת",won,22500,true
+אופק מרפאה,קליניקות ובריאות,59,2025-12-03,43,builder,2.3,3.0,2.0,2.3,1.3,builder,inspector,builder,builder,firefighter,תזרים מזומנים לוחץ; כל מחלקה עם מערכת משלה,won,37000,true
+חצב ביסטרו,מסעדנות,55,2025-12-04,22,firefighter,1.0,1.0,1.0,1.5,1.0,firefighter,firefighter,firefighter,firefighter,firefighter,"כל שבוע עדיפות אחרת; החלטות נתקעות אצל המנכ""ל",won,12500,true
+ארז חשבונאות,משרד רואי חשבון,7,2025-12-05,34,builder,1.5,2.0,2.0,1.5,1.5,firefighter,builder,builder,firefighter,firefighter,כל שבוע עדיפות אחרת; תחלופת עובדים גבוהה,diagnosed,9000,true
+דקל בנייה,בנייה ושיפוצים,7,2025-12-08,36,builder,1.5,2.5,1.8,1.5,1.8,firefighter,inspector,builder,firefighter,builder,אין תוכנית עבודה שנתית; תחלופת עובדים גבוהה,diagnosed,17000,true
+נוף ביסטרו,מסעדנות,73,2025-12-08,,,,,,,,,,,,,לא יודעים מה הרווחיות לפי מוצר,new,44000,true
+תמר מכללה,חינוך והדרכה,22,2025-12-08,43,builder,1.8,2.3,2.8,1.8,2.3,builder,builder,inspector,builder,builder,כל שבוע עדיפות אחרת; עובדים לא יודעים למי לפנות,diagnosed,12500,true
+דרום תעשיות,ייצור ותעשייה קלה,10,2025-12-09,35,builder,2.0,2.0,1.8,1.0,2.0,builder,builder,builder,firefighter,builder,תחלופת עובדים גבוהה; כל מחלקה עם מערכת משלה,diagnosed,20000,true
+אלון סוכנות,סוכנות ביטוח,41,2025-12-10,27,firefighter,1.8,1.0,1.8,1.0,1.3,builder,firefighter,builder,firefighter,firefighter,"החלטות נתקעות אצל המנכ""ל; תחלופת עובדים גבוהה",lost,22000,true
+"דרום סוכנות בע""מ",סוכנות ביטוח,81,2025-12-11,37,builder,2.5,2.0,1.8,1.3,1.8,inspector,builder,builder,firefighter,builder,תחלופת עובדים גבוהה; כל מחלקה עם מערכת משלה,proposal,26500,true
+"יובל סוכנות בע""מ",סוכנות ביטוח,9,2025-12-11,,,,,,,,,,,,,הבעלים עונה לכל טלפון,new,,true
+נחל לוגיסטיקה,הובלה ולוגיסטיקה,19,2025-12-11,41,builder,1.8,2.3,2.3,1.8,2.3,builder,builder,builder,builder,builder,כל שבוע עדיפות אחרת; עובדים לא יודעים למי לפנות,proposal,8500,true
+רימון מרפאה,קליניקות ובריאות,34,2025-12-11,45,builder,2.0,2.5,1.5,2.8,2.5,builder,inspector,firefighter,inspector,inspector,מלאי וניהול באקסל; כל שבוע עדיפות אחרת,proposal,23500,true
+"כרמל שילוח בע""מ",הובלה ולוגיסטיקה,24,2025-12-12,37,builder,2.0,2.3,2.0,1.5,1.5,builder,builder,builder,firefighter,firefighter,תחלופת עובדים גבוהה; תקציב לא מוגדר למחלקות,won,23500,true
+ערבה סדנאות,חינוך והדרכה,7,2025-12-12,,,,,,,,,,,,,ידע נשאר בראש של עובד אחד,new,14000,true
+שחר קייטרינג,מסעדנות,30,2025-12-12,42,builder,2.3,2.3,1.3,2.0,2.8,builder,builder,firefighter,builder,inspector,כל מחלקה עם מערכת משלה; תחלופת עובדים גבוהה,diagnosed,13000,true
+"ערבה נדל""ן","נדל""ן",27,2025-12-14,37,builder,2.0,1.8,1.5,2.3,1.8,builder,builder,firefighter,builder,builder,"כל מחלקה עם מערכת משלה; החלטות נתקעות אצל המנכ""ל",diagnosed,18000,true
+סלע משפטים,משרד עורכי דין,4,2025-12-15,41,builder,2.0,1.5,2.0,2.8,2.0,builder,firefighter,builder,inspector,builder,אין ישיבות בקרה קבועות; אין יעדים כתובים,won,11000,true
+לוטם חשבונאות,משרד רואי חשבון,15,2025-12-16,28,firefighter,2.0,1.0,2.0,1.0,1.0,builder,firefighter,builder,firefighter,firefighter,אין ישיבות בקרה קבועות; עובדים לא יודעים למי לפנות,won,11500,true
+כרמל ראיית חשבון,משרד רואי חשבון,16,2025-12-19,36,builder,1.8,1.8,2.3,1.5,1.8,builder,builder,builder,firefighter,builder,אין מסלול צמיחה לעובדים; אין יעדים כתובים,proposal,15500,true
+"ערבה מטבח בע""מ",מסעדנות,41,2025-12-21,45,builder,2.5,2.5,2.0,2.3,2.0,inspector,inspector,builder,builder,builder,כל מחלקה עם מערכת משלה; לא יודעים מה הרווחיות לפי מוצר,proposal,25500,true
+ברוש סדנאות,חינוך והדרכה,17,2025-12-22,48,inspector,3.0,2.0,2.3,1.8,3.0,inspector,builder,builder,builder,inspector,תחלופת עובדים גבוהה; אין ישיבות בקרה קבועות,lost,17500,true
+"זית הובלות בע""מ",הובלה ולוגיסטיקה,91,2025-12-22,29,firefighter,1.0,1.8,1.3,1.8,1.5,firefighter,builder,firefighter,builder,firefighter,אין יעדים כתובים; ידע נשאר בראש של עובד אחד,won,23000,true
+ברוש שיפוצים,בנייה ושיפוצים,6,2025-12-23,41,builder,1.8,2.3,1.8,2.3,2.3,builder,builder,builder,builder,builder,אין תוכנית עבודה שנתית; מלאי וניהול באקסל,won,18500,true
+דרום מפעלים,ייצור ותעשייה קלה,114,2025-12-23,36,builder,1.5,1.5,1.8,2.3,2.0,firefighter,firefighter,builder,builder,builder,אין יעדים כתובים; אין ישיבות בקרה קבועות,won,40000,true
+לוטם ביטוח,סוכנות ביטוח,19,2025-12-23,44,builder,2.5,1.5,2.3,2.8,2.0,inspector,firefighter,builder,inspector,builder,אין ישיבות בקרה קבועות; תזרים מזומנים לוחץ,diagnosed,13000,true
+"רימון פיננסים בע""מ",סוכנות ביטוח,12,2025-12-25,,,,,,,,,,,,,אין מסלול צמיחה לעובדים,contacted,16500,true
+ארז מרכולים,קמעונאות,9,2025-12-27,22,firefighter,1.3,1.0,1.3,1.0,1.0,firefighter,firefighter,firefighter,firefighter,firefighter,"החלטות נתקעות אצל המנכ""ל; תחלופת עובדים גבוהה",diagnosed,10000,true
+תמר תעשיות,ייצור ותעשייה קלה,59,2025-12-27,50,inspector,2.0,2.8,2.5,3.0,2.3,builder,inspector,inspector,inspector,builder,אין תוכנית עבודה שנתית; תזרים מזומנים לוחץ,won,25000,true
+ארז הדרכה,חינוך והדרכה,11,2025-12-28,27,firefighter,1.8,1.0,2.0,1.0,1.0,builder,firefighter,builder,firefighter,firefighter,"החלטות נתקעות אצל המנכ""ל; עובדים לא יודעים למי לפנות",proposal,13500,true
+אופק ייעוץ משפטי,משרד עורכי דין,53,2025-12-29,,,,,,,,,,,,,כל מחלקה עם מערכת משלה,meeting,,true
+גבעה תעשיות,ייצור ותעשייה קלה,55,2025-12-29,39,builder,1.5,1.8,2.5,2.0,2.0,firefighter,builder,inspector,builder,builder,כל שבוע עדיפות אחרת; אין ישיבות בקרה קבועות,won,21000,true
+"חצב עו""ד",משרד עורכי דין,47,2025-12-30,52,inspector,3.0,2.8,2.8,3.0,1.5,inspector,inspector,inspector,inspector,firefighter,"תקציב לא מוגדר למחלקות; החלטות נתקעות אצל המנכ""ל",won,21500,true
+"יובל מדיה בע""מ",שיווק ופרסום,21,2025-12-31,43,builder,2.0,2.3,2.0,2.5,2.0,builder,builder,builder,inspector,builder,אין יעדים כתובים; ידע נשאר בראש של עובד אחד,diagnosed,17000,true
+ארז בריאות,קליניקות ובריאות,22,2026-01-01,,,,,,,,,,,,,תזרים מזומנים לוחץ,new,16000,true
+גבעה מכללה,חינוך והדרכה,8,2026-01-03,,,,,,,,,,,,,תחלופת עובדים גבוהה,contacted,,true
+מגדל סוכנות,סוכנות ביטוח,70,2026-01-04,51,inspector,2.5,2.8,3.0,2.3,2.3,inspector,inspector,inspector,builder,builder,אין מסלול צמיחה לעובדים; תזרים מזומנים לוחץ,proposal,22000,true
+"נוף מטבח בע""מ",מסעדנות,115,2026-01-06,43,builder,2.3,2.5,1.5,2.0,2.5,builder,inspector,firefighter,builder,inspector,ידע נשאר בראש של עובד אחד; עובדים לא יודעים למי לפנות,won,32500,true
+אורן פרסום,שיווק ופרסום,8,2026-01-08,46,builder,1.8,2.0,2.3,2.8,2.8,builder,builder,builder,inspector,inspector,כל שבוע עדיפות אחרת; אין ישיבות בקרה קבועות,contacted,19000,true
+סלע סטודיו,שיווק ופרסום,11,2026-01-08,31,firefighter,2.0,1.3,1.3,1.5,1.8,builder,firefighter,firefighter,firefighter,builder,"החלטות נתקעות אצל המנכ""ל; ידע נשאר בראש של עובד אחד",won,14500,true
+"נוף עו""ד",משרד עורכי דין,114,2026-01-09,49,inspector,2.8,1.5,2.8,3.0,2.3,inspector,firefighter,inspector,inspector,builder,"החלטות נתקעות אצל המנכ""ל; תקציב לא מוגדר למחלקות",won,49500,true
+גבעה מדיה,שיווק ופרסום,15,2026-01-10,32,firefighter,2.0,1.3,1.5,1.8,1.5,builder,firefighter,firefighter,builder,firefighter,"החלטות נתקעות אצל המנכ""ל; ידע נשאר בראש של עובד אחד",diagnosed,9500,true
+"נוף שיפוצים בע""מ",בנייה ושיפוצים,5,2026-01-11,,,,,,,,,,,,,תזרים מזומנים לוחץ,new,18500,true
+"גבעה קבלנות בע""מ",בנייה ושיפוצים,35,2026-01-13,33,firefighter,1.0,1.8,1.8,2.3,1.5,firefighter,builder,builder,builder,firefighter,אין יעדים כתובים; תזרים מזומנים לוחץ,lost,29000,true
+גפן שילוח,הובלה ולוגיסטיקה,3,2026-01-15,45,builder,2.8,3.0,1.5,2.3,1.8,inspector,inspector,firefighter,builder,builder,ידע נשאר בראש של עובד אחד; תקציב לא מוגדר למחלקות,won,10000,true
+לוטם תעשיות,ייצור ותעשייה קלה,58,2026-01-15,,,,,,,,,,,,,אין מסלול צמיחה לעובדים,meeting,15500,true
+"תמר נכסים בע""מ","נדל""ן",25,2026-01-15,,,,,,,,,,,,,כל שבוע עדיפות אחרת,meeting,20500,true
+אופק שילוח,הובלה ולוגיסטיקה,171,2026-01-16,56,inspector,2.3,3.0,2.8,3.0,3.0,builder,inspector,inspector,inspector,inspector,אין יעדים כתובים; כל מחלקה עם מערכת משלה,contacted,63500,true
+זית משפטים,משרד עורכי דין,108,2026-01-16,44,builder,2.5,1.3,2.5,2.0,2.8,inspector,firefighter,inspector,builder,inspector,"החלטות נתקעות אצל המנכ""ל; אין מסלול צמיחה לעובדים",proposal,24500,true
+נוף הובלות,הובלה ולוגיסטיקה,168,2026-01-17,51,inspector,2.8,2.8,2.0,3.0,2.3,inspector,inspector,builder,inspector,builder,ידע נשאר בראש של עובד אחד; תזרים מזומנים לוחץ,diagnosed,34500,true
+"גבעה שילוח בע""מ",הובלה ולוגיסטיקה,41,2026-01-18,38,builder,2.0,1.3,2.8,2.0,1.5,builder,firefighter,inspector,builder,firefighter,הבעלים עונה לכל טלפון; לא יודעים מה הרווחיות לפי מוצר,won,31500,true
+רימון מרכולים,קמעונאות,31,2026-01-19,44,builder,2.5,2.8,1.5,2.3,2.0,inspector,inspector,firefighter,builder,builder,מלאי וניהול באקסל; לא יודעים מה הרווחיות לפי מוצר,diagnosed,28000,true
+"גבעה נדל""ן","נדל""ן",10,2026-01-21,,,,,,,,,,,,,לא יודעים מה הרווחיות לפי מוצר,new,10500,true
+"גפן בנייה בע""מ",בנייה ושיפוצים,7,2026-01-22,,,,,,,,,,,,,אין תוכנית עבודה שנתית,meeting,,true
+תמר בריאות,קליניקות ובריאות,68,2026-01-23,48,inspector,2.3,2.5,2.8,2.0,2.5,builder,inspector,inspector,builder,inspector,אין מסלול צמיחה לעובדים; כל שבוע עדיפות אחרת,diagnosed,35500,true
+זית לוגיסטיקה,הובלה ולוגיסטיקה,8,2026-01-27,25,firefighter,1.8,1.3,1.0,1.3,1.0,builder,firefighter,firefighter,firefighter,firefighter,מלאי וניהול באקסל; תזרים מזומנים לוחץ,lost,17500,true
+"אופק עו""ד בע""מ",משרד עורכי דין,101,2026-02-03,28,firefighter,1.0,2.0,1.3,1.3,1.5,firefighter,builder,firefighter,firefighter,firefighter,אין יעדים כתובים; מלאי וניהול באקסל,diagnosed,29500,true
+סלע מרכולים,קמעונאות,22,2026-02-05,29,firefighter,1.5,1.8,1.3,1.3,1.5,firefighter,builder,firefighter,firefighter,firefighter,מלאי וניהול באקסל; תחלופת עובדים גבוהה,diagnosed,15000,true
+"אלון קבלנות בע""מ",בנייה ושיפוצים,32,2026-02-06,38,builder,1.8,1.8,1.8,2.5,1.8,builder,builder,builder,inspector,builder,כל שבוע עדיפות אחרת; הבעלים עונה לכל טלפון,proposal,24000,true
+"נחל נדל""ן","נדל""ן",3,2026-02-06,53,inspector,2.5,3.0,3.0,2.8,2.0,inspector,inspector,inspector,inspector,builder,תזרים מזומנים לוחץ; אין תוכנית עבודה שנתית,proposal,8500,true
+תמר הנהלת חשבונות,משרד רואי חשבון,13,2026-02-06,35,builder,1.8,1.3,1.8,2.0,2.0,builder,firefighter,builder,builder,builder,אין ישיבות בקרה קבועות; אין יעדים כתובים,proposal,19000,true
+אופק קייטרינג,מסעדנות,31,2026-02-07,27,firefighter,1.3,1.0,1.0,1.8,1.8,firefighter,firefighter,firefighter,builder,builder,הבעלים עונה לכל טלפון; ידע נשאר בראש של עובד אחד,diagnosed,13000,true
+שחר חשבונאות,משרד רואי חשבון,18,2026-02-07,46,builder,2.8,2.5,1.8,3.0,1.5,inspector,inspector,builder,inspector,firefighter,לא יודעים מה הרווחיות לפי מוצר; מלאי וניהול באקסל,diagnosed,11500,true
+ארז חנויות,קמעונאות,5,2026-02-08,32,firefighter,1.8,1.5,2.0,1.8,1.0,builder,firefighter,builder,builder,firefighter,לא יודעים מה הרווחיות לפי מוצר; אין ישיבות בקרה קבועות,won,8000,true
+"ארז קייטרינג בע""מ",מסעדנות,3,2026-02-08,32,firefighter,2.0,1.8,1.8,1.0,1.5,builder,builder,builder,firefighter,firefighter,תחלופת עובדים גבוהה; לא יודעים מה הרווחיות לפי מוצר,contacted,12000,true
+דקל מכללה,חינוך והדרכה,12,2026-02-08,39,builder,1.8,2.5,2.3,1.5,1.8,builder,inspector,builder,firefighter,builder,עובדים לא יודעים למי לפנות; אין תוכנית עבודה שנתית,won,15000,true
+"ארז מטבח בע""מ",מסעדנות,17,2026-02-09,32,firefighter,1.8,1.3,2.0,1.3,1.8,builder,firefighter,builder,firefighter,builder,הבעלים עונה לכל טלפון; תחלופת עובדים גבוהה,diagnosed,9000,true
+אופק בוטיק,קמעונאות,25,2026-02-12,52,inspector,2.0,2.8,3.0,2.8,2.5,builder,inspector,inspector,inspector,inspector,כל שבוע עדיפות אחרת; תקציב לא מוגדר למחלקות,diagnosed,21000,true
+צפון קייטרינג,מסעדנות,6,2026-02-12,41,builder,2.8,2.3,2.3,1.8,1.3,inspector,builder,builder,builder,firefighter,לא יודעים מה הרווחיות לפי מוצר; אין מסלול צמיחה לעובדים,lost,20000,true
+נחל תעשיות,ייצור ותעשייה קלה,13,2026-02-14,25,firefighter,1.3,1.5,1.0,1.0,1.5,firefighter,firefighter,firefighter,firefighter,firefighter,ידע נשאר בראש של עובד אחד; אין מסלול צמיחה לעובדים,contacted,20000,true
+"דקל עו""ד בע""מ",משרד עורכי דין,25,2026-02-16,51,inspector,2.5,2.5,2.5,2.8,2.5,inspector,inspector,inspector,inspector,inspector,אין יעדים כתובים; הבעלים עונה לכל טלפון,diagnosed,23500,true
+"זית שילוח בע""מ",הובלה ולוגיסטיקה,8,2026-02-17,,,,,,,,,,,,,אין מסלול צמיחה לעובדים,contacted,,true
+זית תעשיות,ייצור ותעשייה קלה,10,2026-02-18,27,firefighter,1.0,1.3,1.8,1.0,1.8,firefighter,firefighter,builder,firefighter,builder,אין יעדים כתובים; עובדים לא יודעים למי לפנות,proposal,17500,true
+סלע ביסטרו,מסעדנות,41,2026-02-18,37,builder,2.0,1.5,2.5,2.0,1.3,builder,firefighter,inspector,builder,firefighter,תזרים מזומנים לוחץ; הבעלים עונה לכל טלפון,diagnosed,26000,true
+דרום חנויות,קמעונאות,45,2026-02-20,47,inspector,2.8,2.5,1.8,2.5,2.3,inspector,inspector,builder,inspector,builder,ידע נשאר בראש של עובד אחד; תזרים מזומנים לוחץ,proposal,21500,true
+כרמל הדרכה,חינוך והדרכה,21,2026-02-20,,,,,,,,,,,,,אין יעדים כתובים,new,,true
+גפן מדיה,שיווק ופרסום,12,2026-02-21,,,,,,,,,,,,,"החלטות נתקעות אצל המנכ""ל",new,17000,true
+"אופק קבלנות בע""מ",בנייה ושיפוצים,44,2026-02-23,27,firefighter,1.5,1.8,1.3,1.3,1.0,firefighter,builder,firefighter,firefighter,firefighter,תקציב לא מוגדר למחלקות; ידע נשאר בראש של עובד אחד,contacted,23500,true
+מגדל פרסום,שיווק ופרסום,23,2026-02-25,35,builder,1.8,1.8,1.0,1.8,2.5,builder,builder,firefighter,builder,inspector,ידע נשאר בראש של עובד אחד; אין יעדים כתובים,proposal,19500,true
+"יובל חנויות בע""מ",קמעונאות,24,2026-02-27,,,,,,,,,,,,,תחלופת עובדים גבוהה,meeting,12000,true
+ערבה ראיית חשבון,משרד רואי חשבון,19,2026-03-01,38,builder,1.8,1.8,2.0,2.0,2.0,builder,builder,builder,builder,builder,כל שבוע עדיפות אחרת; אין ישיבות בקרה קבועות,won,13000,true
+צפון הדרכה,חינוך והדרכה,17,2026-03-01,23,firefighter,1.0,1.5,1.3,1.0,1.0,firefighter,firefighter,firefighter,firefighter,firefighter,אין תוכנית עבודה שנתית; תחלופת עובדים גבוהה,lost,11500,true
+גפן מרכולים,קמעונאות,7,2026-03-02,44,builder,2.5,2.3,2.3,2.3,1.8,inspector,builder,builder,builder,builder,תקציב לא מוגדר למחלקות; אין ישיבות בקרה קבועות,proposal,13500,true
+רימון מכללה,חינוך והדרכה,10,2026-03-02,,,,,,,,,,,,,תקציב לא מוגדר למחלקות,contacted,11500,true
+שקד בנייה,בנייה ושיפוצים,18,2026-03-04,45,builder,2.8,2.5,1.3,2.8,2.0,inspector,inspector,firefighter,inspector,builder,מלאי וניהול באקסל; תקציב לא מוגדר למחלקות,proposal,18500,true
+"אלון הדרכה בע""מ",חינוך והדרכה,8,2026-03-05,34,builder,1.0,2.3,1.3,1.8,2.3,firefighter,builder,firefighter,builder,builder,אין יעדים כתובים; ידע נשאר בראש של עובד אחד,proposal,12000,true
+שחר הובלות,הובלה ולוגיסטיקה,17,2026-03-07,22,firefighter,1.0,1.3,1.0,1.3,1.0,firefighter,firefighter,firefighter,firefighter,firefighter,כל שבוע עדיפות אחרת; ידע נשאר בראש של עובד אחד,won,22000,true
+שחר הנהלת חשבונות,משרד רואי חשבון,17,2026-03-09,40,builder,2.3,1.3,2.0,2.3,2.3,builder,firefighter,builder,builder,builder,"החלטות נתקעות אצל המנכ""ל; מלאי וניהול באקסל",diagnosed,10000,true
+"אורן מפעלים בע""מ",ייצור ותעשייה קלה,10,2026-03-11,32,firefighter,1.3,1.8,2.3,1.5,1.3,firefighter,builder,builder,firefighter,firefighter,אין יעדים כתובים; תזרים מזומנים לוחץ,diagnosed,9500,true
+תמר קבלנות,בנייה ושיפוצים,123,2026-03-12,,,,,,,,,,,,,כל שבוע עדיפות אחרת,new,59500,true
+"חצב מטבח בע""מ",מסעדנות,17,2026-03-13,35,builder,1.3,1.8,2.0,1.8,2.0,firefighter,builder,builder,builder,builder,אין תוכנית עבודה שנתית; הבעלים עונה לכל טלפון,won,15500,true
+יובל תעשיות,ייצור ותעשייה קלה,66,2026-03-14,36,builder,2.0,2.0,1.8,1.8,1.5,builder,builder,builder,builder,firefighter,לא יודעים מה הרווחיות לפי מוצר; ידע נשאר בראש של עובד אחד,proposal,29500,true
+לוטם הנהלת חשבונות,משרד רואי חשבון,16,2026-03-16,32,firefighter,1.8,2.0,1.0,2.0,1.3,builder,builder,firefighter,builder,firefighter,ידע נשאר בראש של עובד אחד; תזרים מזומנים לוחץ,diagnosed,17000,true
+אורן קבלנות,בנייה ושיפוצים,6,2026-03-18,22,firefighter,1.0,1.0,1.5,1.0,1.0,firefighter,firefighter,firefighter,firefighter,firefighter,אין תוכנית עבודה שנתית; אין ישיבות בקרה קבועות,diagnosed,15000,true
+"אורן ראיית חשבון בע""מ",משרד רואי חשבון,16,2026-03-18,31,firefighter,1.5,1.3,1.5,2.3,1.3,firefighter,firefighter,firefighter,builder,firefighter,אין ישיבות בקרה קבועות; לא יודעים מה הרווחיות לפי מוצר,diagnosed,19500,true
+מגדל נכסים,"נדל""ן",46,2026-03-18,,,,,,,,,,,,,מלאי וניהול באקסל,contacted,31000,true
+נחל נכסים,"נדל""ן",50,2026-03-20,51,inspector,3.0,2.0,2.5,2.8,2.5,inspector,builder,inspector,inspector,inspector,אין ישיבות בקרה קבועות; ידע נשאר בראש של עובד אחד,contacted,34000,true
+"שקד עו""ד בע""מ",משרד עורכי דין,155,2026-03-21,38,builder,2.0,1.8,1.8,2.5,1.5,builder,builder,builder,inspector,firefighter,תזרים מזומנים לוחץ; הבעלים עונה לכל טלפון,proposal,44500,true
+נחל פרסום,שיווק ופרסום,4,2026-03-22,26,firefighter,1.3,1.0,1.3,1.5,1.5,firefighter,firefighter,firefighter,firefighter,firefighter,"החלטות נתקעות אצל המנכ""ל; אין תוכנית עבודה שנתית",diagnosed,16500,true
+לוטם פיננסים,סוכנות ביטוח,21,2026-03-24,31,firefighter,2.0,2.0,1.3,1.3,1.3,builder,builder,firefighter,firefighter,firefighter,מלאי וניהול באקסל; אין מסלול צמיחה לעובדים,proposal,23000,true
+ערבה מדיה,שיווק ופרסום,21,2026-03-24,54,inspector,2.8,2.3,2.8,3.0,2.8,inspector,builder,inspector,inspector,inspector,"החלטות נתקעות אצל המנכ""ל; כל שבוע עדיפות אחרת",lost,14000,true
+"מגדל עו""ד",משרד עורכי דין,144,2026-03-26,,,,,,,,,,,,,"החלטות נתקעות אצל המנכ""ל",new,41500,true
+דרום ראיית חשבון,משרד רואי חשבון,24,2026-03-28,38,builder,1.8,2.0,2.0,1.5,2.3,builder,builder,builder,firefighter,builder,אין מסלול צמיחה לעובדים; אין תוכנית עבודה שנתית,won,19000,true
+יובל מכללה,חינוך והדרכה,18,2026-03-28,,,,,,,,,,,,,מלאי וניהול באקסל,contacted,,true
+לוטם לוגיסטיקה,הובלה ולוגיסטיקה,5,2026-03-30,35,builder,1.8,1.8,2.0,1.5,1.8,builder,builder,builder,firefighter,builder,עובדים לא יודעים למי לפנות; אין יעדים כתובים,diagnosed,18500,true
+חצב חנויות,קמעונאות,46,2026-03-31,39,builder,1.5,1.8,2.5,2.5,1.5,firefighter,builder,inspector,inspector,firefighter,אין תוכנית עבודה שנתית; תזרים מזומנים לוחץ,contacted,14500,true
+"סלע חשבונאות בע""מ",משרד רואי חשבון,21,2026-03-31,43,builder,2.3,2.0,2.3,2.3,2.0,builder,builder,builder,builder,builder,אין ישיבות בקרה קבועות; לא יודעים מה הרווחיות לפי מוצר,won,18500,true
+"ארז שילוח בע""מ",הובלה ולוגיסטיקה,15,2026-04-02,41,builder,2.5,1.5,2.0,1.5,2.8,inspector,firefighter,builder,firefighter,inspector,אין ישיבות בקרה קבועות; תחלופת עובדים גבוהה,diagnosed,13000,true
+נחל ייצור,ייצור ותעשייה קלה,11,2026-04-02,27,firefighter,1.0,1.3,1.8,1.3,1.5,firefighter,firefighter,builder,firefighter,firefighter,אין תוכנית עבודה שנתית; אין ישיבות בקרה קבועות,proposal,15000,true
+לוטם סטודיו,שיווק ופרסום,75,2026-04-03,43,builder,2.0,2.0,2.5,2.0,2.3,builder,builder,inspector,builder,builder,אין תוכנית עבודה שנתית; הבעלים עונה לכל טלפון,diagnosed,18000,true
+שחר מרפאה,קליניקות ובריאות,32,2026-04-03,36,builder,1.0,2.3,2.0,2.5,1.3,firefighter,builder,builder,inspector,firefighter,אין יעדים כתובים; לא יודעים מה הרווחיות לפי מוצר,proposal,15500,true
+נחל סדנאות,חינוך והדרכה,17,2026-04-04,40,builder,2.3,2.0,2.3,2.0,1.5,builder,builder,builder,builder,firefighter,תזרים מזומנים לוחץ; הבעלים עונה לכל טלפון,proposal,15500,true
+רימון הנהלת חשבונות,משרד רואי חשבון,47,2026-04-04,42,builder,2.5,1.8,2.5,2.0,1.8,inspector,builder,inspector,builder,builder,הבעלים עונה לכל טלפון; תזרים מזומנים לוחץ,lost,25500,true
+"נחל ייעוץ משפטי בע""מ",משרד עורכי דין,64,2026-04-05,35,builder,1.8,1.3,1.8,2.0,2.0,builder,firefighter,builder,builder,builder,"החלטות נתקעות אצל המנכ""ל; כל שבוע עדיפות אחרת",proposal,30000,true
+ארז ייעוץ משפטי,משרד עורכי דין,31,2026-04-08,,,,,,,,,,,,,לא יודעים מה הרווחיות לפי מוצר,contacted,,true
+"אלון ביסטרו בע""מ",מסעדנות,12,2026-04-10,39,builder,1.8,2.3,1.5,2.3,2.0,builder,builder,firefighter,builder,builder,כל מחלקה עם מערכת משלה; אין יעדים כתובים,contacted,11000,true
+"לוטם ביסטרו בע""מ",מסעדנות,3,2026-04-12,,,,,,,,,,,,,תזרים מזומנים לוחץ,new,10000,true
+צפון סדנאות,חינוך והדרכה,13,2026-04-13,35,builder,2.5,1.8,1.8,1.8,1.0,inspector,builder,builder,builder,firefighter,תקציב לא מוגדר למחלקות; אין ישיבות בקרה קבועות,proposal,12500,true
+אלון ייצור,ייצור ותעשייה קלה,11,2026-04-14,,,,,,,,,,,,,אין תוכנית עבודה שנתית,contacted,20500,true
+"ערבה מכללה בע""מ",חינוך והדרכה,27,2026-04-14,,,,,,,,,,,,,"החלטות נתקעות אצל המנכ""ל",meeting,15500,true
+זית פיננסים,סוכנות ביטוח,41,2026-04-15,44,builder,2.5,2.5,2.0,1.8,2.3,inspector,inspector,builder,builder,builder,אין מסלול צמיחה לעובדים; ידע נשאר בראש של עובד אחד,diagnosed,14000,true
+דקל מדיה,שיווק ופרסום,10,2026-04-16,38,builder,2.0,2.0,1.8,1.3,2.5,builder,builder,builder,firefighter,inspector,אין מסלול צמיחה לעובדים; כל מחלקה עם מערכת משלה,diagnosed,19500,true
+"מגדל בריאות בע""מ",קליניקות ובריאות,14,2026-04-17,38,builder,2.0,2.3,1.5,2.0,1.8,builder,builder,firefighter,builder,builder,מלאי וניהול באקסל; תזרים מזומנים לוחץ,contacted,22000,true
+רימון ביטוח,סוכנות ביטוח,5,2026-04-17,50,inspector,2.3,2.5,2.3,2.8,2.8,builder,inspector,builder,inspector,inspector,אין יעדים כתובים; כל מחלקה עם מערכת משלה,lost,17500,true
+רימון תעשיות,ייצור ותעשייה קלה,12,2026-04-17,,,,,,,,,,,,,"החלטות נתקעות אצל המנכ""ל",new,,true
+אופק ייצור,ייצור ותעשייה קלה,35,2026-04-19,46,builder,1.5,2.3,2.8,2.5,2.5,firefighter,builder,inspector,inspector,inspector,אין תוכנית עבודה שנתית; אין ישיבות בקרה קבועות,lost,12500,true
+מגדל חשבונאות,משרד רואי חשבון,16,2026-04-20,30,firefighter,1.0,2.0,1.3,1.5,1.8,firefighter,builder,firefighter,firefighter,builder,כל שבוע עדיפות אחרת; כל מחלקה עם מערכת משלה,proposal,17500,true
+נוף מדיה,שיווק ופרסום,23,2026-04-20,45,builder,2.3,2.0,2.5,2.3,2.3,builder,builder,inspector,builder,builder,אין ישיבות בקרה קבועות; אין יעדים כתובים,diagnosed,22500,true
+"ברוש מדיה בע""מ",שיווק ופרסום,10,2026-04-21,,,,,,,,,,,,,אין ישיבות בקרה קבועות,new,15500,true
+גפן הנהלת חשבונות,משרד רואי חשבון,4,2026-04-24,24,firefighter,1.0,1.3,1.3,1.5,1.0,firefighter,firefighter,firefighter,firefighter,firefighter,אין יעדים כתובים; תזרים מזומנים לוחץ,won,11500,true
+כרמל קליניקה,קליניקות ובריאות,12,2026-04-24,35,builder,2.0,1.8,2.0,1.0,2.0,builder,builder,builder,firefighter,builder,עובדים לא יודעים למי לפנות; אין ישיבות בקרה קבועות,proposal,11000,true
+"אופק מפעלים בע""מ",ייצור ותעשייה קלה,28,2026-04-29,38,builder,1.3,2.0,1.3,2.5,2.5,firefighter,builder,firefighter,inspector,inspector,אין יעדים כתובים; ידע נשאר בראש של עובד אחד,lost,12500,true
+אופק בריאות,קליניקות ובריאות,15,2026-04-30,34,builder,1.8,1.8,2.0,2.0,1.0,builder,builder,builder,builder,firefighter,לא יודעים מה הרווחיות לפי מוצר; אין יעדים כתובים,lost,17500,true
+שקד משפטים,משרד עורכי דין,28,2026-04-30,,,,,,,,,,,,,הבעלים עונה לכל טלפון,meeting,24500,true
+ארז יזמות,"נדל""ן",29,2026-05-01,24,firefighter,1.3,1.0,1.5,1.0,1.3,firefighter,firefighter,firefighter,firefighter,firefighter,"החלטות נתקעות אצל המנכ""ל; אין מסלול צמיחה לעובדים",diagnosed,21000,true
+צפון מפעלים,ייצור ותעשייה קלה,19,2026-05-02,40,builder,2.0,2.3,1.5,1.5,2.8,builder,builder,firefighter,firefighter,inspector,ידע נשאר בראש של עובד אחד; עובדים לא יודעים למי לפנות,lost,23500,true
+צפון מרכולים,קמעונאות,65,2026-05-02,31,firefighter,2.3,1.5,1.3,1.0,1.8,builder,firefighter,firefighter,firefighter,builder,תחלופת עובדים גבוהה; כל מחלקה עם מערכת משלה,diagnosed,25500,true
+לוטם יזמות,"נדל""ן",59,2026-05-04,48,inspector,2.5,2.0,2.0,2.8,2.8,inspector,builder,builder,inspector,inspector,"החלטות נתקעות אצל המנכ""ל; כל מחלקה עם מערכת משלה",diagnosed,24500,true
+"אורן סוכנות בע""מ",סוכנות ביטוח,8,2026-05-05,24,firefighter,1.0,1.3,1.0,1.5,1.3,firefighter,firefighter,firefighter,firefighter,firefighter,כל שבוע עדיפות אחרת; ידע נשאר בראש של עובד אחד,lost,17000,true
+שחר ביטוח,סוכנות ביטוח,17,2026-05-07,22,firefighter,1.0,1.0,1.0,1.0,1.5,firefighter,firefighter,firefighter,firefighter,firefighter,אין יעדים כתובים; אין ישיבות בקרה קבועות,contacted,24000,true
+ברוש פיננסים,סוכנות ביטוח,23,2026-05-11,,,,,,,,,,,,,אין תוכנית עבודה שנתית,contacted,26000,true
+ברוש סטודיו,שיווק ופרסום,4,2026-05-12,38,builder,2.0,1.5,1.8,2.5,1.8,builder,firefighter,builder,inspector,builder,"החלטות נתקעות אצל המנכ""ל; ידע נשאר בראש של עובד אחד",won,11500,true
+גבעה בוטיק,קמעונאות,56,2026-05-12,29,firefighter,1.8,1.8,1.0,1.5,1.3,builder,builder,firefighter,firefighter,firefighter,מלאי וניהול באקסל; תקציב לא מוגדר למחלקות,won,12500,true
+"דרום פיננסים בע""מ",סוכנות ביטוח,20,2026-05-14,34,builder,1.8,1.8,1.8,2.0,1.3,builder,builder,builder,builder,firefighter,לא יודעים מה הרווחיות לפי מוצר; אין תוכנית עבודה שנתית,won,17000,true
+גפן סדנאות,חינוך והדרכה,25,2026-05-15,31,firefighter,1.5,1.8,1.8,1.8,1.0,firefighter,builder,builder,builder,firefighter,לא יודעים מה הרווחיות לפי מוצר; אין יעדים כתובים,proposal,16500,true
+גפן קליניקה,קליניקות ובריאות,35,2026-05-16,29,firefighter,2.0,1.5,1.0,1.0,1.8,builder,firefighter,firefighter,firefighter,builder,כל מחלקה עם מערכת משלה; אין מסלול צמיחה לעובדים,proposal,10500,true
+ערבה פרסום,שיווק ופרסום,23,2026-05-16,33,firefighter,1.5,2.3,1.3,1.8,1.5,firefighter,builder,firefighter,builder,firefighter,מלאי וניהול באקסל; אין תוכנית עבודה שנתית,won,23000,true
+"צפון סוכנות בע""מ",סוכנות ביטוח,10,2026-05-16,39,builder,2.0,1.5,2.0,2.3,2.0,builder,firefighter,builder,builder,builder,אין ישיבות בקרה קבועות; אין תוכנית עבודה שנתית,proposal,11000,true
+יובל מרפאה,קליניקות ובריאות,15,2026-05-17,,,,,,,,,,,,,אין יעדים כתובים,contacted,,true
+אורן הובלות,הובלה ולוגיסטיקה,13,2026-05-19,47,inspector,2.5,3.0,2.3,1.5,2.5,inspector,inspector,builder,firefighter,inspector,אין מסלול צמיחה לעובדים; ידע נשאר בראש של עובד אחד,contacted,18000,true
+דרום ביטוח,סוכנות ביטוח,14,2026-05-19,51,inspector,2.5,2.5,2.0,3.0,2.8,inspector,inspector,builder,inspector,inspector,מלאי וניהול באקסל; אין יעדים כתובים,diagnosed,12500,true
+לוטם ייצור,ייצור ותעשייה קלה,54,2026-05-20,46,builder,2.3,2.8,2.0,2.3,2.3,builder,inspector,builder,builder,builder,כל מחלקה עם מערכת משלה; אין יעדים כתובים,proposal,18000,true
+"נחל מטבח בע""מ",מסעדנות,26,2026-05-21,40,builder,2.5,2.3,1.5,2.0,1.8,inspector,builder,firefighter,builder,builder,כל מחלקה עם מערכת משלה; תקציב לא מוגדר למחלקות,proposal,15000,true
+דרום קייטרינג,מסעדנות,15,2026-05-23,32,firefighter,2.0,1.3,1.3,1.8,1.8,builder,firefighter,firefighter,builder,builder,"החלטות נתקעות אצל המנכ""ל; כל מחלקה עם מערכת משלה",diagnosed,11000,true
+כרמל מרפאה,קליניקות ובריאות,83,2026-05-25,47,inspector,2.3,2.0,2.5,2.8,2.3,builder,builder,inspector,inspector,builder,הבעלים עונה לכל טלפון; אין יעדים כתובים,won,21500,true
+כרמל ביטוח,סוכנות ביטוח,17,2026-05-27,27,firefighter,1.0,1.3,1.3,2.0,1.3,firefighter,firefighter,firefighter,builder,firefighter,כל שבוע עדיפות אחרת; הבעלים עונה לכל טלפון,proposal,15000,true
+דרום פרסום,שיווק ופרסום,59,2026-06-03,,,,,,,,,,,,,עובדים לא יודעים למי לפנות,contacted,33500,true
+סלע ראיית חשבון,משרד רואי חשבון,4,2026-06-03,40,builder,1.8,1.3,2.3,2.3,2.5,builder,firefighter,builder,builder,inspector,"החלטות נתקעות אצל המנכ""ל; אין תוכנית עבודה שנתית",lost,18000,true
+"נוף מכללה בע""מ",חינוך והדרכה,36,2026-06-04,40,builder,1.8,2.5,2.0,1.5,2.3,builder,inspector,builder,firefighter,builder,אין מסלול צמיחה לעובדים; כל שבוע עדיפות אחרת,lost,25000,true
+"גבעה ביטוח בע""מ",סוכנות ביטוח,10,2026-06-08,27,firefighter,1.5,1.5,1.0,1.0,1.8,firefighter,firefighter,firefighter,firefighter,builder,ידע נשאר בראש של עובד אחד; עובדים לא יודעים למי לפנות,diagnosed,19500,true
+יובל קייטרינג,מסעדנות,6,2026-06-11,30,firefighter,1.5,1.5,1.5,1.3,1.8,firefighter,firefighter,firefighter,firefighter,builder,תחלופת עובדים גבוהה; אין יעדים כתובים,proposal,7000,true
+זית ביסטרו,מסעדנות,21,2026-06-12,47,inspector,2.8,1.5,2.5,2.5,2.5,inspector,firefighter,inspector,inspector,inspector,הבעלים עונה לכל טלפון; כל מחלקה עם מערכת משלה,proposal,25500,true
+דרום מרפאה,קליניקות ובריאות,62,2026-06-13,27,firefighter,1.0,2.0,1.3,1.3,1.3,firefighter,builder,firefighter,firefighter,firefighter,אין יעדים כתובים; כל מחלקה עם מערכת משלה,contacted,39500,true
+חצב מפעלים,ייצור ותעשייה קלה,11,2026-06-13,44,builder,2.3,1.8,2.5,2.5,2.0,builder,builder,inspector,inspector,builder,"החלטות נתקעות אצל המנכ""ל; תקציב לא מוגדר למחלקות",proposal,19000,true
+צפון בוטיק,קמעונאות,16,2026-06-13,47,inspector,2.0,2.5,2.8,1.5,3.0,builder,inspector,inspector,firefighter,inspector,אין מסלול צמיחה לעובדים; אין יעדים כתובים,lost,8000,true
+אורן הדרכה,חינוך והדרכה,31,2026-06-14,44,builder,2.0,2.5,2.0,2.3,2.3,builder,inspector,builder,builder,builder,אין תוכנית עבודה שנתית; כל מחלקה עם מערכת משלה,proposal,10000,true
+"רימון ביסטרו בע""מ",מסעדנות,6,2026-06-14,37,builder,2.0,2.0,1.8,1.8,1.8,builder,builder,builder,builder,builder,מלאי וניהול באקסל; עובדים לא יודעים למי לפנות,diagnosed,14000,true
+סלע בנייה,בנייה ושיפוצים,26,2026-06-16,38,builder,2.0,2.3,2.0,1.5,1.8,builder,builder,builder,firefighter,builder,תחלופת עובדים גבוהה; תקציב לא מוגדר למחלקות,won,11500,true
+זית פרסום,שיווק ופרסום,63,2026-06-18,52,inspector,2.8,3.0,2.8,2.3,2.3,inspector,inspector,inspector,builder,builder,אין מסלול צמיחה לעובדים; לא יודעים מה הרווחיות לפי מוצר,proposal,14500,true
+רימון מטבח,מסעדנות,63,2026-06-19,47,inspector,1.5,2.8,2.8,2.5,2.3,firefighter,inspector,inspector,inspector,builder,כל שבוע עדיפות אחרת; לא יודעים מה הרווחיות לפי מוצר,lost,39000,true
+חצב סטודיו,שיווק ופרסום,25,2026-06-20,39,builder,1.8,1.5,2.0,2.3,2.3,builder,firefighter,builder,builder,builder,"החלטות נתקעות אצל המנכ""ל; כל שבוע עדיפות אחרת",proposal,22000,true
+תמר מדיה,שיווק ופרסום,53,2026-06-20,,,,,,,,,,,,,אין מסלול צמיחה לעובדים,contacted,,true
+אלון בנייה,בנייה ושיפוצים,76,2026-06-21,25,firefighter,1.0,1.3,1.8,1.0,1.3,firefighter,firefighter,builder,firefighter,firefighter,אין תוכנית עבודה שנתית; תחלופת עובדים גבוהה,proposal,20500,true
+דרום מטבח,מסעדנות,27,2026-06-24,,,,,,,,,,,,,כל מחלקה עם מערכת משלה,new,,true
+"כרמל קבלנות בע""מ",בנייה ושיפוצים,23,2026-06-26,26,firefighter,1.5,1.5,1.3,1.3,1.0,firefighter,firefighter,firefighter,firefighter,firefighter,תזרים מזומנים לוחץ; כל מחלקה עם מערכת משלה,won,12500,true
+"נחל הובלות בע""מ",הובלה ולוגיסטיקה,41,2026-06-30,37,builder,1.5,1.8,1.8,2.3,2.0,firefighter,builder,builder,builder,builder,"אין תוכנית עבודה שנתית; החלטות נתקעות אצל המנכ""ל",lost,12500,true
+סלע לוגיסטיקה,הובלה ולוגיסטיקה,12,2026-06-30,29,firefighter,1.3,1.8,1.8,1.0,1.5,firefighter,builder,builder,firefighter,firefighter,תחלופת עובדים גבוהה; כל שבוע עדיפות אחרת,lost,16500,true
+"ארז הנהלת חשבונות בע""מ",משרד רואי חשבון,6,2026-07-02,32,firefighter,1.8,1.8,1.5,1.5,1.5,builder,builder,firefighter,firefighter,firefighter,מלאי וניהול באקסל; אין מסלול צמיחה לעובדים,diagnosed,16500,true
+דקל מרכולים,קמעונאות,19,2026-07-03,,,,,,,,,,,,,ידע נשאר בראש של עובד אחד,new,,true
+תמר יזמות,"נדל""ן",132,2026-07-03,,,,,,,,,,,,,"החלטות נתקעות אצל המנכ""ל",new,53500,true
+"אורן שילוח בע""מ",הובלה ולוגיסטיקה,10,2026-07-05,28,firefighter,1.8,1.5,1.0,1.8,1.0,builder,firefighter,firefighter,builder,firefighter,ידע נשאר בראש של עובד אחד; תזרים מזומנים לוחץ,proposal,13500,true
+ארז שיפוצים,בנייה ושיפוצים,25,2026-07-05,25,firefighter,1.0,1.5,1.3,1.3,1.3,firefighter,firefighter,firefighter,firefighter,firefighter,כל שבוע עדיפות אחרת; מלאי וניהול באקסל,lost,21500,true
+דקל מרפאה,קליניקות ובריאות,39,2026-07-05,,,,,,,,,,,,,הבעלים עונה לכל טלפון,contacted,,true
+שחר סוכנות,סוכנות ביטוח,40,2026-07-05,38,builder,2.5,2.0,2.3,1.8,1.0,inspector,builder,builder,builder,firefighter,תקציב לא מוגדר למחלקות; אין מסלול צמיחה לעובדים,diagnosed,15500,true
+דקל שילוח,הובלה ולוגיסטיקה,58,2026-07-07,,,,,,,,,,,,,תקציב לא מוגדר למחלקות,new,22000,true
+"נוף סדנאות בע""מ",חינוך והדרכה,8,2026-07-09,44,builder,2.0,2.5,1.5,2.3,2.8,builder,inspector,firefighter,builder,inspector,ידע נשאר בראש של עובד אחד; כל שבוע עדיפות אחרת,diagnosed,9500,true
+כרמל סדנאות,חינוך והדרכה,14,2026-07-10,44,builder,2.5,1.8,1.8,3.0,2.0,inspector,builder,builder,inspector,builder,הבעלים עונה לכל טלפון; מלאי וניהול באקסל,diagnosed,8500,true
+מגדל סטודיו,שיווק ופרסום,4,2026-07-12,33,firefighter,1.8,1.5,1.5,2.0,1.5,builder,firefighter,firefighter,builder,firefighter,אין ישיבות בקרה קבועות; כל מחלקה עם מערכת משלה,proposal,15500,true
+נחל סטודיו,שיווק ופרסום,6,2026-07-14,41,builder,2.5,2.0,1.8,2.3,1.8,inspector,builder,builder,builder,builder,כל מחלקה עם מערכת משלה; תזרים מזומנים לוחץ,proposal,10000,true
+דקל חנויות,קמעונאות,25,2026-07-15,,,,,,,,,,,,,"החלטות נתקעות אצל המנכ""ל",new,14000,true
+זית הדרכה,חינוך והדרכה,71,2026-07-18,27,firefighter,1.8,1.5,1.0,1.3,1.3,builder,firefighter,firefighter,firefighter,firefighter,כל מחלקה עם מערכת משלה; תחלופת עובדים גבוהה,lost,39000,true
+צפון ייעוץ משפטי,משרד עורכי דין,19,2026-07-18,,,,,,,,,,,,,אין ישיבות בקרה קבועות,new,20500,true
+ברוש ביטוח,סוכנות ביטוח,9,2026-07-21,28,firefighter,1.0,1.3,1.3,1.5,2.0,firefighter,firefighter,firefighter,firefighter,builder,אין יעדים כתובים; הבעלים עונה לכל טלפון,lost,21000,true
+סלע שילוח,הובלה ולוגיסטיקה,77,2026-07-21,52,inspector,2.3,2.8,3.0,2.5,2.5,builder,inspector,inspector,inspector,inspector,אין תוכנית עבודה שנתית; עובדים לא יודעים למי לפנות,proposal,36500,true
+"זית עו""ד",משרד עורכי דין,46,2026-07-22,32,firefighter,1.8,1.8,1.0,1.8,1.8,builder,builder,firefighter,builder,builder,כל מחלקה עם מערכת משלה; אין יעדים כתובים,diagnosed,20000,true
+צפון מרפאה,קליניקות ובריאות,26,2026-07-24,25,firefighter,1.0,1.0,1.3,1.0,2.0,firefighter,firefighter,firefighter,firefighter,builder,אין יעדים כתובים; הבעלים עונה לכל טלפון,proposal,14500,true
+"נחל מרכולים בע""מ",קמעונאות,13,2026-07-26,29,firefighter,1.0,1.3,2.0,1.8,1.3,firefighter,firefighter,builder,builder,firefighter,כל שבוע עדיפות אחרת; הבעלים עונה לכל טלפון,won,15500,true
+"גבעה סטודיו בע""מ",שיווק ופרסום,3,2026-07-27,46,builder,1.5,1.8,3.0,2.8,2.5,firefighter,builder,inspector,inspector,inspector,"אין יעדים כתובים; החלטות נתקעות אצל המנכ""ל",diagnosed,11000,true
+דקל סטודיו,שיווק ופרסום,67,2026-07-27,,,,,,,,,,,,,אין ישיבות בקרה קבועות,new,,true
+"נחל עו""ד",משרד עורכי דין,14,2026-07-29,39,builder,2.0,2.0,2.3,1.5,2.0,builder,builder,builder,firefighter,builder,תחלופת עובדים גבוהה; כל שבוע עדיפות אחרת,lost,15000,true
+שחר לוגיסטיקה,הובלה ולוגיסטיקה,105,2026-07-29,33,firefighter,1.8,1.5,1.5,1.3,2.3,builder,firefighter,firefighter,firefighter,builder,עובדים לא יודעים למי לפנות; אין ישיבות בקרה קבועות,contacted,32000,true
+שקד ביטוח,סוכנות ביטוח,37,2026-07-29,,,,,,,,,,,,,אין תוכנית עבודה שנתית,new,,true
+שקד סדנאות,חינוך והדרכה,11,2026-07-30,23,firefighter,1.0,1.3,1.5,1.0,1.0,firefighter,firefighter,firefighter,firefighter,firefighter,כל שבוע עדיפות אחרת; תחלופת עובדים גבוהה,diagnosed,20000,true
+"דקל ביטוח בע""מ",סוכנות ביטוח,6,2026-07-31,41,builder,2.0,2.5,1.3,2.5,2.0,builder,inspector,firefighter,inspector,builder,ידע נשאר בראש של עובד אחד; אין תוכנית עבודה שנתית,diagnosed,10500,true
+דרום הובלות,הובלה ולוגיסטיקה,19,2026-07-31,32,firefighter,1.8,1.3,1.8,1.8,1.5,builder,firefighter,builder,builder,firefighter,"החלטות נתקעות אצל המנכ""ל; לא יודעים מה הרווחיות לפי מוצר",diagnosed,16000,true
+נוף קליניקה,קליניקות ובריאות,4,2026-07-31,40,builder,1.0,2.3,2.0,2.0,2.8,firefighter,builder,builder,builder,inspector,אין תוכנית עבודה שנתית; ידע נשאר בראש של עובד אחד,contacted,8500,true
+"אלון נדל""ן","נדל""ן",4,2026-08-01,30,firefighter,1.8,1.5,1.0,1.8,1.5,builder,firefighter,firefighter,builder,firefighter,ידע נשאר בראש של עובד אחד; הבעלים עונה לכל טלפון,contacted,7500,true
+שקד מדיה,שיווק ופרסום,41,2026-08-02,51,inspector,2.0,2.5,3.0,2.8,2.5,builder,inspector,inspector,inspector,inspector,כל שבוע עדיפות אחרת; אין ישיבות בקרה קבועות,contacted,23000,true
+"ברוש קייטרינג בע""מ",מסעדנות,3,2026-08-03,49,inspector,2.8,3.0,1.8,2.3,2.5,inspector,inspector,builder,builder,inspector,ידע נשאר בראש של עובד אחד; תחלופת עובדים גבוהה,contacted,14000,true
+זית הנהלת חשבונות,משרד רואי חשבון,46,2026-08-03,,,,,,,,,,,,,תחלופת עובדים גבוהה,contacted,,true
+"זית בנייה בע""מ",בנייה ושיפוצים,5,2026-08-04,45,builder,2.0,2.5,1.8,2.5,2.5,builder,inspector,builder,inspector,inspector,כל מחלקה עם מערכת משלה; כל שבוע עדיפות אחרת,won,11000,true
+"שקד נדל""ן בע""מ","נדל""ן",84,2026-08-06,33,firefighter,1.5,1.8,2.0,1.5,1.5,firefighter,builder,builder,firefighter,firefighter,אין תוכנית עבודה שנתית; תחלופת עובדים גבוהה,diagnosed,47500,true
+אלון ראיית חשבון,משרד רואי חשבון,23,2026-08-08,43,builder,2.5,2.8,1.8,2.0,1.8,inspector,inspector,builder,builder,builder,ידע נשאר בראש של עובד אחד; תקציב לא מוגדר למחלקות,won,23500,true
+לוטם ראיית חשבון,משרד רואי חשבון,8,2026-08-09,55,inspector,3.0,2.3,2.8,2.8,3.0,inspector,builder,inspector,inspector,inspector,"החלטות נתקעות אצל המנכ""ל; ידע נשאר בראש של עובד אחד",lost,9000,true
+שחר ראיית חשבון,משרד רואי חשבון,85,2026-08-09,45,builder,2.3,2.3,3.0,1.8,2.0,builder,builder,inspector,builder,builder,אין מסלול צמיחה לעובדים; תקציב לא מוגדר למחלקות,diagnosed,30000,true
+תמר בנייה,בנייה ושיפוצים,15,2026-08-09,32,firefighter,2.3,1.8,1.0,1.5,1.5,builder,builder,firefighter,firefighter,firefighter,ידע נשאר בראש של עובד אחד; אין מסלול צמיחה לעובדים,lost,16500,true
+אופק מדיה,שיווק ופרסום,20,2026-08-10,35,builder,1.8,2.0,1.8,1.8,1.5,builder,builder,builder,builder,firefighter,לא יודעים מה הרווחיות לפי מוצר; כל שבוע עדיפות אחרת,proposal,12000,true
+"גפן יזמות בע""מ","נדל""ן",16,2026-08-10,45,builder,2.0,2.8,2.3,2.0,2.3,builder,inspector,builder,builder,builder,כל שבוע עדיפות אחרת; עובדים לא יודעים למי לפנות,won,20000,true
+"ארז עו""ד",משרד עורכי דין,4,2026-08-12,29,firefighter,1.3,1.0,2.0,1.5,1.5,firefighter,firefighter,builder,firefighter,firefighter,הבעלים עונה לכל טלפון; אין יעדים כתובים,won,10500,true
+אופק לוגיסטיקה,הובלה ולוגיסטיקה,86,2026-08-13,54,inspector,2.3,3.0,3.0,3.0,2.3,builder,inspector,inspector,inspector,builder,כל שבוע עדיפות אחרת; לא יודעים מה הרווחיות לפי מוצר,proposal,47500,true
+מגדל בוטיק,קמעונאות,19,2026-08-15,,,,,,,,,,,,,מלאי וניהול באקסל,new,11000,true
+נחל סוכנות,סוכנות ביטוח,37,2026-08-19,,,,,,,,,,,,,אין ישיבות בקרה קבועות,new,30500,true
+"כרמל בריאות בע""מ",קליניקות ובריאות,31,2026-08-20,38,builder,2.3,1.3,2.3,1.3,2.5,builder,firefighter,builder,firefighter,inspector,הבעלים עונה לכל טלפון; אין מסלול צמיחה לעובדים,lost,16000,true
+גבעה הדרכה,חינוך והדרכה,24,2026-08-23,,,,,,,,,,,,,אין תוכנית עבודה שנתית,new,26000,true
+סלע קבלנות,בנייה ושיפוצים,3,2026-08-23,23,firefighter,1.0,1.3,1.5,1.0,1.0,firefighter,firefighter,firefighter,firefighter,firefighter,אין יעדים כתובים; תחלופת עובדים גבוהה,proposal,14000,true
+סלע הובלות,הובלה ולוגיסטיקה,29,2026-08-26,29,firefighter,1.8,1.0,1.5,1.8,1.3,builder,firefighter,firefighter,builder,firefighter,"החלטות נתקעות אצל המנכ""ל; תזרים מזומנים לוחץ",proposal,21500,true
+"ארז נדל""ן","נדל""ן",24,2026-08-27,25,firefighter,1.3,1.5,1.0,1.3,1.3,firefighter,firefighter,firefighter,firefighter,firefighter,מלאי וניהול באקסל; אין יעדים כתובים,won,11000,true
+נוף הנהלת חשבונות,משרד רואי חשבון,22,2026-08-31,46,builder,2.5,2.3,2.3,2.8,1.8,inspector,builder,builder,inspector,builder,"תזרים מזומנים לוחץ; החלטות נתקעות אצל המנכ""ל",won,13000,true
+סלע בוטיק,קמעונאות,10,2026-09-01,33,firefighter,2.3,1.5,2.0,1.3,1.3,builder,firefighter,builder,firefighter,firefighter,אין מסלול צמיחה לעובדים; תקציב לא מוגדר למחלקות,diagnosed,11500,true
+"תמר לוגיסטיקה בע""מ",הובלה ולוגיסטיקה,26,2026-09-01,,,,,,,,,,,,,מלאי וניהול באקסל,contacted,21500,true
+צפון חנויות,קמעונאות,3,2026-09-04,45,builder,2.5,2.5,2.8,2.0,1.5,inspector,inspector,inspector,builder,firefighter,תזרים מזומנים לוחץ; תחלופת עובדים גבוהה,won,14500,true
+צפון יזמות,"נדל""ן",9,2026-09-05,40,builder,2.8,1.5,2.5,1.5,1.8,inspector,firefighter,inspector,firefighter,builder,"החלטות נתקעות אצל המנכ""ל; עובדים לא יודעים למי לפנות",won,18500,true
+סלע בריאות,קליניקות ובריאות,23,2026-09-08,28,firefighter,1.0,1.5,1.3,1.5,1.8,firefighter,firefighter,firefighter,firefighter,builder,כל שבוע עדיפות אחרת; כל מחלקה עם מערכת משלה,diagnosed,22500,true
+כרמל מדיה,שיווק ופרסום,32,2026-09-11,30,firefighter,1.5,1.3,2.0,1.0,1.8,firefighter,firefighter,builder,firefighter,builder,עובדים לא יודעים למי לפנות; אין ישיבות בקרה קבועות,proposal,21500,true
+"ערבה עו""ד",משרד עורכי דין,21,2026-09-12,,,,,,,,,,,,,אין תוכנית עבודה שנתית,new,,true
+"לוטם מרכולים בע""מ",קמעונאות,15,2026-09-13,43,builder,2.0,2.3,2.3,2.0,2.3,builder,builder,builder,builder,builder,אין תוכנית עבודה שנתית; תחלופת עובדים גבוהה,lost,11000,true
+דרום סדנאות,חינוך והדרכה,109,2026-09-15,,,,,,,,,,,,,תזרים מזומנים לוחץ,new,57000,true
+סלע מדיה,שיווק ופרסום,14,2026-09-17,29,firefighter,1.3,1.3,2.0,1.8,1.0,firefighter,firefighter,builder,builder,firefighter,תקציב לא מוגדר למחלקות; אין יעדים כתובים,lost,21000,true
+אורן פיננסים,סוכנות ביטוח,53,2026-09-19,52,inspector,2.8,2.8,2.8,2.5,2.3,inspector,inspector,inspector,inspector,builder,תקציב לא מוגדר למחלקות; אין מסלול צמיחה לעובדים,lost,30500,true
+"נוף ראיית חשבון בע""מ",משרד רואי חשבון,3,2026-09-19,35,builder,1.8,1.8,1.8,1.5,2.0,builder,builder,builder,firefighter,builder,תחלופת עובדים גבוהה; אין יעדים כתובים,contacted,14000,true
+ארז לוגיסטיקה,הובלה ולוגיסטיקה,19,2026-09-21,45,builder,2.0,2.0,2.3,2.3,2.8,builder,builder,builder,builder,inspector,אין יעדים כתובים; אין ישיבות בקרה קבועות,lost,23500,true
+"גבעה ייעוץ משפטי בע""מ",משרד עורכי דין,14,2026-09-21,39,builder,1.5,2.8,2.0,1.5,2.0,firefighter,inspector,builder,firefighter,builder,אין יעדים כתובים; תחלופת עובדים גבוהה,won,20000,true
+נחל קייטרינג,מסעדנות,6,2026-09-21,44,builder,2.3,1.5,2.5,2.8,2.0,builder,firefighter,inspector,inspector,builder,אין ישיבות בקרה קבועות; לא יודעים מה הרווחיות לפי מוצר,won,11500,true
+"ארז קבלנות בע""מ",בנייה ושיפוצים,16,2026-09-24,31,firefighter,1.0,1.5,2.0,1.8,1.5,firefighter,firefighter,builder,builder,firefighter,"אין תוכנית עבודה שנתית; החלטות נתקעות אצל המנכ""ל",diagnosed,15500,true
+"דרום ייעוץ משפטי בע""מ",משרד עורכי דין,39,2026-09-29,38,builder,1.8,2.5,1.8,2.3,1.3,builder,inspector,builder,builder,firefighter,תקציב לא מוגדר למחלקות; כל שבוע עדיפות אחרת,proposal,22500,true
+מגדל הדרכה,חינוך והדרכה,3,2026-09-29,37,builder,1.8,2.3,1.8,2.0,1.5,builder,builder,builder,builder,firefighter,תזרים מזומנים לוחץ; אין תוכנית עבודה שנתית,proposal,12500,true
+כרמל סטודיו,שיווק ופרסום,4,2026-09-30,29,firefighter,1.5,1.8,1.8,1.3,1.0,firefighter,builder,builder,firefighter,firefighter,תזרים מזומנים לוחץ; עובדים לא יודעים למי לפנות,diagnosed,16000,true
+ברוש לוגיסטיקה,הובלה ולוגיסטיקה,50,2026-10-01,37,builder,1.0,1.8,2.5,2.0,2.0,firefighter,builder,inspector,builder,builder,אין תוכנית עבודה שנתית; הבעלים עונה לכל טלפון,won,19000,true
+נוף קבלנות,בנייה ושיפוצים,8,2026-10-03,38,builder,2.0,1.3,2.0,2.0,2.3,builder,firefighter,builder,builder,builder,אין ישיבות בקרה קבועות; אין יעדים כתובים,won,19500,true
+גבעה מפעלים,ייצור ותעשייה קלה,27,2026-10-05,30,firefighter,2.5,1.3,1.8,1.0,1.0,inspector,firefighter,builder,firefighter,firefighter,עובדים לא יודעים למי לפנות; לא יודעים מה הרווחיות לפי מוצר,diagnosed,24000,true
+ברוש חשבונאות,משרד רואי חשבון,19,2026-10-06,35,builder,1.8,1.0,2.0,2.0,2.0,builder,firefighter,builder,builder,builder,הבעלים עונה לכל טלפון; אין תוכנית עבודה שנתית,won,20000,true
+יובל הנהלת חשבונות,משרד רואי חשבון,10,2026-10-10,36,builder,2.0,2.0,2.3,1.3,1.5,builder,builder,builder,firefighter,firefighter,תחלופת עובדים גבוהה; תזרים מזומנים לוחץ,diagnosed,11500,true
+יובל משפטים,משרד עורכי דין,16,2026-10-10,,,,,,,,,,,,,כל שבוע עדיפות אחרת,contacted,14000,true
+רימון מדיה,שיווק ופרסום,165,2026-10-10,40,builder,2.0,1.8,1.5,2.0,2.8,builder,builder,firefighter,builder,inspector,"מלאי וניהול באקסל; החלטות נתקעות אצל המנכ""ל",diagnosed,26000,true
+גבעה פיננסים,סוכנות ביטוח,48,2026-10-12,33,firefighter,1.8,2.0,1.3,2.3,1.0,builder,builder,firefighter,builder,firefighter,לא יודעים מה הרווחיות לפי מוצר; ידע נשאר בראש של עובד אחד,proposal,31500,true
+"דרום נדל""ן בע""מ","נדל""ן",30,2026-10-12,,,,,,,,,,,,,"החלטות נתקעות אצל המנכ""ל",meeting,,true
+דקל סוכנות,סוכנות ביטוח,38,2026-10-14,37,builder,2.0,2.3,2.0,1.8,1.3,builder,builder,builder,builder,firefighter,תקציב לא מוגדר למחלקות; עובדים לא יודעים למי לפנות,won,11500,true
+"שקד חנויות בע""מ",קמעונאות,35,2026-10-17,,,,,,,,,,,,,"החלטות נתקעות אצל המנכ""ל",meeting,14500,true
+"חצב חשבונאות בע""מ",משרד רואי חשבון,40,2026-10-18,31,firefighter,1.0,1.8,1.5,2.0,1.5,firefighter,builder,firefighter,builder,firefighter,כל שבוע עדיפות אחרת; מלאי וניהול באקסל,diagnosed,15500,true
+חצב מכללה,חינוך והדרכה,11,2026-10-20,53,inspector,2.5,3.0,2.5,3.0,2.3,inspector,inspector,inspector,inspector,builder,תקציב לא מוגדר למחלקות; כל שבוע עדיפות אחרת,won,11000,true
+שקד פיננסים,סוכנות ביטוח,9,2026-10-21,,,,,,,,,,,,,כל שבוע עדיפות אחרת,new,12500,true
+כרמל מפעלים,ייצור ותעשייה קלה,3,2026-10-22,,,,,,,,,,,,,"החלטות נתקעות אצל המנכ""ל",new,,true
+"נחל יזמות בע""מ","נדל""ן",48,2026-10-23,37,builder,1.3,1.5,2.0,2.5,2.0,firefighter,firefighter,builder,inspector,builder,"אין תוכנית עבודה שנתית; החלטות נתקעות אצל המנכ""ל",won,25500,true
+"צפון מכללה בע""מ",חינוך והדרכה,9,2026-10-25,42,builder,2.3,1.0,2.3,2.3,2.8,builder,firefighter,builder,builder,inspector,"החלטות נתקעות אצל המנכ""ל; אין תוכנית עבודה שנתית",diagnosed,13000,true
+"זית סוכנות בע""מ",סוכנות ביטוח,60,2026-10-26,,,,,,,,,,,,,לא יודעים מה הרווחיות לפי מוצר,contacted,27500,true
+"צפון נכסים בע""מ","נדל""ן",10,2026-10-26,24,firefighter,1.3,1.0,1.0,1.3,1.5,firefighter,firefighter,firefighter,firefighter,firefighter,הבעלים עונה לכל טלפון; כל מחלקה עם מערכת משלה,contacted,19000,true
+אופק תעשיות,ייצור ותעשייה קלה,28,2026-10-29,24,firefighter,1.3,1.8,1.0,1.0,1.0,firefighter,builder,firefighter,firefighter,firefighter,מלאי וניהול באקסל; תחלופת עובדים גבוהה,won,28000,true
+אלון מפעלים,ייצור ותעשייה קלה,4,2026-10-29,34,builder,2.0,1.8,1.8,1.0,2.0,builder,builder,builder,firefighter,builder,"תחלופת עובדים גבוהה; החלטות נתקעות אצל המנכ""ל",lost,15500,true
+זית חנויות,קמעונאות,6,2026-10-31,50,inspector,2.5,2.3,2.8,2.5,2.5,inspector,builder,inspector,inspector,inspector,אין ישיבות בקרה קבועות; אין יעדים כתובים,contacted,16500,true
