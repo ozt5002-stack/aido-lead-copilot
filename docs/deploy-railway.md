@@ -431,6 +431,17 @@ Most commands take `--service`, `--environment`, `--project`, `--json` and `--ye
 | `railway api '<graphql>'` | raw GraphQL against Railway's API; `railway api describe <Type>` prints a type |
 | `railway down --service web --yes`, `railway service delete --service web --yes`, `railway delete` | remove the latest deployment, a service, the project |
 
-## 9. This deployment
+## 9. This deployment, as of 2026-11-08
 
-Filled in by plan task 9 (issue #12) once the project is live: the Railway project name, services, region, the public URL, which variables are set where, and what is not done yet. Until then, the original bakery-copilot deployment notes are in the Git history (`git show 2a6691f:docs/deploy-railway.md`).
+- **URL:** https://web-production-688d3.up.railway.app (`/health` answers 200 with `"env":"production"`, `"provider":"anthropic"`, `"db":"postgres"`, no problems).
+- **Railway:** project `aido-lead-copilot` in Oz's workspace, on Railway's trial (26 days or $5 at deploy time; the plan's Hobby subscription, about $5 a month, is Oz's choice when the trial ends, or the services stop), environment `production`, services `web`, `digest` and `Postgres`, all in region `iad`. `railway config plan` reports no drift after `railway config apply` (which also moved the then-empty database from `sfo` to `iad`, with Oz's OK).
+- **GitHub:** the Railway GitHub app is installed on `ozt5002-stack` for this one repository only, and both services build `main` on push.
+- **Variables:** every variable in section 3 is set on `web`. `digest` references them. `APP_SECRET` and `CRON_SECRET` were generated randomly straight into Railway, and `APP_PASSWORD` and `ANTHROPIC_API_KEY` were sent from Oz's local `.env` with `--stdin`. No value was printed or committed. `DIGEST_WEBHOOK_URL` is not set, so the digest prints to the log only.
+- **First start:** `seed report: schema_version: 2, leads_seeded: 300`.
+- **Digest:** cron `30 4 * * *`. A manual `railway cron run` exited after 2 s and printed the Hebrew lines, with 15 hot leads waiting. The first scheduled run is 2026-11-09 04:30 UTC; `railway cron list --service digest` shows it.
+- **First deployments:** each service's first deployment (21:43 local) failed on purpose, as step 3 says: the services were created before any variables existed. The next deployment, after the variables and `config apply`, succeeded.
+- **Rows left by the acceptance checks:** checking spec §7 on the live app logged three fictional leads (ענבל הדרכות, עדן אירועים, חרמון השקעות) and filled in נחל מכללה's diagnosis. They stay as demo data and show in the next morning digest as yesterday's new leads.
+- **On Windows, two snags:**
+  - `railway config plan/apply` failed with "requires Railway CLI 5.42.1 or newer" although 5.71 was installed. The IaC package runs `process.env._ --version` and Node cannot spawn the npm `.cmd` shim. Running the native binary with `_` set to it works: `env _="<npm prefix>\node_modules\@railway\cli\bin\railway.exe" "<same path>" config plan`.
+  - A user folder with a non-Latin name (here Hebrew) breaks `cmd.exe` shims in some shells; the short 8.3 path works.
+- **Not done:** no `ANTHROPIC_API_KEY` GitHub Actions secret, so CI skips the evals (they were run locally and are recorded in `evals/history.csv`).

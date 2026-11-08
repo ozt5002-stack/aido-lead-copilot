@@ -6,7 +6,7 @@ An internal chat assistant for AIDO consultants, in Hebrew, right to left. Consu
 
 **Credit.** This project is built on [MaceTenth/bakery-copilot](https://github.com/MaceTenth/bakery-copilot), the AIDO course project, and keeps its structure and its Git history: FastAPI backend, agent loop, tools, Postgres, chat UI, morning digest, auth, limits, tests and evals, Railway config. The bakery domain was replaced by leads, step by step, in the PRs listed on the [board](https://github.com/users/ozt5002-stack/projects/2).
 
-Live app: the URL goes in [docs/deploy-railway.md](docs/deploy-railway.md), section 9, once plan task 9 has deployed it.
+**Live app:** https://web-production-688d3.up.railway.app (sign in with a name and the team password; details in [docs/deploy-railway.md](docs/deploy-railway.md), section 9).
 
 ## Docs
 
