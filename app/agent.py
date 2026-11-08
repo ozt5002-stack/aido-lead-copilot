@@ -39,8 +39,8 @@ except ImportError:  # pragma: no cover
 MAX_TOOL_ROUNDS = 6
 SYSTEM_PATH = ROOT / "app" / "prompts" / "system.md"
 FALLBACK_MODELS = {"claude-opus-5-5", "claude-opus-5", "claude-sonnet-5-5", "claude-fable-5-1"}
-REFUSAL_TEXT = ("I can't help with that request. If it is about leads or diagnoses, try rephrasing it; "
-                "for anything else, ask the AIDO team lead.")
+REFUSAL_TEXT = ("אני לא יכול לעזור בבקשה הזו. אם היא על לידים או אבחונים, נסה לנסח אותה אחרת; "
+                "בכל דבר אחר, פנה לראש הצוות ב-AIDO.")
 
 
 # ---------------------------------------------------------------------------
@@ -198,14 +198,14 @@ def _summarise_result(result_text: str) -> str:
 def _friendly(exc: Exception) -> str:
     if anthropic is not None:
         if isinstance(exc, (anthropic.RateLimitError, getattr(anthropic, "OverloadedError", anthropic.RateLimitError))):
-            return "The model is busy right now. Try again in a minute."
+            return "המודל עמוס כרגע. נסה שוב בעוד דקה."
         if isinstance(exc, anthropic.AuthenticationError):
-            return "The model key is not valid. Check ANTHROPIC_API_KEY."
+            return "מפתח המודל לא תקין. צריך לבדוק את ANTHROPIC_API_KEY."
         if isinstance(exc, anthropic.APIConnectionError):
-            return "Could not reach the model. Check the connection and try again."
+            return "אין חיבור למודל. בדוק את החיבור ונסה שוב."
         if isinstance(exc, anthropic.BadRequestError):
-            return f"The request was rejected: {exc.message if hasattr(exc, 'message') else exc}"
-    return "Something went wrong on our side. The error was recorded; try again."
+            return "המודל דחה את הבקשה. השגיאה נרשמה; נסה לנסח אחרת או פנה למי שמתחזק את המערכת."
+    return "משהו השתבש אצלנו. השגיאה נרשמה; נסה שוב."
 
 
 def run_turn(db: Session, *, user: User, conversation: Conversation | None, text: str, image: dict | None,
@@ -216,7 +216,7 @@ def run_turn(db: Session, *, user: User, conversation: Conversation | None, text
     image_ref = f"img_{hashlib.sha256(image['data'].encode()).hexdigest()[:10]}" if image else None
 
     if conversation is None:
-        conversation = Conversation(user_id=user.id, title=(text or "Meeting notes photo")[:60])
+        conversation = Conversation(user_id=user.id, title=(text or "צילום סיכום פגישה")[:60])
         db.add(conversation)
         db.commit()
         db.refresh(conversation)
@@ -225,7 +225,7 @@ def run_turn(db: Session, *, user: User, conversation: Conversation | None, text
     # 1. The user's message is saved first: it counts for the rate limit even if the stream dies.
     stored = text + (f"\n[image {image_ref}]" if image_ref else "")
     user_msg = Message(conversation_id=conversation.id, user_id=user.id, role="user",
-                       content=stored or "(meeting notes photo)", has_image=bool(image))
+                       content=stored or "(צילום סיכום פגישה)", has_image=bool(image))
     db.add(user_msg)
     conversation.updated_at = utcnow()
     db.commit()
@@ -235,7 +235,7 @@ def run_turn(db: Session, *, user: User, conversation: Conversation | None, text
     content: list[dict] = []
     if image:
         content.append({"type": "image", "source": {"type": "base64", "media_type": image["media_type"], "data": image["data"]}})
-    prompt_text = text or "Please read these meeting notes and log the lead."
+    prompt_text = text or "זה צילום של סיכום פגישה. תקרא אותו ותרשום את הליד."
     if image_ref:
         prompt_text += f"\n\n(image reference: {image_ref})"
     content.append({"type": "text", "text": prompt_text})
@@ -282,7 +282,7 @@ def run_turn(db: Session, *, user: User, conversation: Conversation | None, text
                 if not tool_uses:
                     break
                 if round_no >= MAX_TOOL_ROUNDS:
-                    note = "\n\nI stopped after too many tool steps. Please ask again, more specifically."
+                    note = "\n\nעצרתי אחרי יותר מדי צעדים. נסה לשאול שוב, בצורה ממוקדת יותר."
                     pieces.append(note)
                     yield {"type": "text", "text": note}
                     break
@@ -304,7 +304,7 @@ def run_turn(db: Session, *, user: User, conversation: Conversation | None, text
                 pieces.append(REFUSAL_TEXT)
                 yield {"type": "text", "text": REFUSAL_TEXT}
             elif stop.stop_reason == "max_tokens":
-                note = "\n\n(Reply cut short at the length limit.)"
+                note = "\n\n(התשובה נקטעה באורך המרבי.)"
                 pieces.append(note)
                 yield {"type": "text", "text": note}
             break

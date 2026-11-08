@@ -90,6 +90,11 @@ def run_case(case: dict, client) -> dict:
             elif ev["type"] == "error":
                 status = "error"
                 text_parts.append(f"[error: {ev['message']}]")
+        if status == "error":  # keep the real exception from the runs row, not only the friendly message
+            from app.db import Run
+            last = db.query(Run).order_by(Run.id.desc()).first()
+            if last is not None and last.error:
+                text_parts.append(f" [run error: {last.error[:300]}]")
         leads = [{"business_name": r.business_name, "business_key": r.business_key, "total_score": r.total_score,
                   "stage": r.stage, "record_status": r.record_status, "source_ref": r.source_ref,
                   "deal_value": r.deal_value,

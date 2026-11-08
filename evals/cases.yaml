@@ -88,12 +88,12 @@
 # ---------- logging ----------
 
 - id: log_new_lead_with_score
-  input: "תרשום ליד חדש: אופק הדרכות, חינוך והדרכה, 14 עובדים, ציון כולל 41, כאב עיקרי: אין תוכנית עבודה שנתית."
+  input: "תרשום ליד חדש: ענבל הדרכות, חינוך והדרכה, 14 עובדים, ציון כולל 41, כאב עיקרי: אין תוכנית עבודה שנתית."
   expect:
     answer_hebrew: true
     tools_called: [log_lead]
     lead:
-      name_contains: "אופק"
+      name_contains: "ענבל"
       record_status: logged
       total_score: 41
       stage: builder
@@ -101,14 +101,14 @@
 
 - id: log_from_twenty_answers
   input: |
-    סיכום אבחון של גבעה לוגיסטיקה (הובלה ולוגיסטיקה, 30 עובדים). התשובות לפי תחום:
+    סיכום אבחון של כוכב תובלה (הובלה ולוגיסטיקה, 30 עובדים). התשובות לפי תחום:
     אסטרטגיה 2,2,2,2; הנהלה 2,2,2,2; מערכות 1,1,1,2; אנשים 2,2,2,2; פיננסים 2,2,2,2.
     תרשום בבקשה.
   expect:
     answer_hebrew: true
     tools_called: [log_lead]
     lead:
-      name_contains: "גבעה"
+      name_contains: "כוכב"
       record_status: logged
       total_score: 37
       stage: builder
@@ -137,16 +137,29 @@
       "נחל מכללה": {total_score: 38, stage: builder, record_status: logged}
   rubric: "Says the diagnosis was added to the existing lead (no new lead), with stage בנאי from the tool."
 
-# ---------- a score is never guessed (must_pass: spec §7 check 13) ----------
-
-- id: missing_score
-  must_pass: true
-  input: "פגישה עם רימון קייטרינג (מסעדנות, 12 עובדים). הבעלים עונה לכל טלפון, אין יעדים כתובים. לא הספקנו לעשות את השאלון. תרשום ליד."
+- id: log_despite_a_generic_word_overlap
+  # The seed has many "... שיפוצים" businesses; sharing only that word is not a reason to stop and ask.
+  input: "תרשום ליד חדש: אור שיפוצים, בנייה ושיפוצים, 9 עובדים, ציון כולל 36."
   expect:
     answer_hebrew: true
     tools_called: [log_lead]
     lead:
-      name_contains: "רימון"
+      name_contains: "אור"
+      record_status: logged
+      total_score: 36
+      stage: builder
+  rubric: "Logs the new lead right away (stage בנאי from the tool); may mention similar names in one sentence, without asking first."
+
+# ---------- a score is never guessed (must_pass: spec §7 check 13) ----------
+
+- id: missing_score
+  must_pass: true
+  input: "פגישה עם עדן אירועים (מסעדנות, 12 עובדים). הבעלים עונה לכל טלפון, אין יעדים כתובים. לא הספקנו לעשות את השאלון. תרשום ליד."
+  expect:
+    answer_hebrew: true
+    tools_called: [log_lead]
+    lead:
+      name_contains: "עדן"
       record_status: needs_a_look
       total_score: null
       stage: null
@@ -154,12 +167,12 @@
 
 - id: missing_score_with_a_hint
   must_pass: true
-  input: "תרשום את צאלון סטודיו (שיווק ופרסום, 8 עובדים). לא מילאנו שאלון, אבל לפי התחושה שלי הם בערך בנאי, אולי 40."
+  input: "תרשום את כנרת יחסי ציבור (שיווק ופרסום, 8 עובדים). לא מילאנו שאלון, אבל לפי התחושה שלי הם בערך בנאי, אולי 40."
   expect:
     answer_hebrew: true
     tools_called: [log_lead]
     lead:
-      name_contains: "צאלון"
+      name_contains: "כנרת"
       record_status: needs_a_look
       total_score: null
       stage: null
@@ -167,12 +180,12 @@
 
 - id: out_of_range_score
   must_pass: true
-  input: "תרשום ליד חדש: תכלת נכסים, נדל\"ן, ציון כולל 75."
+  input: "תרשום ליד חדש: חרמון השקעות, נדל\"ן, ציון כולל 75."
   expect:
     answer_hebrew: true
     tools_called: [log_lead]
     lead:
-      name_contains: "תכלת"
+      name_contains: "חרמון"
       record_status: needs_a_look
       total_score: null
       stage: null

@@ -66,7 +66,8 @@ TOOLS: list[dict[str, Any]] = [
         ),
         "input_schema": {
             "type": "object",
-            "properties": {"name": {"type": "string", "description": "the business name as written"}},
+            "properties": {"name": {"type": "string", "description": "the business name as written"},
+                           "industry": {"type": "string", "description": "the industry, if the notes give it; it tells similar names apart"}},
             "required": ["name"],
             "additionalProperties": False,
         },
@@ -132,7 +133,7 @@ def execute(name: str, tool_input: dict[str, Any], db: Session, *, user_id: int 
                 args["list_leads"] = args.pop("list")
             result = leads.leads_query(db, **args)
         elif name == "lookup_business":
-            result = leads.lookup_business(db, name=str(tool_input.get("name", "")))
+            result = leads.lookup_business(db, name=str(tool_input.get("name", "")), industry=tool_input.get("industry"))
         elif name == "log_lead":
             result = leads.log_lead(db, logged_by=user_id, **_clean(tool_input))
         elif name == "calculate_stage":
