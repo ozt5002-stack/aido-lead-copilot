@@ -98,7 +98,7 @@ def test_cases_file_is_consistent():
     assert tools == {"leads_query", "lookup_business", "log_lead", "calculate_stage"}
 
 
-NEW_NAMES = ["אופק הדרכות", "כוכב תובלה", "רימון קייטרינג", "צאלון סטודיו", "תכלת נכסים", "אגם פתרונות משפטיים",
+NEW_NAMES = ["ענבל הדרכות", "כוכב תובלה", "עדן אירועים", "כנרת יחסי ציבור", "חרמון השקעות", "אגם פתרונות משפטיים",
              "פסגה רובוטיקה", "סלע שיפוצים"]
 
 
@@ -107,6 +107,17 @@ def test_new_business_names_in_cases_are_not_in_the_seed(name):
     # A "new lead" case must use a name the seed does not have, or it silently becomes a duplicate case.
     assert name in "".join(c["input"] + str(c.get("setup_leads", "")) for c in CASES)
     assert business_key(name) not in SEEDED
+
+
+@pytest.mark.parametrize("name", [n for n in NEW_NAMES if n != "סלע שיפוצים"])  # that one is set up by its case
+def test_new_business_names_have_no_similar_seeded_name(client, name):
+    # With a similar seeded name the assistant rightly asks "same business?" before logging, and a
+    # logging case would then test the wrong thing (seen twice in real runs, 2026-11-08).
+    from app.db import SessionLocal
+    from app.tools.leads import lookup_business
+
+    with SessionLocal() as db:
+        assert lookup_business(db, name=name)["matches"] == []
 
 
 @pytest.mark.parametrize("name", ["שקד בוטיק", "נחל מכללה", "אופק סוכנות"])
