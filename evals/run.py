@@ -3,7 +3,8 @@
     python -m evals.run                 # all cases once
     python -m evals.run --runs 3        # each case three times (agents vary)
     python -m evals.run --judge         # also grade wording with a cheaper model
-    python -m evals.run --baseline 0.8  # exit 1 if the pass rate is below 80%, or any must_pass case fails
+    python -m evals.run --baseline 0.8  # exit 1 if the pass rate is below 80%
+                                        # (a failed must_pass case exits 1 with or without --baseline)
 
 Facts are graded exactly (which tools ran, what rows exist). Wording is graded
 by a second model only when --judge is passed, and never for the facts.
@@ -29,9 +30,10 @@ import yaml
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 
-# A fresh database per run so eval leads never land in the real one.
+# Always a fresh, throwaway database: every case empties and reseeds the leads table, so the evals must
+# never see a real one, even when DATABASE_URL is set in the shell (for example under `railway run`).
 _tmp = Path(tempfile.mkdtemp(prefix="aido-lead-copilot-evals-"))
-os.environ.setdefault("DATABASE_URL", f"sqlite:///{_tmp / 'evals.db'}")
+os.environ["DATABASE_URL"] = f"sqlite:///{_tmp / 'evals.db'}"
 os.environ.setdefault("APP_ENV", "local")
 os.environ.setdefault("DAILY_CAP_USD", "1000")
 
@@ -90,6 +92,7 @@ def run_case(case: dict, client) -> dict:
                 text_parts.append(f"[error: {ev['message']}]")
         leads = [{"business_name": r.business_name, "business_key": r.business_key, "total_score": r.total_score,
                   "stage": r.stage, "record_status": r.record_status, "source_ref": r.source_ref,
+                  "deal_value": r.deal_value,
                   "origin": r.origin, "id": r.id}
                  for r in db.query(Lead).filter(Lead.origin == "chat").order_by(Lead.id).all()]
         touched = {}
@@ -112,6 +115,9 @@ def grade_facts(case: dict, result: dict) -> list[str]:
     answer = result["answer"].lower()
     if exp.get("answer_contains_any") and not any(s.lower() in answer for s in exp["answer_contains_any"]):
         failures.append(f"answer contains none of {exp['answer_contains_any']}")
+    for s in exp.get("answer_contains_all", []):
+        if s.lower() not in answer:
+            failures.append(f"answer must contain {s!r}")
     for s in exp.get("answer_not_contains", []):
         if s.lower() in answer:
             failures.append(f"answer must not contain {s!r}")
@@ -130,7 +136,7 @@ def grade_facts(case: dict, result: dict) -> list[str]:
             row = rows[-1]
             if "name_contains" in want and want["name_contains"].lower() not in (row["business_name"] or "").lower():
                 failures.append(f"business {row['business_name']!r} does not contain {want['name_contains']!r}")
-            for key in ("record_status", "total_score", "stage"):
+            for key in ("record_status", "total_score", "stage", "source_ref", "deal_value"):
                 if key in want and row.get(key) != want[key]:
                     failures.append(f"lead.{key} = {row.get(key)!r}, expected {want[key]!r}")
     if "lead_count_for_name" in exp:
@@ -200,6 +206,9 @@ def main() -> int:
     cases = yaml.safe_load((HERE / "cases.yaml").read_text(encoding="utf-8"))
     if args.only:
         cases = [c for c in cases if c["id"] == args.only]
+        if not cases:
+            print(f"no case with id {args.only!r}", file=sys.stderr)
+            return 2
 
     passed = total = 0
     must_failed: list[str] = []

@@ -73,10 +73,20 @@ def test_grade_lead_row_and_watched():
 def test_no_bi_patterns_catch_a_recommendation_but_not_a_refusal():
     case = next(c for c in CASES if c["id"] == "no_bi_for_firefighter")
     patterns = case["expect"]["answer_not_matches"]
-    recommend = "שקד בוטיק בשלב כבאי. אני ממליץ להם על דשבורד BI כבר עכשיו."
-    refuse = "שקד בוטיק בשלב כבאי, ולכן לא מתאים להם BI עכשיו. קודם סדר בסיסי: יעדים כתובים ומלאי מסודר."
-    assert any(re.search(p, recommend, re.IGNORECASE) for p in patterns)
-    assert not any(re.search(p, refuse, re.IGNORECASE) for p in patterns)
+    recommends = ["שקד בוטיק בשלב כבאי. אני ממליץ להם על דשבורד BI כבר עכשיו.",
+                  "כדאי להציע להם דשבורד BI פשוט.",
+                  "BI יעזור להם לראות את המלאי."]
+    refusals = ["שקד בוטיק בשלב כבאי, ולכן לא מתאים להם BI עכשיו. קודם סדר בסיסי: יעדים כתובים ומלאי מסודר.",
+                "לא הייתי ממליץ על דשבורד BI בשלב הזה.",
+                "לא כדאי להציע להם BI עכשיו.",
+                "לא מומלץ BI לעסק בשלב כבאי.",
+                "BI לא מתאים להם כרגע.",
+                "אני לא ממליץ על דשבורד BI כרגע.",
+                "מומלץ לא להציע דשבורד BI עכשיו."]
+    for text in recommends:
+        assert any(re.search(p, text, re.IGNORECASE) for p in patterns), text
+    for text in refusals:
+        assert not any(re.search(p, text, re.IGNORECASE) for p in patterns), text
 
 
 def test_cases_file_is_consistent():
@@ -122,3 +132,23 @@ def test_watched_rows_are_read_back_after_the_turn(client):
     fake = FakeModelClient()
     result = evals_run.run_case({"id": "t", "input": "שלום", "expect": {"watched": {"שקד בוטיק": {}}}}, fake)
     assert result["watched"]["שקד בוטיק"]["stage"] == "firefighter"
+
+
+def test_every_hebrew_case_requires_a_hebrew_answer():
+    for c in CASES:
+        if evals_run.hebrew_share(c["input"]) > 0.5:
+            assert c["expect"].get("answer_hebrew") is True, c["id"]
+
+
+def test_contains_all_and_extra_lead_fields_are_graded():
+    case = {"expect": {"answer_contains_all": ["86", "119"], "lead": {"source_ref": "img_x", "deal_value": 18000}}}
+    ok = _result(answer="86 כבאי, 119 בנאי", leads=[{"business_name": "x", "source_ref": "img_x", "deal_value": 18000}])
+    assert evals_run.grade_facts(case, ok) == []
+    bad = _result(answer="86 כבאי", leads=[{"business_name": "x", "source_ref": None, "deal_value": 18}])
+    assert len(evals_run.grade_facts(case, bad)) == 3
+
+
+def test_evals_never_use_the_database_from_the_shell():
+    # Every case empties the leads table; a real DATABASE_URL must never reach the runner.
+    src = (Path(evals_run.HERE) / "run.py").read_text(encoding="utf-8")
+    assert 'os.environ["DATABASE_URL"] = ' in src and 'setdefault("DATABASE_URL"' not in src
