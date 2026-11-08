@@ -95,6 +95,7 @@ def test_out_of_range_average_is_dropped_and_the_rest_kept(db):
     lead = rows(db)[0]
     assert lead.finance_avg is None and lead.people_avg == 2.5 and lead.people_stage == "inspector"
     assert lead.total_score == 50 and "finance average 3.4 out of range" in lead.notes
+    assert lead.record_status == "needs_a_look"  # rule 4: a rejected value needs a person, even with a total
 
 
 def test_answer_outside_1_to_3_is_out_of_range(db):
@@ -283,3 +284,41 @@ def test_registry_lists_the_four_tools_and_survives_bad_input(db):
     assert via_tool["leads"] == []  # the tool's "list" reaches leads_query
     ok = json.loads(registry.execute("log_lead", {"business_name": "ח עסק", "total_score": 40}, db, user_id=None))
     assert ok["action"] == "created"
+
+
+def test_bad_answers_with_a_valid_total_need_a_look(db):
+    r = log_lead(db, business_name="צאלון מדיה", total_score=41, answers=dict(ALL_2, people=[2, 2, 2, 4]))
+    assert r["record_status"] == "needs_a_look" and rows(db)[0].total_score == 41
+
+
+def test_disagreeing_total_keeps_valid_explicit_averages(db):
+    log_lead(db, business_name="מעיין שילוח", total_score=45, answers=ALL_2, domain_averages={"finance": 2.5})
+    lead = rows(db)[0]
+    assert lead.total_score is None and lead.strategy_avg is None and lead.finance_avg == 2.5
+
+
+def test_fill_in_never_overwrites_a_filled_average(db):
+    log_lead(db, business_name="אורן קליניקה", domain_averages={"strategy": 2.0})
+    r = log_lead(db, business_name="אורן קליניקה", total_score=30, domain_averages={"strategy": 1.0, "people": 1.5})
+    lead = rows(db)[0]
+    assert r["action"] == "filled"
+    assert lead.strategy_avg == 2.0 and lead.people_avg == 1.5 and lead.total_score == 30
+
+
+def test_fill_in_with_a_rejected_value_needs_a_look(db):
+    log_lead(db, business_name="אורן קליניקה")
+    r = log_lead(db, business_name="אורן קליניקה", total_score=30, domain_averages={"strategy": 3.9})
+    assert r["action"] == "filled" and r["record_status"] == "needs_a_look"
+
+
+def test_very_long_name_twice_is_a_duplicate_not_a_crash(db):
+    name = "שם ארוך מאוד " * 20
+    log_lead(db, business_name=name, total_score=40, source_ref="x" * 200)
+    assert log_lead(db, business_name=name, total_score=40)["action"] == "duplicate"
+
+
+def test_industry_filter_treats_wildcards_literally(small):
+    assert leads_query(small, metric="count", group_by="none", industry="%")["value"] == 0
+    assert leads_query(small, metric="count", group_by="none", industry="_")["value"] == 0
+    r = leads_query(small, metric="count", group_by="industry", top_n=1)
+    assert r["row_count"] == 1 and r["total_groups"] == 2

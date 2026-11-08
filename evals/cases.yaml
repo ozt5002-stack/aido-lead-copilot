@@ -22,7 +22,7 @@
   input: "האם יש לנו כבר את שקד בוטיק?"
   expect:
     tools_called: [lookup_business]
-    answer_contains_any: ["כבאי", "קיים", "יש"]
+    answer_contains_any: ["כבאי"]
     no_lead_rows: true
   rubric: "Says yes, the business is already a lead, and gives its stage from the tool."
 

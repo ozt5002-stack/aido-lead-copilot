@@ -1,4 +1,4 @@
-"""Bakery Copilot backend: the API, the static UI, the health check, the digest hook.
+"""AIDO Lead Copilot backend: the API, the static UI, the health check, the digest hook.
 
 One service does everything (docs/02-architecture.md, "Components and responsibilities"). The agent
 loop itself lives in agent.py; this file is doors, locks and plumbing.
@@ -33,7 +33,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="Bakery Copilot", version="0.1.0", lifespan=lifespan, docs_url=None, redoc_url=None)
+app = FastAPI(title="AIDO Lead Copilot", version="0.1.0", lifespan=lifespan, docs_url=None, redoc_url=None)
 app.mount("/static", StaticFiles(directory=str(ROOT / "static")), name="static")
 
 

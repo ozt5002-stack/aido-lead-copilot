@@ -109,7 +109,7 @@ def load_settings() -> Settings:
         database_url = database_url.replace("postgresql://", "postgresql+psycopg://", 1)
 
     return Settings(
-        app_password=app_password or "bakery",
+        app_password=app_password or "change-me",
         app_secret=app_secret or secrets.token_hex(32),
         database_url=database_url,
         anthropic_api_key=api_key,

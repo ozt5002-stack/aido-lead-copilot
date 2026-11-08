@@ -1,4 +1,4 @@
-// Bakery Copilot — the UI layer. It displays what the backend sends; it remembers nothing itself.
+// AIDO Lead Copilot - the UI layer. It displays what the backend sends; it remembers nothing itself.
 (() => {
   const $ = (id) => document.getElementById(id);
   const state = { user: null, conversations: [], current: null, image: null, streaming: false };
@@ -78,7 +78,7 @@
   function addBubble(role, text, { hasImage = false, imageDataUrl = null, time = null } = {}) {
     const div = document.createElement("div");
     div.className = `msg ${role}`;
-    const who = role === "user" ? (state.user ? state.user.name : "You") : "Bakery Copilot";
+    const who = role === "user" ? (state.user ? state.user.name : "You") : "AIDO Lead Copilot";
     const initial = role === "user" ? who.trim().charAt(0).toUpperCase() : "🥐";
     const when = time ? new Date(time) : new Date();
     const stamp = when.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });

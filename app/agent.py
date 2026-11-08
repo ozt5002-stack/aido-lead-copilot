@@ -189,7 +189,9 @@ def _summarise_result(result_text: str) -> str:
     if "value" in r and "metric" in r:  # leads_query total
         return f"{r['metric']} = {r['value']}"
     if "stage" in r or "domains" in r:  # calculate_stage
-        return f"stage {r.get('stage_he') or r.get('stage') or '-'}"
+        if r.get("stage"):
+            return f"stage {r.get('stage_he') or r['stage']}"
+        return "domains: " + ", ".join(f"{d} {v.get('stage_he')}" for d, v in (r.get("domains") or {}).items())
     return result_text[:90]
 
 

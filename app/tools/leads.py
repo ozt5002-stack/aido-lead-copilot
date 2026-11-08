@@ -165,7 +165,8 @@ def leads_query(db: Session, *, metric: str = "count", group_by: str = "none", d
     if stage_key:
         q = q.where(Lead.stage == stage_key)
     if industry:
-        q = q.where(func.lower(Lead.industry).like(f"%{industry.strip().lower()}%"))
+        needle = industry.strip().lower().replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+        q = q.where(func.lower(Lead.industry).like(f"%{needle}%", escape="\\"))
     if pipeline_status:
         q = q.where(Lead.pipeline_status == pipeline_status)
     if hot_only:
@@ -218,10 +219,12 @@ def leads_query(db: Session, *, metric: str = "count", group_by: str = "none", d
         rows.sort(key=lambda x: order.get(x["key"], 99))
     else:
         rows.sort(key=lambda x: (-(x["value"] or 0), x["key"]))
+    total_groups = len(rows)
+    if group_by in ("industry", "weakest_domain"):
         rows = rows[:top_n]
-    out = {**base, "rows": rows, "row_count": len(rows)}
+    out = {**base, "rows": rows, "row_count": len(rows), "total_groups": total_groups}
     if group_by == "weakest_domain":
-        out["note"] = "only diagnosed leads; a lead with a tie is counted under each tied domain"
+        out["note"] = "only leads with all five domain averages; a lead with a tie is counted under each tied domain"
     return out
 
 
@@ -312,9 +315,11 @@ def _boundaries() -> dict:
 # log_lead (insert one business, or fill an empty diagnosis)
 # ---------------------------------------------------------------------------
 
-def _diagnosis(total_score, answers, domain_averages) -> tuple[int | None, dict[str, float], list[str]]:
-    """Apply rules 1-5 and 7: what score and averages may be stored, and the notes on why not."""
+def _diagnosis(total_score, answers, domain_averages) -> tuple[int | None, dict[str, float], list[str], bool]:
+    """Apply rules 1-5 and 7: what score and averages may be stored, the notes on why not, and whether a
+    value was rejected (then the row needs a person, rule 4, even when a valid total is there)."""
     notes: list[str] = []
+    rejected = False
     computed_total, computed_avgs = None, {}
     if answers:
         complete = isinstance(answers, dict) and all(isinstance(answers.get(d), list) and len(answers[d]) == 4
@@ -326,6 +331,7 @@ def _diagnosis(total_score, answers, domain_averages) -> tuple[int | None, dict[
                 computed_avgs = {d["id"]: d["average"] for d in r["domains"]}
             except StageError as exc:
                 notes.append(f"answers out of range, not stored: {exc}")
+                rejected = True
         else:
             notes.append("partial answers, not a score: " + json.dumps(answers, ensure_ascii=False)[:300])
 
@@ -334,12 +340,13 @@ def _diagnosis(total_score, answers, domain_averages) -> tuple[int | None, dict[
         whole = as_whole(total_score)
         if whole is None or not MIN_TOTAL <= whole <= MAX_TOTAL:
             notes.append(f"score {total_score!r} out of range ({MIN_TOTAL}-{MAX_TOTAL}), not stored")
+            rejected = True
         else:
             given_total = whole
 
     if given_total is not None and computed_total is not None and given_total != computed_total:
         notes.append(f"total and answers disagree ({given_total} vs {computed_total}); neither stored")
-        return None, {}, notes
+        given_total, computed_total, computed_avgs, rejected = None, None, {}, True
 
     avgs = dict(computed_avgs)
     for d, v in (domain_averages or {}).items():
@@ -350,6 +357,7 @@ def _diagnosis(total_score, answers, domain_averages) -> tuple[int | None, dict[
             stage_for_average(v)
         except StageError:
             notes.append(f"{d} average {v!r} out of range (1.0-3.0), not stored")
+            rejected = True
             continue
         if d in avgs:
             if round1(float(v)) != avgs[d]:
@@ -358,7 +366,7 @@ def _diagnosis(total_score, answers, domain_averages) -> tuple[int | None, dict[
         avgs[d] = round1(float(v))
 
     total = given_total if given_total is not None else computed_total
-    return total, avgs, notes
+    return total, avgs, notes, rejected
 
 
 def _set_diagnosis(lead: Lead, total: int | None, avgs: dict[str, float], only_empty: bool) -> bool:
@@ -385,19 +393,21 @@ def log_lead(db: Session, *, business_name: str | None, industry: str | None = N
              deal_value=None, source_ref: str | None = None, notes: str | None = None,
              logged_by: int | None = None) -> dict:
     name = " ".join((business_name or "").split())
-    key = business_key(name)
+    key = business_key(name)[:120]
     if not key:
         return {"error": "business name missing: a lead needs a business name; nothing was logged"}
-    source_ref = (source_ref or "").strip() or None
-    total, avgs, problems = _diagnosis(total_score, answers, domain_averages)
+    source_ref = (source_ref or "").strip()[:120] or None
+    total, avgs, problems, rejected = _diagnosis(total_score, answers, domain_averages)
 
     # Rule 6: one business is one row.
     existing = db.scalar(select(Lead).where(Lead.source_ref == source_ref)) if source_ref else None
     existing = existing or db.scalar(select(Lead).where(Lead.business_key == key))
     if existing is not None:
         if existing.total_score is None and _set_diagnosis(existing, total, avgs, only_empty=True):
-            if existing.total_score is not None:
+            if existing.total_score is not None and not rejected:
                 existing.record_status = "logged"
+            elif rejected:
+                existing.record_status = "needs_a_look"
             _append_notes(existing, [f"diagnosis filled in by chat {datetime.now(ZoneInfo(settings.timezone)).date().isoformat()}", *problems])
             db.commit()
             db.refresh(existing)
@@ -427,10 +437,10 @@ def log_lead(db: Session, *, business_name: str | None, industry: str | None = N
     if total is None:
         problems.append("score missing: a person needs to add it")
 
-    lead = Lead(business_name=name[:120], business_key=key[:120], industry=(industry or "").strip()[:60] or None,
+    lead = Lead(business_name=name[:120], business_key=key, industry=(industry or "").strip()[:60] or None,
                 employees=people, lead_date=when, pains="; ".join(pains) if isinstance(pains, (list, tuple)) else pains,
                 pipeline_status=status, deal_value=money, fictional=False,
-                record_status="logged" if total is not None else "needs_a_look",
+                record_status="logged" if total is not None and not rejected else "needs_a_look",
                 source_ref=source_ref, origin="chat", logged_by=logged_by)
     _set_diagnosis(lead, total, avgs, only_empty=False)
     lead.notes = "; ".join(filter(None, [notes, *problems]))[:2000] or None
