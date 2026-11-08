@@ -9,7 +9,7 @@ Lesson 4's loop, grown up. Every ticket, by you or by Claude Code, goes through 
 3. **Branch.** `git checkout -b <issue>-<slug>` from an up-to-date `main`, e.g. `12-stream-reply`.
 4. **Build** the smallest change that meets the ticket's "Done when" lines. No drive-by refactors.
 5. **Test.** Run `pytest -q`. Add the test the ticket names. If the system prompt, the tools, the model or the effort changed, also run `python -m evals.run` and paste the pass rate.
-6. **Docs.** If a decision changed, update `architecture.md` in the same commit (drawing, limits or the decisions table). If a check changed, update `spec.md` §7.
+6. **Docs.** If a decision changed, update `docs/02-architecture.md` in the same commit (drawing, limits or the decisions table). If a check changed, update `spec.md` §7.
 7. **Commit.** One ticket, one commit, the number in the message: `Stream chat reply token by token (#12)`.
 8. **Pull request.** Diff, test output, eval numbers, the issue link. A bug found on the way becomes a new issue, labelled `bug`, linked from the PR; it is not fixed silently in this branch.
 
@@ -26,7 +26,7 @@ Lesson 4's loop, grown up. Every ticket, by you or by Claude Code, goes through 
 
 - Does the diff do only what the ticket says?
 - Is there a test for each "Done when" line, and does it fail without the change?
-- Did `architecture.md` change if a decision did?
+- Did `docs/02-architecture.md` change if a decision did?
 - Are the three numbers in the PR: tests passed, eval pass rate against the baseline, tokens per eval run?
 - Does `grep -rn "sk-ant" .` come back empty (in PowerShell, `git grep -n "sk-ant"`, which checks tracked files), and is `.env` still untracked?
 
