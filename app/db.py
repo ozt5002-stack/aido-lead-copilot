@@ -30,7 +30,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, rela
 from .config import ROOT, settings
 from .stage import DOMAIN_IDS
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2  # 2: the bakery tables replaced by leads (docs/02-architecture.md); needs a fresh database
 
 
 def utcnow() -> datetime:
@@ -95,52 +95,6 @@ class Run(Base):
     duration_ms: Mapped[int] = mapped_column(Integer, default=0)
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, index=True)
-
-
-class Supplier(Base):
-    __tablename__ = "suppliers"
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    name: Mapped[str] = mapped_column(String(120), index=True)
-    item: Mapped[str] = mapped_column(String(120))
-    unit: Mapped[str] = mapped_column(String(20))
-    price: Mapped[float] = mapped_column(Float)
-    currency: Mapped[str] = mapped_column(String(3))
-
-
-class Invoice(Base):
-    __tablename__ = "invoices"
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    supplier: Mapped[str] = mapped_column(String(120), index=True)
-    invoice_number: Mapped[str | None] = mapped_column(String(60), nullable=True, index=True)
-    amount: Mapped[float | None] = mapped_column(Float, nullable=True)
-    currency: Mapped[str] = mapped_column(String(3), default="ILS")
-    invoice_date: Mapped[date | None] = mapped_column(Date, nullable=True)
-    status: Mapped[str] = mapped_column(String(20), default="logged")  # logged | needs_a_look
-    flagged: Mapped[bool] = mapped_column(Boolean, default=False)  # over the spec threshold
-    source_ref: Mapped[str | None] = mapped_column(String(120), nullable=True, unique=True)  # the dedup key
-    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
-    logged_by: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, index=True)
-
-
-class Sale(Base):
-    """One line of the Lesson 4 bakery dataset (29,115 rows, Sep 2025 to Aug 2026)."""
-
-    __tablename__ = "sales"
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    order_id: Mapped[str] = mapped_column(String(20), index=True)
-    order_datetime: Mapped[datetime] = mapped_column(DateTime)
-    order_date: Mapped[date] = mapped_column(Date, index=True)
-    branch: Mapped[str] = mapped_column(String(60), index=True)
-    channel: Mapped[str] = mapped_column(String(30))
-    payment_method: Mapped[str] = mapped_column(String(20))
-    customer_type: Mapped[str] = mapped_column(String(20))
-    product: Mapped[str] = mapped_column(String(60), index=True)
-    category: Mapped[str] = mapped_column(String(30))
-    quantity: Mapped[int] = mapped_column(Integer)
-    unit_price: Mapped[float] = mapped_column(Float)
-    line_total: Mapped[float] = mapped_column(Float)
-    status: Mapped[str] = mapped_column(String(12), index=True)  # completed | refunded
 
 
 PIPELINE_STATUSES = ("new", "contacted", "meeting", "diagnosed", "proposal", "won", "lost")
@@ -237,15 +191,11 @@ def init_db(bind=None, data_dir: Path | None = None) -> dict:
     bind = bind or engine
     data_dir = data_dir or (ROOT / "data")
     Base.metadata.create_all(bind)
-    report = {"schema_version": SCHEMA_VERSION, "suppliers_seeded": 0, "sales_seeded": 0, "leads_seeded": 0}
+    report = {"schema_version": SCHEMA_VERSION, "leads_seeded": 0}
     with Session(bind) as db:
         if db.scalar(select(func.count()).select_from(SchemaVersion)) == 0:
             db.add(SchemaVersion(version=SCHEMA_VERSION))
             db.commit()
-        if db.scalar(select(func.count()).select_from(Supplier)) == 0:
-            report["suppliers_seeded"] = _seed_suppliers(db, data_dir / "suppliers.csv")
-        if db.scalar(select(func.count()).select_from(Sale)) == 0:
-            report["sales_seeded"] = _seed_sales(db, data_dir / "bakery_sales.csv")
         if db.scalar(select(func.count()).select_from(Lead)) == 0:
             report["leads_seeded"] = seed_leads(db, data_dir / "leads.csv")
     return report
@@ -277,43 +227,3 @@ def seed_leads(db: Session, path: Path) -> int:
     db.execute(Lead.__table__.insert(), rows)
     db.commit()
     return len(rows)
-
-
-def _seed_suppliers(db: Session, path: Path) -> int:
-    if not path.exists():
-        return 0
-    rows = []
-    with path.open(encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            rows.append(Supplier(name=r["supplier"].strip(), item=r["item"].strip(), unit=r["unit"].strip(),
-                                 price=float(r["price"]), currency=r["currency"].strip().upper()))
-    db.add_all(rows)
-    db.commit()
-    return len(rows)
-
-
-def _seed_sales(db: Session, path: Path, chunk: int = 2000) -> int:
-    if not path.exists():
-        return 0
-    total = 0
-    batch: list[dict] = []
-    with path.open(encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            dt = datetime.strptime(r["order_datetime"], "%Y-%m-%d %H:%M")
-            # Clean at the door (Lesson 5): the source file has a "Herzliya " variant with a trailing space.
-            batch.append({
-                "order_id": r["order_id"].strip(), "order_datetime": dt, "order_date": dt.date(),
-                "branch": r["branch"].strip(), "channel": r["channel"].strip(), "payment_method": r["payment_method"].strip(),
-                "customer_type": r["customer_type"].strip(), "product": r["product"].strip(), "category": r["category"].strip(),
-                "quantity": int(r["quantity"]), "unit_price": float(r["unit_price"]),
-                "line_total": float(r["line_total"]), "status": r["status"],
-            })
-            if len(batch) >= chunk:
-                db.execute(Sale.__table__.insert(), batch)
-                total += len(batch)
-                batch = []
-    if batch:
-        db.execute(Sale.__table__.insert(), batch)
-        total += len(batch)
-    db.commit()
-    return total

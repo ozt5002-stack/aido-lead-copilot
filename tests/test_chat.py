@@ -2,7 +2,7 @@
 from app import agent as agent_module
 from app.agent import ModelEvent, run_turn
 from app.costs import Usage
-from app.db import Conversation, Invoice, Message, Run, SessionLocal, User
+from app.db import Conversation, Lead, Message, Run, SessionLocal, User
 from tests.conftest import read_sse
 
 
@@ -43,36 +43,45 @@ def test_chat_streams_text_and_saves_once(client, db, logged_in, fake):
     assert events[-1]["cost_usd"] == 0.0  # fake model has no price table
 
 
-def test_tool_loop_logs_invoice_once_even_when_sent_twice(client, db, logged_in, fake):
+def test_tool_loop_logs_a_lead_once_even_when_sent_twice(client, db, logged_in, fake):
     tool_turn = [
-        ModelEvent(type="text", text="Reading the invoice. "),
+        ModelEvent(type="text", text="Reading the notes. "),
         ModelEvent(type="stop", stop_reason="tool_use", usage=Usage(300, 40), content=[
-            {"type": "text", "text": "Reading the invoice. "},
-            {"type": "tool_use", "id": "tu_1", "name": "log_invoice",
-             "input": {"supplier": "Levi Flour", "invoice_number": "L-2201", "amount": None, "source_ref": "img_fixed"}},
+            {"type": "text", "text": "Reading the notes. "},
+            {"type": "tool_use", "id": "tu_1", "name": "log_lead",
+             "input": {"business_name": "גפן סדנאות בדיקה", "industry": "חינוך והדרכה", "total_score": None,
+                       "source_ref": "img_fixed"}},
         ]),
     ]
     final_turn = [
-        ModelEvent(type="text", text="Logged Levi Flour L-2201 — amount unreadable, marked needs a look."),
+        ModelEvent(type="text", text="Logged, no score yet: marked needs a look."),
         ModelEvent(type="stop", stop_reason="end_turn", usage=Usage(420, 30),
-                   content=[{"type": "text", "text": "Logged Levi Flour L-2201 — amount unreadable, marked needs a look."}]),
+                   content=[{"type": "text", "text": "Logged, no score yet: marked needs a look."}]),
     ]
     fake.turns.extend([tool_turn, final_turn, tool_turn, final_turn])
 
-    r1 = client.post("/api/chat", json={"message": "log this invoice please"})
+    r1 = client.post("/api/chat", json={"message": "log these notes please"})
     e1 = read_sse(r1)
     tools = [e for e in e1 if e["type"] == "tool"]
-    assert [t["status"] for t in tools] == ["start", "done"] and tools[0]["name"] == "log_invoice"
+    assert [t["status"] for t in tools] == ["start", "done"] and tools[0]["name"] == "log_lead"
     assert "needs_a_look" in tools[1]["summary"]
-    rows = db.query(Invoice).filter_by(source_ref="img_fixed").all()
-    assert len(rows) == 1 and rows[0].status == "needs_a_look"
+    rows = db.query(Lead).filter_by(source_ref="img_fixed").all()
+    assert len(rows) == 1 and rows[0].record_status == "needs_a_look" and rows[0].total_score is None
 
-    r2 = client.post("/api/chat", json={"message": "log this invoice please", "conversation_id": e1[0]["conversation_id"]})
+    r2 = client.post("/api/chat", json={"message": "log these notes please", "conversation_id": e1[0]["conversation_id"]})
     e2 = read_sse(r2)
     assert any(e["type"] == "tool" and e["status"] == "done" and "duplicate" in e["summary"] for e in e2)
-    assert db.query(Invoice).filter_by(source_ref="img_fixed").count() == 1
+    assert db.query(Lead).filter_by(source_ref="img_fixed").count() == 1
     run = db.query(Run).filter_by(conversation_id=e1[0]["conversation_id"]).order_by(Run.id.desc()).first()
     assert run.tool_calls == 1 and run.input_tokens == 720  # both model calls of the turn are summed
+
+
+def test_leads_endpoint_lists_recent_leads(client, logged_in):
+    rows = client.get("/api/leads").json()
+    assert 0 < len(rows) <= 50
+    assert {"business_name", "stage_he", "record_status", "hot", "fictional"} <= rows[0].keys()
+    client.cookies.clear()
+    assert client.get("/api/leads").status_code == 401
 
 
 def test_refusal_is_reported_not_hidden(client, db, logged_in, fake):
@@ -119,11 +128,15 @@ def test_image_message_carries_a_reference(client, db, logged_in, fake):
     assert user_msg.has_image is True and "[image img_" in user_msg.content
 
 
-def test_system_prompt_names_the_real_branches(client, db):
-    # Issue #3: unnamed, the model made one up ("Haifa") for its examples.
+def test_system_prompt_names_the_real_industries_and_dates(client, db):
+    # bakery-copilot issue #3: unnamed, the model made up a branch for its examples. Same for industries.
     text = agent_module.build_system(db)[0]["text"]
-    for branch in ("Tel Aviv - Florentin", "Tel Aviv - Dizengoff", "Ramat Gan", "Herzliya"):
-        assert branch in text
+    for industry in ("קמעונאות", "מסעדנות", "סוכנות ביטוח"):
+        assert industry in text
+    from app.tools.leads import data_range
+
+    d_from, d_to = data_range(db)  # leads logged by other tests move the end date, as real ones would
+    assert f"{d_from} to {d_to}" in text
     assert "{{" not in text
 
 
@@ -137,12 +150,12 @@ def test_startup_prints_the_seed_report(client, capsys):
     capsys.readouterr()
     with TestClient(app):
         pass
-    assert "seed report: schema_version: 1, suppliers_seeded: 0, sales_seeded: 0" in capsys.readouterr().out
+    assert "seed report: schema_version: 2, leads_seeded: 0" in capsys.readouterr().out
 
 
 def test_digest_endpoint_needs_secret(client, logged_in):
     assert client.post("/internal/digest").status_code == 401
     r = client.post("/internal/digest", headers={"X-Cron-Secret": "cron-test"})
     assert r.status_code == 200
-    assert r.json()["text"].startswith("Bakery Copilot —")
+    assert r.json()["text"].startswith("AIDO Lead Copilot - ")
     assert r.json()["sent"] is False

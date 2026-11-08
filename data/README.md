@@ -7,4 +7,4 @@
 - About a fifth of the leads have no diagnosis yet (empty score and stages, an early pipeline status). This is normal for a new lead. It is not the *needs a look* state, which only rows logged through the chat can get.
 - Stages are computed by `app/stage.py` (the lesson 8 model): total 20-33 כבאי, 34-46 בנאי, 47-60 פקח; domain average 1.0-1.6 כבאי, 1.7-2.3 בנאי, 2.4-3.0 פקח.
 
-The bakery files (`bakery_sales.csv`, `suppliers.csv`) stay until plan task 3 removes them together with the bakery tools.
+The bakery files (`bakery_sales.csv`, `suppliers.csv`) were removed with the bakery tools in plan task 3; they are in the Git history.

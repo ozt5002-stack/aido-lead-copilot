@@ -1,4 +1,4 @@
-// Bakery Copilot — the UI layer. It displays what the backend sends; it remembers nothing itself.
+// AIDO Lead Copilot - the UI layer. It displays what the backend sends; it remembers nothing itself.
 (() => {
   const $ = (id) => document.getElementById(id);
   const state = { user: null, conversations: [], current: null, image: null, streaming: false };
@@ -66,10 +66,10 @@
     scrollDown();
   }
   function renderEmpty() {
-    $("messages").innerHTML = `<div class="empty"><p>Ask about sales, or attach an invoice photo.</p>
-      <span class="hint" data-q="What sold best last week?">What sold best last week?</span>
-      <span class="hint" data-q="Revenue by branch this month">Revenue by branch this month</span>
-      <span class="hint" data-q="How many Challah did we sell in August 2026?">Challah in August 2026</span></div>`;
+    $("messages").innerHTML = `<div class="empty"><p>Ask about leads, or attach a photo of meeting notes.</p>
+      <span class="hint" data-q="כמה לידים יש בכל שלב?">כמה לידים יש בכל שלב?</span>
+      <span class="hint" data-q="אילו לידים חמים מחכים לטיפול?">לידים חמים שמחכים</span>
+      <span class="hint" data-q="מה השלב של עסק עם ציון 41?">שלב לציון 41</span></div>`;
     $("messages").querySelectorAll(".hint").forEach((h) => h.addEventListener("click", () => { $("input").value = h.dataset.q; $("input").focus(); }));
   }
   $("new-chat").addEventListener("click", () => { state.current = null; $("conv-title").textContent = "New chat"; renderConversations(); renderEmpty(); $("input").focus(); });
@@ -78,12 +78,12 @@
   function addBubble(role, text, { hasImage = false, imageDataUrl = null, time = null } = {}) {
     const div = document.createElement("div");
     div.className = `msg ${role}`;
-    const who = role === "user" ? (state.user ? state.user.name : "You") : "Bakery Copilot";
+    const who = role === "user" ? (state.user ? state.user.name : "You") : "AIDO Lead Copilot";
     const initial = role === "user" ? who.trim().charAt(0).toUpperCase() : "🥐";
     const when = time ? new Date(time) : new Date();
     const stamp = when.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     let inner = "";
-    if (imageDataUrl) inner += `<img class="img" src="${imageDataUrl}" alt="attached invoice">`;
+    if (imageDataUrl) inner += `<img class="img" src="${imageDataUrl}" alt="attached meeting notes">`;
     else if (hasImage) inner += `<span class="chip">📎 image</span><br>`;
     inner += role === "user" ? `<p>${escapeHtml(text).replace(/\n/g, "<br>")}</p>` : render(text);
     div.innerHTML = `<div class="avatar ${role}">${initial}</div><div class="msg-body"><div class="msg-head"><span class="author">${escapeHtml(who)}</span>${role === "assistant" ? '<span class="tag">BOT</span>' : ""}<span class="time">${stamp}</span></div><div class="body">${inner}</div></div>`;
@@ -118,7 +118,7 @@
     const image = state.image;
     $("input").value = ""; $("input").style.height = "auto"; state.image = null; $("image").value = ""; $("attachment").classList.add("hidden");
     if ($("messages").querySelector(".empty")) $("messages").innerHTML = "";
-    addBubble("user", text || "(invoice photo)", { imageDataUrl: image ? image.dataUrl : null });
+    addBubble("user", text || "(meeting notes photo)", { imageDataUrl: image ? image.dataUrl : null });
 
     const bot = addBubble("assistant", "");
     const body = bot.querySelector(".body"); body.classList.add("cursor");
@@ -156,13 +156,13 @@
   });
   async function loadConversationsQuiet() { try { state.conversations = await api("/api/conversations"); renderConversations(); } catch (_) {} }
 
-  // ---------- invoices panel ----------
-  async function loadInvoices() {
-    const rows = await api("/api/invoices");
-    $("invoice-rows").innerHTML = rows.map((r) => `<tr><td>${r.invoice_date || (r.created_at || "").slice(0, 10)}</td><td>${escapeHtml(r.supplier)}<br><small>${escapeHtml(r.invoice_number || "")}</small></td><td>${r.amount == null ? "—" : r.amount.toLocaleString() + " " + r.currency}</td><td><span class="badge ${r.status}">${r.status.replace(/_/g, " ")}</span>${r.flagged ? '<span class="badge flag">flag</span>' : ""}</td></tr>`).join("") || `<tr><td colspan="4"><small>No invoices yet.</small></td></tr>`;
+  // ---------- leads panel (task 6 turns this into the Hebrew RTL version) ----------
+  async function loadLeads() {
+    const rows = await api("/api/leads");
+    $("lead-rows").innerHTML = rows.map((r) => `<tr><td>${r.lead_date || ""}</td><td>${escapeHtml(r.business_name)}<br><small>${escapeHtml(r.industry || "")}</small></td><td>${r.stage_he ? escapeHtml(r.stage_he) + " · " + r.total_score : "—"}</td><td><span class="badge ${r.record_status}">${r.record_status.replace(/_/g, " ")}</span>${r.hot ? '<span class="badge flag">hot</span>' : ""}</td></tr>`).join("") || `<tr><td colspan="4"><small>No leads yet.</small></td></tr>`;
   }
-  $("toggle-invoices").addEventListener("click", async () => { $("invoices").classList.toggle("hidden"); if (!$("invoices").classList.contains("hidden")) await loadInvoices(); });
-  $("close-invoices").addEventListener("click", () => $("invoices").classList.add("hidden"));
+  $("toggle-leads").addEventListener("click", async () => { $("leads").classList.toggle("hidden"); if (!$("leads").classList.contains("hidden")) await loadLeads(); });
+  $("close-leads").addEventListener("click", () => $("leads").classList.add("hidden"));
 
   // ---------- boot ----------
   (async () => {
