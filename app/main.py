@@ -91,7 +91,7 @@ def health(db: Session = Depends(get_db)):
 @app.post("/api/login")
 def login(payload: LoginIn, response: Response, db: Session = Depends(get_db)):
     if not auth.password_ok(payload.password):
-        raise HTTPException(401, "Wrong password.")
+        raise HTTPException(401, "סיסמה שגויה.")
     user = auth.get_or_create_user(db, auth.normalise_name(payload.name))
     response.set_cookie(auth.COOKIE_NAME, auth.make_token(user.id, user.name), httponly=True, samesite="lax",
                         secure=settings.is_production, max_age=settings.session_hours * 3600, path="/")
@@ -127,7 +127,7 @@ def list_messages(conversation_id: int, request: Request, db: Session = Depends(
     user = auth.current_user(request, db)
     conv = db.get(Conversation, conversation_id)
     if conv is None or conv.user_id != user.id:
-        raise HTTPException(404, "Conversation not found.")
+        raise HTTPException(404, "השיחה לא נמצאה.")
     rows = db.scalars(select(Message).where(Message.conversation_id == conv.id).order_by(Message.id)).all()
     return [{"id": m.id, "role": m.role, "content": m.content, "has_image": m.has_image,
              "created_at": m.created_at.isoformat(timespec="seconds")} for m in rows]
@@ -147,7 +147,7 @@ def chat(payload: ChatIn, request: Request, db: Session = Depends(get_db)):
     if payload.conversation_id is not None:
         conv = db.get(Conversation, payload.conversation_id)
         if conv is None or conv.user_id != user.id:
-            raise HTTPException(404, "Conversation not found.")
+            raise HTTPException(404, "השיחה לא נמצאה.")
     conv_id = conv.id if conv else None
     user_id = user.id
     image = payload.image.model_dump() if payload.image else None

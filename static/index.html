@@ -1,61 +1,70 @@
 <!doctype html>
-<html lang="en">
+<html lang="he" dir="rtl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AIDO Lead Copilot</title>
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js" defer></script>
 </head>
 <body>
   <div id="login" class="modal hidden" role="dialog" aria-labelledby="login-title">
     <form id="login-form" class="card">
-      <p class="kicker">AIDO LEAD COPILOT</p>
-      <h1 id="login-title">Sign in</h1>
-      <label>Your name<input id="login-name" name="name" autocomplete="username" required minlength="2" maxlength="40" placeholder="Dana"></label>
-      <label>Team password<input id="login-password" name="password" type="password" autocomplete="current-password" required></label>
-      <button type="submit" class="primary">Enter</button>
+      <div class="logo" aria-hidden="true"><span>A</span></div>
+      <p class="kicker">AIDO · כלי פנימי ליועצים</p>
+      <h1 id="login-title">כניסה ל-Lead Copilot</h1>
+      <label>השם שלך<input id="login-name" name="name" autocomplete="username" required minlength="2" maxlength="40" placeholder="עוז"></label>
+      <label>סיסמת הצוות<input id="login-password" name="password" type="password" autocomplete="current-password" required></label>
+      <button type="submit" class="primary wide">כניסה</button>
       <p id="login-error" class="error" role="alert"></p>
+      <p class="fiction">כל הלידים במערכת בדיוניים: נתוני הדגמה בלבד.</p>
     </form>
   </div>
 
   <div id="app" class="app hidden">
     <aside class="sidebar">
       <div class="brand">
-        <span class="dot"></span>
+        <div class="logo small" aria-hidden="true"><span>A</span></div>
         <div><strong>AIDO Lead Copilot</strong><small id="who"></small></div>
       </div>
-      <button id="new-chat" class="primary wide">+ New chat</button>
-      <nav id="conversations" class="conversations" aria-label="Conversations"></nav>
+      <button id="new-chat" class="primary wide">+ שיחה חדשה</button>
+      <nav id="conversations" class="conversations" aria-label="שיחות"></nav>
       <div class="sidebar-foot">
-        <button id="toggle-leads" class="ghost">Leads</button>
-        <button id="logout" class="ghost">Sign out</button>
+        <button id="toggle-leads" class="ghost">לידים אחרונים</button>
+        <button id="logout" class="ghost">יציאה</button>
       </div>
     </aside>
 
     <main class="main">
       <header class="topbar">
-        <h2 id="conv-title">New chat</h2>
-        <span id="status" class="status"></span>
+        <h2 id="conv-title">שיחה חדשה</h2>
+        <span id="status" class="status" aria-live="polite"></span>
       </header>
+      <p class="fiction-bar">נתוני הדגמה: כל הלידים במערכת בדיוניים.</p>
 
       <section id="messages" class="messages" aria-live="polite"></section>
 
       <form id="composer" class="composer">
-        <label class="attach" title="Attach a photo of meeting notes">
-          <input id="image" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
-          <span>📎</span>
+        <label class="attach" title="צירוף צילום של סיכום פגישה">
+          <input id="image" type="file" accept="image/png,image/jpeg,image/webp,image/gif" aria-label="צירוף צילום של סיכום פגישה">
+          <span aria-hidden="true">📎</span>
         </label>
-        <textarea id="input" rows="1" placeholder="Ask about leads, or attach meeting notes…" required></textarea>
-        <button id="send" type="submit" class="primary">Send</button>
+        <textarea id="input" rows="1" placeholder="שאלה, או סיכום פגישה…" aria-label="הודעה" required></textarea>
+        <button id="send" type="submit" class="primary">שליחה</button>
       </form>
       <p id="attachment" class="attachment hidden"></p>
     </main>
 
-    <aside id="leads" class="panel hidden" aria-label="Recent leads">
-      <header><h3>Recent leads</h3><button id="close-leads" class="ghost">✕</button></header>
+    <aside id="leads" class="panel hidden" aria-label="לידים אחרונים">
+      <header><h3>לידים אחרונים</h3><button id="close-leads" class="ghost" aria-label="סגירה">✕</button></header>
+      <p class="legend"><span class="stage firefighter">כבאי</span><span class="stage builder">בנאי</span><span class="stage inspector">פקח</span><span class="badge hot">חם</span></p>
       <table>
-        <thead><tr><th>Date</th><th>Business</th><th>Stage</th><th>Status</th></tr></thead>
+        <thead><tr><th>תאריך</th><th>עסק</th><th>שלב</th><th>סטטוס</th></tr></thead>
         <tbody id="lead-rows"></tbody>
       </table>
     </aside>
