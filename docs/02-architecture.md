@@ -8,7 +8,7 @@ This is the bakery-copilot architecture with the domain swapped. The layers, the
 
 | Component | File(s) | Responsibility | Changes from bakery-copilot |
 |---|---|---|---|
-| Chat UI | `static/index.html`, `app.js`, `styles.css` | Login, chat with streaming, conversation list, a "recent leads" panel, a "fictional data" note | Hebrew, `dir="rtl"`, AIDO look; invoices panel becomes leads panel |
+| Chat UI | `static/index.html`, `app.js`, `styles.css` | Login, chat with streaming (model Markdown rendered by marked and sanitised by DOMPurify, or shown as escaped text if either is blocked), conversation list, a "recent leads" panel, a "fictional data" note | Hebrew, `dir="rtl"`, AIDO look; invoices panel becomes leads panel |
 | API | `app/main.py` | Routes, auth check, SSE stream, `/health`, `/api/stats`, `/internal/digest` | `/api/invoices` becomes `/api/leads` |
 | Agent loop | `app/agent.py` | Builds the system prompt, resends history, streams the model, runs tools, max 6 rounds, records one `runs` row | Prompt placeholders change (industries, data range); tool summaries for the new tools |
 | System prompt | `app/prompts/system.md` | The assistant's job description | Rewritten: AIDO consultants, Hebrew first, numbers only from tools, no BI for כבאי |
@@ -86,7 +86,7 @@ Tables `users`, `conversations`, `messages`, `runs` and `schema_version` stay as
 ### Tools (inputs the model sends, outputs it gets)
 
 - **`leads_query`** (read only): `metric` in `count`, `deal_value_sum`, `deal_value_avg`, `score_avg`; `group_by` in `none`, `stage`, `industry`, `pipeline_status`, `month`, `weakest_domain`, or a domain's stage (`strategy_stage` ... `finance_stage`); filters `date_from`, `date_to`, `stage`, `industry` (substring), `pipeline_status`, `hot_only`, `waiting_only`, `diagnosed_only`, `min_employees`, `max_employees`; `top_n`. Returns `{metric, group_by, filters, value}` or `{..., rows: [{key, value, count}], row_count}`. With `list: true` it returns up to `top_n` matching leads (name, industry, stage, status, deal value), so the model can name them.
-- **`lookup_business`** (read only): `name` (partial). Matches on `business_key`, then on any word longer than 2 letters. Returns `{matches: [{id, business_name, industry, stage, total_score, pipeline_status, lead_date}], known: bool}`.
+- **`lookup_business`** (read only): `name` (partial), optional `industry`. Matches on `business_key`, then on any word longer than 2 letters. Each match carries `likely_same`: a near-identical spelling (similarity >= 0.85), or the same first name word in the same industry (or when the industry is unknown). The result says `possibly_same`; the prompt asks "same business?" only then, so a name that shares only a generic word (שיפוצים, ייעוץ) is logged at once. Returns `{matches: [{id, business_name, industry, stage, total_score, pipeline_status, lead_date, likely_same}], known, possibly_same}`.
 - **`log_lead`**: `business_name` (required), `industry`, `employees`, `lead_date`, `total_score` or `answers` (all 20, by domain), `domain_averages`, `pains`, `pipeline_status`, `deal_value`, `source_ref`, `notes`. Returns `{action: created | filled | duplicate, record_status, row}`.
 - **`calculate_stage`** (no database): `total_score`, or `domain_averages`, or `answers`. Returns the stage(s) with the boundaries used.
 
@@ -124,7 +124,7 @@ One Railway project, as in bakery-copilot: the **web** service (Railpack, from `
 ## Tests and evals
 
 - **Tests** (pytest, model mocked, run in CI on every PR): stage boundaries (33/34, 46/47, 1.6/1.7, 2.3/2.4, rounding), the port matching `score.js` on the lesson 8 examples (the outputs of `score.js` are committed as `tests/fixtures/score_js_cases.json`, so CI does not need the lesson 8 folder), `leads_query` aggregates on a small fixture, `lookup_business` normalisation, every `log_lead` rule above, the generator being deterministic for a fixed seed and in range, the digest lines, including that seeded rows are not counted as new.
-- **Evals** (`python -m evals.run`, real model, scored as a pass rate, run on prompt, tool or model changes and before release, and in CI when the `ANTHROPIC_API_KEY` secret is set): cases for each tool, duplicates, the fill-in, missing and out-of-range scores, no BI for כבאי, Hebrew replies, refusing deletes, no number without a tool. Baseline 80%, plus every `must_pass` case (all missing-score cases) must pass; CI runs `python -m evals.run --baseline 0.8`, which enforces both.
+- **Evals** (`python -m evals.run`, real model, scored as a pass rate, run on prompt, tool or model changes and before release, and in CI when the `ANTHROPIC_API_KEY` secret is set): cases for each tool, duplicates, the fill-in, missing and out-of-range scores, no BI for כבאי, Hebrew replies, refusing deletes, no number without a tool. Baseline 80%, plus every `must_pass` case (all missing-score cases) must pass; CI runs `python -m evals.run --baseline 0.8`, which enforces both. Every case starts from the seed: the runner always uses a throwaway SQLite database (never `DATABASE_URL` from the shell) and reseeds the leads table before each case.
 
 ## Decisions
 
@@ -141,6 +141,9 @@ One Railway project, as in bakery-copilot: the **web** service (Railpack, from `
 | 2026-11-08 | Drop the bakery tables and start at schema version 2 with `create_all` | There is no production data yet, so nothing to migrate | The first schema change after real data exists (then add Alembic) |
 | 2026-11-08 | Hebrew, right-to-left UI and Hebrew-first prompt | The consultants work in Hebrew; the stage names are Hebrew | An English-speaking team joins |
 | 2026-11-08 | Public GitHub repo | The lecturer must see it; there are no secrets in the code and the data is fictional | Real client data or configuration has to be committed |
+| 2026-11-08 | `lookup_business` marks `likely_same` and the prompt asks only then | Matching on any shared word made the ask-first rule stall logging for most real names (review of #19) | Consultants report missed duplicates (tighten) or needless questions (loosen) |
+| 2026-11-08 | Model replies are sanitised (DOMPurify) before they reach the page | Replies can echo meeting notes or business names, and marked does not sanitise (review of #20) | Replies become plain text only |
+| 2026-11-08 | Evals always run on a throwaway SQLite database and reseed per case | Each case empties the leads table; a real `DATABASE_URL` in the shell must never be wiped (review of #18) | Evals need Postgres-specific behaviour |
 
 Decisions inherited from bakery-copilot and still valid, copied with their original dates and reasons:
 

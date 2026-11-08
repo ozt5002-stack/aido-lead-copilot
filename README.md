@@ -20,6 +20,7 @@ An internal chat assistant for AIDO consultants, in Hebrew, right to left. Consu
 | [runbook.md](runbook.md) | what to do when it breaks |
 | [docs/deploy-railway.md](docs/deploy-railway.md) | deploying on Railway, every variable, day two |
 | [docs/watch.md](docs/watch.md) | the six numbers to watch every week |
+| [docs/retrospective.md](docs/retrospective.md) | the final audit against every rule, and the gaps (Hebrew) |
 
 ## Run it locally (Windows, PowerShell)
 
