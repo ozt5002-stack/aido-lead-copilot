@@ -1,6 +1,6 @@
 """Bakery Copilot backend: the API, the static UI, the health check, the digest hook.
 
-One service does everything (docs/02-architecture.md, "Where things run"). The agent
+One service does everything (docs/02-architecture.md, "Components and responsibilities"). The agent
 loop itself lives in agent.py; this file is doors, locks and plumbing.
 """
 from __future__ import annotations
