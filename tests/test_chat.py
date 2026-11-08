@@ -87,7 +87,7 @@ def test_leads_endpoint_lists_recent_leads(client, logged_in):
 def test_refusal_is_reported_not_hidden(client, db, logged_in, fake):
     fake.turns.append([ModelEvent(type="stop", stop_reason="refusal", usage=Usage(50, 0), content=[])])
     events = read_sse(client.post("/api/chat", json={"message": "do something odd"}))
-    assert any(e["type"] == "text" and "can't help" in e["text"] for e in events)
+    assert any(e["type"] == "text" and "לא יכול לעזור" in e["text"] for e in events)
     conv_id = events[0]["conversation_id"]
     assert db.query(Run).filter_by(conversation_id=conv_id).one().status == "refusal"
 
@@ -136,7 +136,7 @@ def test_system_prompt_names_the_real_industries_and_dates(client, db):
     from app.tools.leads import data_range
 
     d_from, d_to = data_range(db)  # leads logged by other tests move the end date, as real ones would
-    assert f"{d_from} to {d_to}" in text
+    assert str(d_from) in text and str(d_to) in text
     assert "{{" not in text
 
 

@@ -138,7 +138,7 @@ def chat(payload: ChatIn, request: Request, db: Session = Depends(get_db)):
     """One turn. Checks the three limits, then streams the agent's events as SSE."""
     user = auth.current_user(request, db)
     if not payload.message.strip() and payload.image is None:
-        raise HTTPException(400, "Say something or attach a photo of meeting notes.")
+        raise HTTPException(400, "כתוב משהו, או צרף צילום של סיכום פגישה.")
     limits.check_rate_limit(db, user.id)
     limits.check_daily_cap(db)
     limits.check_upload_size(payload.image.data if payload.image else None)

@@ -101,14 +101,14 @@
 
 - id: log_from_twenty_answers
   input: |
-    סיכום אבחון של גבעה לוגיסטיקה (הובלה ולוגיסטיקה, 30 עובדים). התשובות לפי תחום:
+    סיכום אבחון של כוכב תובלה (הובלה ולוגיסטיקה, 30 עובדים). התשובות לפי תחום:
     אסטרטגיה 2,2,2,2; הנהלה 2,2,2,2; מערכות 1,1,1,2; אנשים 2,2,2,2; פיננסים 2,2,2,2.
     תרשום בבקשה.
   expect:
     answer_hebrew: true
     tools_called: [log_lead]
     lead:
-      name_contains: "גבעה"
+      name_contains: "כוכב"
       record_status: logged
       total_score: 37
       stage: builder
