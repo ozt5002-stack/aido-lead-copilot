@@ -60,7 +60,7 @@ flowchart LR
 |---|---|---|
 | id | int | primary key |
 | business_name | str(120) | as written |
-| business_key | str(120), unique | normalised name, the dedup key. Order: lowercase; remove the legal suffixes first, in all their spellings (`בע"מ`, `בע״מ`, `בעמ`, `Ltd`, `Ltd.`); then remove punctuation; collapse spaces |
+| business_key | str(120), unique | normalised name, the dedup key. Order: Unicode-normalise, drop Hebrew vowel marks, casefold; delete quote marks (so `נדל"ן` = `נדלן`, `בע"מ` = `בעמ`); remove a trailing legal suffix (`בעמ`, `Ltd`, `Inc`, also in brackets or with a dot); turn the remaining punctuation into spaces; collapse spaces. An empty key (a name that is only a suffix) is refused |
 | industry | str(60) | from a fixed list in the generator; free text for new leads |
 | employees | int, nullable | |
 | lead_date | date | the day the lead came in |

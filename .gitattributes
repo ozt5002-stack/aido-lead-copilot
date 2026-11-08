@@ -1,2 +1,5 @@
 # Shell scripts run in bash (Git Bash on Windows), which rejects CRLF line endings.
 *.sh text eol=lf
+
+# The generator writes LF; keep it byte-identical on Windows so --check and the tests compare equal.
+data/leads.csv text eol=lf
