@@ -1,5 +1,5 @@
 {
-  "name": "bakery-copilot-railway-iac",
+  "name": "aido-lead-copilot-railway-iac",
   "private": true,
   "description": "Dev tooling only: lets `railway config plan` and `railway config apply` evaluate railway.ts. Not part of the app; kept out of the repo root so Railpack still sees a Python project.",
   "devDependencies": {
