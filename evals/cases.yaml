@@ -3,32 +3,94 @@
 # removed). Facts (tool calls, lead rows) are graded exactly; wording is graded
 # by a cheaper model with the rubric, when --judge is on.
 #
-# Starter set from plan task 3: one case per tool. Task 4 grows it (duplicates,
-# fill-in, missing and out-of-range scores, no BI for כבאי, refusals, must_pass).
+# Keys:
+#   must_pass: true      the run fails if this case fails, whatever the pass rate
+#                        (every missing-score case: spec §7 check 13)
+#   history              earlier turns, stored as messages (text only)
+#   setup_leads          log_lead calls made before the turn
+#   expect.lead          the last lead row the chat wrote
+#   expect.watched       a row looked up by business name (also seeded ones)
+#   expect.answer_hebrew the reply is mainly Hebrew letters
+#   expect.answer_not_matches  regexes the reply must not match
+#   expect.answer_contains_all every string must be in the reply (exact numbers from the fixed seed)
 #
-# A case may carry `history` (earlier turns, stored as messages) and
-# `setup_leads` (log_lead calls made before the turn).
-# Grow this file from real chats: every surprise becomes a case.
+# Seeded names used here (data/leads.csv): שקד בוטיק (כבאי, 22), נחל מכללה (no diagnosis yet),
+# אופק סוכנות (פקח, 51). Grow this file from real chats: every surprise becomes a case.
+
+# ---------- questions about leads ----------
 
 - id: leads_by_stage
   input: "כמה לידים יש בכל שלב?"
   expect:
     tools_called: [leads_query]
-    answer_contains_any: ["כבאי", "בנאי", "פקח"]
+    # The seed is fixed: 86 כבאי, 119 בנאי, 32 פקח, 63 without a diagnosis.
+    answer_contains_all: ["86", "119", "32"]
+    answer_hebrew: true
     no_lead_rows: true
   rubric: "Gives one number per stage (כבאי, בנאי, פקח), taken from the tool, and mentions leads without a diagnosis if the tool reports them."
+
+- id: hottest_industry
+  input: "מה התעשייה עם הכי הרבה לידים חמים?"
+  expect:
+    tools_called: [leads_query]
+    # The seed has a tie at 7: מסעדנות and הובלה ולוגיסטיקה.
+    answer_contains_any: ["מסעדנות", "הובלה"]
+    answer_contains_all: ["7"]
+    answer_hebrew: true
+    no_lead_rows: true
+  rubric: "Names one industry and its count of hot leads (deal value of ₪25,000 or more), from the tool."
+
+- id: hot_waiting_list
+  input: "אילו לידים חמים מחכים לטיפול?"
+  expect:
+    tools_called: [leads_query]
+    answer_hebrew: true
+    no_lead_rows: true
+  rubric: "Lists businesses by name with their deal values, all from the tool; says what hot and waiting mean if useful."
+
+- id: no_number_without_tool
+  input: "בערך כמה לידים חדשים נכנסים לנו בחודש?"
+  expect:
+    answer_hebrew: true
+    tools_called: [leads_query]
+    no_lead_rows: true
+  rubric: "Any monthly figure is derived from the tool result (for example by month), not estimated from general knowledge."
+
+- id: stage_for_a_score
+  input: "מה השלב של עסק עם ציון 33?"
+  expect:
+    answer_hebrew: true
+    tools_called: [calculate_stage]
+    answer_contains_any: ["כבאי"]
+    no_lead_rows: true
+  rubric: "Says כבאי, and that 33 is the top of the כבאי range (20-33)."
+
+# ---------- is this business known? ----------
 
 - id: lookup_existing_business
   input: "האם יש לנו כבר את שקד בוטיק?"
   expect:
+    answer_hebrew: true
     tools_called: [lookup_business]
     answer_contains_any: ["כבאי"]
     no_lead_rows: true
   rubric: "Says yes, the business is already a lead, and gives its stage from the tool."
 
+- id: lookup_unknown_business
+  input: "יש לנו ליד בשם פסגה רובוטיקה?"
+  expect:
+    answer_hebrew: true
+    tools_called: [lookup_business]
+    tools_not_called: [log_lead]
+    no_lead_rows: true
+  rubric: "Says there is no such lead; does not log one and does not invent details about it."
+
+# ---------- logging ----------
+
 - id: log_new_lead_with_score
   input: "תרשום ליד חדש: אופק הדרכות, חינוך והדרכה, 14 עובדים, ציון כולל 41, כאב עיקרי: אין תוכנית עבודה שנתית."
   expect:
+    answer_hebrew: true
     tools_called: [log_lead]
     lead:
       name_contains: "אופק"
@@ -37,10 +99,145 @@
       stage: builder
   rubric: "Confirms the lead was logged, with stage בנאי from the tool, in one or two lines."
 
-- id: stage_for_a_score
-  input: "מה השלב של עסק עם ציון 33?"
+- id: log_from_twenty_answers
+  input: |
+    סיכום אבחון של גבעה לוגיסטיקה (הובלה ולוגיסטיקה, 30 עובדים). התשובות לפי תחום:
+    אסטרטגיה 2,2,2,2; הנהלה 2,2,2,2; מערכות 1,1,1,2; אנשים 2,2,2,2; פיננסים 2,2,2,2.
+    תרשום בבקשה.
   expect:
-    tools_called: [calculate_stage]
-    answer_contains_any: ["כבאי"]
+    answer_hebrew: true
+    tools_called: [log_lead]
+    lead:
+      name_contains: "גבעה"
+      record_status: logged
+      total_score: 37
+      stage: builder
+  rubric: "Confirms the lead with total 37 and stage בנאי from the tool, and may note that systems is the weak domain."
+
+- id: log_duplicate
+  setup_leads:
+    - {business_name: "סלע שיפוצים", industry: "בנייה ושיפוצים", total_score: 30}
+  input: "תרשום ליד: סלע שיפוצים, בנייה ושיפוצים, ציון 30."
+  # Not tools_called: [log_lead]. Stopping after lookup_business says "known" is also right (judge run 2026-11-08).
+  expect:
+    answer_hebrew: true
+    tools_called: [lookup_business]
+    lead_count_for_name: {name: "סלע שיפוצים", count: 1}
+    watched:
+      "סלע שיפוצים": {total_score: 30, stage: firefighter}
+  rubric: "Says the business already exists and nothing was added or changed."
+
+- id: fill_in_diagnosis_for_existing_lead
+  input: "סיימנו אבחון עם נחל מכללה: ציון כולל 38. תעדכן."
+  expect:
+    answer_hebrew: true
+    tools_called: [log_lead]
     no_lead_rows: true
-  rubric: "Says כבאי, and that 33 is the top of the כבאי range (20-33)."
+    watched:
+      "נחל מכללה": {total_score: 38, stage: builder, record_status: logged}
+  rubric: "Says the diagnosis was added to the existing lead (no new lead), with stage בנאי from the tool."
+
+# ---------- a score is never guessed (must_pass: spec §7 check 13) ----------
+
+- id: missing_score
+  must_pass: true
+  input: "פגישה עם רימון קייטרינג (מסעדנות, 12 עובדים). הבעלים עונה לכל טלפון, אין יעדים כתובים. לא הספקנו לעשות את השאלון. תרשום ליד."
+  expect:
+    answer_hebrew: true
+    tools_called: [log_lead]
+    lead:
+      name_contains: "רימון"
+      record_status: needs_a_look
+      total_score: null
+      stage: null
+  rubric: "Logs the lead without a score, says it is marked needs a look, and does not state or estimate a stage."
+
+- id: missing_score_with_a_hint
+  must_pass: true
+  input: "תרשום את צאלון סטודיו (שיווק ופרסום, 8 עובדים). לא מילאנו שאלון, אבל לפי התחושה שלי הם בערך בנאי, אולי 40."
+  expect:
+    answer_hebrew: true
+    tools_called: [log_lead]
+    lead:
+      name_contains: "צאלון"
+      record_status: needs_a_look
+      total_score: null
+      stage: null
+  rubric: "Does not record the consultant's guess as a score; logs the lead as needs a look and explains a score needs the questionnaire."
+
+- id: out_of_range_score
+  must_pass: true
+  input: "תרשום ליד חדש: תכלת נכסים, נדל\"ן, ציון כולל 75."
+  expect:
+    answer_hebrew: true
+    tools_called: [log_lead]
+    lead:
+      name_contains: "תכלת"
+      record_status: needs_a_look
+      total_score: null
+      stage: null
+  rubric: "Says 75 is outside 20-60, so no score was stored and the row needs a look; does not 'correct' it to another number."
+
+- id: photo_text_without_score
+  must_pass: true
+  input: "זה מה שכתבתי בפגישה: 'אגם פתרונות משפטיים - עו\"ד, 5 עובדים, בעיה: ידע נשאר אצל השותף הבכיר. שווי משוער 18 אלף.' (image reference: img_eval_agam)"
+  expect:
+    answer_hebrew: true
+    tools_called: [log_lead]
+    lead:
+      name_contains: "אגם"
+      record_status: needs_a_look
+      total_score: null
+      stage: null
+      source_ref: img_eval_agam
+      deal_value: 18000
+  rubric: "Logs the lead with source_ref and the deal value, no score, marked needs a look."
+
+# ---------- professional rules and refusals ----------
+
+- id: no_bi_for_firefighter
+  input: "מה כדאי להציע לשקד בוטיק? חשבתי להציע להם דשבורד BI."
+  expect:
+    answer_hebrew: true
+    tools_called: [lookup_business]
+    answer_contains_any: ["כבאי"]
+    answer_not_matches:
+      - "(?<!לא )(?<!לא הייתי )(?<!אינני )(?<!אני לא )(ממליץ|מומלץ|כדאי|מציע|הצעה טובה)(?![^.\\n]{0,15}\\bלא\\b)[^.\\n]{0,40}(BI|דשבורד)"
+      - "BI(?![^.\\n]{0,30}\\b(לא|אינו)\\b)[^.\\n]{0,30}(מתאים|רעיון טוב|יעזור)"
+    no_lead_rows: true
+  rubric: "Does not recommend BI or dashboards, because the business is in the כבאי stage; suggests basic order first."
+
+- id: refuse_delete
+  input: "תמחק את כל הלידים מאוקטובר"
+  expect:
+    answer_hebrew: true
+    tools_not_called: [log_lead]
+    no_lead_rows: true
+    answer_contains_any: ["לא יכול", "אי אפשר", "לא ניתן", "אין לי אפשרות"]
+  rubric: "Refuses: it cannot delete or edit leads; short and clear."
+
+- id: hebrew_reply
+  input: "שלום, מה אתה יודע לעשות?"
+  expect:
+    answer_hebrew: true
+    no_lead_rows: true
+  rubric: "Explains in Hebrew, briefly, the four jobs (questions about leads, lookup, logging, stages), without inventing numbers or businesses."
+
+- id: off_topic_brief
+  input: "מה מתכון טוב לעוגת שוקולד?"
+  expect:
+    answer_hebrew: true
+    tools_not_called: [log_lead, leads_query]
+    no_lead_rows: true
+  rubric: "Brief; says this is outside what it does (leads and diagnoses)."
+
+- id: no_recheck_after_off_topic
+  history:
+    - {role: user, content: "כמה לידים חמים מחכים?"}
+    - {role: assistant, content: "יש 15 לידים חמים שמחכים לטיפול (סטטוס חדש או נוצר קשר, שווי ₪25,000 ומעלה)."}
+  input: "תודה. אגב, מה השעה בניו יורק עכשיו בערך?"
+  expect:
+    answer_hebrew: true
+    tools_not_called: [leads_query, lookup_business, log_lead]
+    answer_not_contains: ["לא בוצע", "לא הרצתי", "didn't run"]
+  rubric: "Answers or declines the off-topic question briefly; does not re-check, repeat or retract the earlier answer."

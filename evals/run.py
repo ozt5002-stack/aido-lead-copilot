@@ -4,6 +4,7 @@
     python -m evals.run --runs 3        # each case three times (agents vary)
     python -m evals.run --judge         # also grade wording with a cheaper model
     python -m evals.run --baseline 0.8  # exit 1 if the pass rate is below 80%
+                                        # (a failed must_pass case exits 1 with or without --baseline)
 
 Facts are graded exactly (which tools ran, what rows exist). Wording is graded
 by a second model only when --judge is passed, and never for the facts.
@@ -17,6 +18,7 @@ import argparse
 import csv
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -28,15 +30,16 @@ import yaml
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 
-# A fresh database per run so eval leads never land in the real one.
+# Always a fresh, throwaway database: every case empties and reseeds the leads table, so the evals must
+# never see a real one, even when DATABASE_URL is set in the shell (for example under `railway run`).
 _tmp = Path(tempfile.mkdtemp(prefix="aido-lead-copilot-evals-"))
-os.environ.setdefault("DATABASE_URL", f"sqlite:///{_tmp / 'evals.db'}")
+os.environ["DATABASE_URL"] = f"sqlite:///{_tmp / 'evals.db'}"
 os.environ.setdefault("APP_ENV", "local")
 os.environ.setdefault("DAILY_CAP_USD", "1000")
 
 from app import agent as agent_module  # noqa: E402
 from app.config import settings  # noqa: E402
-from app.db import Conversation, Lead, Message, SessionLocal, User, business_key, init_db  # noqa: E402
+from app.db import Conversation, Lead, Message, SessionLocal, User, business_key, init_db, seed_leads  # noqa: E402
 from app.tools.leads import log_lead  # noqa: E402
 
 
@@ -63,9 +66,11 @@ def _seed_history(db, user: User, turns: list[dict]) -> Conversation | None:
 
 def run_case(case: dict, client) -> dict:
     with SessionLocal() as db:
-        # Each case starts from the seeded, fictional leads: rows logged by earlier cases are removed.
-        db.query(Lead).filter(Lead.origin == "chat").delete()
+        # Each case starts from exactly the seeded, fictional leads: a fill-in case changes a seeded row,
+        # so the table is emptied and seeded again (300 rows, well under a second).
+        db.query(Lead).delete()
         db.commit()
+        seed_leads(db, ROOT / "data" / "leads.csv")
         for lead in case.get("setup_leads", []):
             log_lead(db, **lead)
         user = db.query(User).filter_by(name="eval").one_or_none() or User(name="eval")
@@ -87,10 +92,11 @@ def run_case(case: dict, client) -> dict:
                 text_parts.append(f"[error: {ev['message']}]")
         leads = [{"business_name": r.business_name, "business_key": r.business_key, "total_score": r.total_score,
                   "stage": r.stage, "record_status": r.record_status, "source_ref": r.source_ref,
+                  "deal_value": r.deal_value,
                   "origin": r.origin, "id": r.id}
                  for r in db.query(Lead).filter(Lead.origin == "chat").order_by(Lead.id).all()]
         touched = {}
-        for key in case.get("expect", {}).get("watch_keys", []):
+        for key in case.get("expect", {}).get("watched", {}):
             row = db.query(Lead).filter(Lead.business_key == business_key(key)).one_or_none()
             touched[key] = None if row is None else {"total_score": row.total_score, "stage": row.stage,
                                                      "record_status": row.record_status}
@@ -109,9 +115,17 @@ def grade_facts(case: dict, result: dict) -> list[str]:
     answer = result["answer"].lower()
     if exp.get("answer_contains_any") and not any(s.lower() in answer for s in exp["answer_contains_any"]):
         failures.append(f"answer contains none of {exp['answer_contains_any']}")
+    for s in exp.get("answer_contains_all", []):
+        if s.lower() not in answer:
+            failures.append(f"answer must contain {s!r}")
     for s in exp.get("answer_not_contains", []):
         if s.lower() in answer:
             failures.append(f"answer must not contain {s!r}")
+    for pattern in exp.get("answer_not_matches", []):
+        if re.search(pattern, result["answer"], re.IGNORECASE):
+            failures.append(f"answer matches forbidden pattern {pattern!r}")
+    if exp.get("answer_hebrew") and hebrew_share(result["answer"]) < 0.6:
+        failures.append(f"answer is not mainly Hebrew ({hebrew_share(result['answer']):.0%} Hebrew letters)")
     if exp.get("no_lead_rows") and result["leads"]:
         failures.append("lead rows were written")
     if "lead" in exp:
@@ -122,7 +136,7 @@ def grade_facts(case: dict, result: dict) -> list[str]:
             row = rows[-1]
             if "name_contains" in want and want["name_contains"].lower() not in (row["business_name"] or "").lower():
                 failures.append(f"business {row['business_name']!r} does not contain {want['name_contains']!r}")
-            for key in ("record_status", "total_score", "stage"):
+            for key in ("record_status", "total_score", "stage", "source_ref", "deal_value"):
                 if key in want and row.get(key) != want[key]:
                     failures.append(f"lead.{key} = {row.get(key)!r}, expected {want[key]!r}")
     if "lead_count_for_name" in exp:
@@ -141,6 +155,23 @@ def grade_facts(case: dict, result: dict) -> list[str]:
     if result["status"] != "ok":
         failures.append("turn ended in error")
     return failures
+
+
+def hebrew_share(text: str) -> float:
+    """Share of letters that are Hebrew. Numbers, names in English and punctuation do not count either way."""
+    letters = [c for c in text if c.isalpha()]
+    return sum("֐" <= c <= "׿" for c in letters) / len(letters) if letters else 0.0
+
+
+def verdict(passed: int, total: int, must_failed: list[str], baseline: float) -> tuple[int, list[str]]:
+    """Exit code and reasons: below the baseline, or any must_pass case failed (whatever the rate)."""
+    reasons = []
+    rate = passed / total if total else 0.0
+    if baseline and rate < baseline:
+        reasons.append(f"below baseline {baseline:.0%}")
+    if must_failed:
+        reasons.append("must_pass cases failed: " + ", ".join(sorted(set(must_failed))))
+    return (1 if reasons else 0), reasons
 
 
 def grade_wording(case: dict, result: dict, judge_model: str) -> str | None:
@@ -175,8 +206,12 @@ def main() -> int:
     cases = yaml.safe_load((HERE / "cases.yaml").read_text(encoding="utf-8"))
     if args.only:
         cases = [c for c in cases if c["id"] == args.only]
+        if not cases:
+            print(f"no case with id {args.only!r}", file=sys.stderr)
+            return 2
 
     passed = total = 0
+    must_failed: list[str] = []
     tokens_in = tokens_out = 0
     cost = 0.0
     out_dir = HERE / "out"
@@ -189,15 +224,18 @@ def main() -> int:
             result = run_case(case, client)
             failures = grade_facts(case, result)
             if args.judge and case.get("rubric"):
-                verdict = grade_wording(case, result, args.judge_model)
-                if verdict:
-                    failures.append(f"rubric: {verdict}")
+                judged = grade_wording(case, result, args.judge_model)
+                if judged:
+                    failures.append(f"rubric: {judged}")
             ok = not failures
             passed += ok
+            if not ok and case.get("must_pass"):
+                must_failed.append(case["id"])
             tokens_in += int(result["usage"].get("input_tokens", 0))
             tokens_out += int(result["usage"].get("output_tokens", 0))
             cost += float(result["cost"] or 0)
-            print(f"{'PASS' if ok else 'FAIL'}  {case['id']}" + (f" (run {n + 1})" if args.runs > 1 else ""))
+            print(f"{'PASS' if ok else 'FAIL'}  {case['id']}" + (" [must_pass]" if case.get("must_pass") else "")
+                  + (f" (run {n + 1})" if args.runs > 1 else ""))
             for f in failures:
                 print(f"      - {f}")
             details.append({"id": case["id"], "run": n + 1, "ok": ok, "failures": failures, **result})
@@ -212,10 +250,10 @@ def main() -> int:
             w.writerow(["timestamp", "git_sha", "model", "effort", "passed", "total", "pass_rate", "input_tokens", "output_tokens", "cost_usd", "judge"])
         w.writerow([stamp, git_sha(), settings.model, settings.model_effort, passed, total, f"{rate:.3f}", tokens_in, tokens_out, f"{cost:.4f}", args.judge])
     print(f"\n{passed}/{total} passed ({rate:.0%}) · {tokens_in} in / {tokens_out} out · ${cost:.4f} · {settings.model} @ {settings.model_effort}")
-    if args.baseline and rate < args.baseline:
-        print(f"below baseline {args.baseline:.0%}", file=sys.stderr)
-        return 1
-    return 0
+    code, reasons = verdict(passed, total, must_failed, args.baseline)
+    for r in reasons:
+        print(r, file=sys.stderr)
+    return code
 
 
 if __name__ == "__main__":
