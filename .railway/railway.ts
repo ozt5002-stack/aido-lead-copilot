@@ -1,8 +1,8 @@
 // Railway Infrastructure as Code: the one description of the Railway project
-// (architecture.md, "Hosting"). Railway does not read this file at deploy time:
+// (docs/02-architecture.md, "Hosting"). Railway does not read this file at deploy time:
 // `railway config plan` shows the drift between it and the project, and
 // `railway config apply` applies it. Variables are unmanaged on purpose, so
-// secrets live only in the Variables tab (architecture.md, "Secrets"). The npm
+// secrets live only in the Variables tab (docs/02-architecture.md, "Secrets"). The npm
 // package next to this file exists only so the CLI can evaluate it.
 import { defineRailway, github, postgres, project, service, volume } from "railway/iac";
 

@@ -1,4 +1,4 @@
-"""The three limits from architecture.md: per user per hour, per day in money,
+"""The three limits from docs/02-architecture.md: per user per hour, per day in money,
 and the file size at the door. (The per-minute limit towards Anthropic is
 handled by the SDK's retries plus the backoff in agent.py.)
 """

@@ -1,6 +1,6 @@
 # Deploying Bakery Copilot on Railway
 
-How to put this app on Railway from nothing, where every secret goes, and the Railway CLI commands for the first deploy and for day two. `architecture.md` ("Hosting", "Secrets") records the decisions; `runbook.md` is for when it breaks; this file is the walkthrough. It describes the project as it runs on 2026-10-27, with Railway CLI 5.71.
+How to put this app on Railway from nothing, where every secret goes, and the Railway CLI commands for the first deploy and for day two. `docs/02-architecture.md` ("Hosting", "Secrets") records the decisions; `runbook.md` is for when it breaks; this file is the walkthrough. It describes the project as it runs on 2026-10-27, with Railway CLI 5.71.
 
 Commands are written for macOS and Linux (zsh or bash). On Windows, use PowerShell 7: the `railway`, `git`, `gh` and `npm` commands run there unchanged, and wherever Windows differs, a **Windows (PowerShell)** block follows the macOS and Linux one. Command Prompt (`cmd.exe`) is not covered, because it keeps single quotes as part of a value.
 
@@ -323,7 +323,7 @@ Do not set the start command, health check, cron schedule or restart policy by h
 
 **Ship a change.** Branch → PR → CI green → merge. Railway builds `main` on push once the GitHub app has access; `railway deployment list --service web` shows each deployment with its commit and status, and `railway logs --service web -b` follows the build, `-d` the running app.
 
-**Change a service setting** (schedule, health timeout, retries, replicas, region). Edit `.railway/railway.ts` in a ticket branch, run `railway config plan`, put the plan's output in the PR, merge, then `railway config apply --yes`. Railway never applies the file by itself; the apply is a deliberate step by a person with the CLI. If a decision changed, `architecture.md` changes in the same commit (practice.md step 6).
+**Change a service setting** (schedule, health timeout, retries, replicas, region). Edit `.railway/railway.ts` in a ticket branch, run `railway config plan`, put the plan's output in the PR, merge, then `railway config apply --yes`. Railway never applies the file by itself; the apply is a deliberate step by a person with the CLI. If a decision changed, `docs/02-architecture.md` changes in the same commit (practice.md step 6).
 
 **Change a variable.** Dashboard → edit → **Deploy**, or `railway variable set NAME=value --service web`, which redeploys `web` at once unless you pass `--skip-deploys`. The digest reads its `${{web.NAME}}` references at its next run. `MODEL` and `MODEL_EFFORT` need an eval run before and after.
 

@@ -1,1 +1,1 @@
-Read practice.md, spec.md and architecture.md before any change. practice.md is the process; spec.md is what we build; architecture.md is how and where. Never edit .env, data/, or push to main.
+Read practice.md, spec.md and docs/02-architecture.md before any change. practice.md is the process; spec.md is what we build; docs/02-architecture.md is how and where. Never edit .env, data/, or push to main.

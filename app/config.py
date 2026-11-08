@@ -1,7 +1,7 @@
 """Configuration: everything comes from environment variables.
 
 Locally they are loaded from `.env`; on Railway they live in the service's
-Variables tab. The code reads the same names in both places (architecture.md,
+Variables tab. The code reads the same names in both places (docs/02-architecture.md,
 "Secrets").
 """
 from __future__ import annotations
