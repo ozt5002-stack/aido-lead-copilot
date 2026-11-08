@@ -16,6 +16,7 @@ from __future__ import annotations
 import json
 import re
 from collections import defaultdict
+from difflib import SequenceMatcher
 from datetime import date, datetime
 from zoneinfo import ZoneInfo
 
@@ -252,7 +253,19 @@ def _label_he(group_by: str, key: str) -> str | None:
 # lookup_business (read only)
 # ---------------------------------------------------------------------------
 
-def lookup_business(db: Session, *, name: str) -> dict:
+def _likely_same(key: str, other: Lead, industry: str | None) -> bool:
+    """Could `other` be the business called `key`? Yes for a near-identical spelling (a typo), or for the same
+    distinctive first name word in the same industry (or when the industry is not known). Sharing only a
+    generic word (an industry word such as שיפוצים or ייעוץ) does not make two businesses the same."""
+    if SequenceMatcher(None, key, other.business_key).ratio() >= 0.85:
+        return True
+    if key.split()[0] != other.business_key.split()[0]:
+        return False
+    wanted = (industry or "").strip().lower()
+    return not wanted or not other.industry or wanted in other.industry.lower() or other.industry.lower() in wanted
+
+
+def lookup_business(db: Session, *, name: str, industry: str | None = None) -> dict:
     key = business_key(name)
     if not key:
         return {"matches": [], "known": False, "error": "business name missing"}
@@ -266,8 +279,15 @@ def lookup_business(db: Session, *, name: str) -> dict:
             for r in db.scalars(select(Lead).where(Lead.business_key.like(f"%{word}%")).limit(10)):
                 seen.setdefault(r.id, r)
         rows = list(seen.values())[:10]
-    return {"matches": [_short(r) for r in rows], "known": False, "exact": False,
-            "note": "no exact match; these are similar names, not the same business" if rows else None}
+    matches = [{**_short(r), "likely_same": _likely_same(key, r, industry)} for r in rows]
+    matches.sort(key=lambda m: not m["likely_same"])
+    likely = any(m["likely_same"] for m in matches)
+    note = None
+    if likely:
+        note = "no exact match, but a match with likely_same=true may be the same business: ask before logging"
+    elif matches:
+        note = "no exact match; the matches only share a generic word, so they are other businesses: log it"
+    return {"matches": matches, "known": False, "exact": False, "possibly_same": likely, "note": note}
 
 
 # ---------------------------------------------------------------------------

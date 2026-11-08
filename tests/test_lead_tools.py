@@ -322,3 +322,16 @@ def test_industry_filter_treats_wildcards_literally(small):
     assert leads_query(small, metric="count", group_by="none", industry="_")["value"] == 0
     r = leads_query(small, metric="count", group_by="industry", top_n=1)
     assert r["row_count"] == 1 and r["total_groups"] == 2
+
+
+def test_lookup_marks_only_likely_same_businesses(db):
+    log_lead(db, business_name="תמר שיפוצים", industry="בנייה ושיפוצים", total_score=40)
+    log_lead(db, business_name="רימון ביסטרו", industry="מסעדנות", total_score=40)
+    log_lead(db, business_name="רימון שילוח", industry="הובלה ולוגיסטיקה", total_score=40)
+    generic = lookup_business(db, name="אור שיפוצים", industry="בנייה ושיפוצים")
+    assert generic["matches"] and generic["possibly_same"] is False  # shares only "שיפוצים": another business
+    same_word = lookup_business(db, name="רימון קייטרינג", industry="מסעדנות")
+    assert same_word["possibly_same"] is True
+    assert [m["business_name"] for m in same_word["matches"] if m["likely_same"]] == ["רימון ביסטרו"]
+    typo = lookup_business(db, name="תמר שיפוצם")
+    assert typo["possibly_same"] is True and typo["matches"][0]["business_name"] == "תמר שיפוצים"

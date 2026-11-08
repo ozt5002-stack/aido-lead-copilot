@@ -137,6 +137,19 @@
       "נחל מכללה": {total_score: 38, stage: builder, record_status: logged}
   rubric: "Says the diagnosis was added to the existing lead (no new lead), with stage בנאי from the tool."
 
+- id: log_despite_a_generic_word_overlap
+  # The seed has many "... שיפוצים" businesses; sharing only that word is not a reason to stop and ask.
+  input: "תרשום ליד חדש: אור שיפוצים, בנייה ושיפוצים, 9 עובדים, ציון כולל 36."
+  expect:
+    answer_hebrew: true
+    tools_called: [log_lead]
+    lead:
+      name_contains: "אור"
+      record_status: logged
+      total_score: 36
+      stage: builder
+  rubric: "Logs the new lead right away (stage בנאי from the tool); may mention similar names in one sentence, without asking first."
+
 # ---------- a score is never guessed (must_pass: spec §7 check 13) ----------
 
 - id: missing_score

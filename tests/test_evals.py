@@ -163,3 +163,13 @@ def test_evals_never_use_the_database_from_the_shell():
     # Every case empties the leads table; a real DATABASE_URL must never reach the runner.
     src = (Path(evals_run.HERE) / "run.py").read_text(encoding="utf-8")
     assert 'os.environ["DATABASE_URL"] = ' in src and 'setdefault("DATABASE_URL"' not in src
+
+
+def test_generic_overlap_case_really_has_only_generic_matches(client):
+    from app.db import SessionLocal
+    from app.tools.leads import lookup_business
+
+    assert any(c["id"] == "log_despite_a_generic_word_overlap" for c in CASES)
+    with SessionLocal() as db:
+        r = lookup_business(db, name="אור שיפוצים", industry="בנייה ושיפוצים")
+    assert r["matches"] and r["possibly_same"] is False

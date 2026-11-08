@@ -204,7 +204,7 @@ def _friendly(exc: Exception) -> str:
         if isinstance(exc, anthropic.APIConnectionError):
             return "אין חיבור למודל. בדוק את החיבור ונסה שוב."
         if isinstance(exc, anthropic.BadRequestError):
-            return f"הבקשה נדחתה: {exc.message if hasattr(exc, 'message') else exc}"
+            return "המודל דחה את הבקשה. השגיאה נרשמה; נסה לנסח אחרת או פנה למי שמתחזק את המערכת."
     return "משהו השתבש אצלנו. השגיאה נרשמה; נסה שוב."
 
 
