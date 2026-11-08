@@ -1,0 +1,962 @@
+[
+  {
+    "name": "עסק א׳ מתרגיל הכיתה: רשת של 4 חנויות, הבעלים עונה לכל טלפון, מלאי באקסל",
+    "answers": {
+      "strategy": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "management": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "systems": [
+        1,
+        1,
+        1,
+        2
+      ],
+      "people": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "finance": [
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "expected": {
+      "total": 21,
+      "max": 60,
+      "stage": "firefighter",
+      "domains": [
+        {
+          "id": "strategy",
+          "name": "אסטרטגיה ויעדים",
+          "sum": 4,
+          "average": 1,
+          "stage": "firefighter"
+        },
+        {
+          "id": "management",
+          "name": "הנהלה ומבנה ארגוני",
+          "sum": 4,
+          "average": 1,
+          "stage": "firefighter"
+        },
+        {
+          "id": "systems",
+          "name": "תהליכים ומערכות מידע",
+          "sum": 5,
+          "average": 1.3,
+          "stage": "firefighter"
+        },
+        {
+          "id": "people",
+          "name": "אנשים ותרבות ארגונית",
+          "sum": 4,
+          "average": 1,
+          "stage": "firefighter"
+        },
+        {
+          "id": "finance",
+          "name": "פיננסים",
+          "sum": 4,
+          "average": 1,
+          "stage": "firefighter"
+        }
+      ]
+    }
+  },
+  {
+    "name": "עסק ב׳ מתרגיל הכיתה: 60 עובדים, סמנכ\"ל לכל מחלקה, יעדים רבעוניים, כל אחד עם אקסל משלו",
+    "answers": {
+      "strategy": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "management": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "systems": [
+        2,
+        2,
+        1,
+        1
+      ],
+      "people": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "finance": [
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "expected": {
+      "total": 38,
+      "max": 60,
+      "stage": "builder",
+      "domains": [
+        {
+          "id": "strategy",
+          "name": "אסטרטגיה ויעדים",
+          "sum": 8,
+          "average": 2,
+          "stage": "builder"
+        },
+        {
+          "id": "management",
+          "name": "הנהלה ומבנה ארגוני",
+          "sum": 8,
+          "average": 2,
+          "stage": "builder"
+        },
+        {
+          "id": "systems",
+          "name": "תהליכים ומערכות מידע",
+          "sum": 6,
+          "average": 1.5,
+          "stage": "firefighter"
+        },
+        {
+          "id": "people",
+          "name": "אנשים ותרבות ארגונית",
+          "sum": 8,
+          "average": 2,
+          "stage": "builder"
+        },
+        {
+          "id": "finance",
+          "name": "פיננסים",
+          "sum": 8,
+          "average": 2,
+          "stage": "builder"
+        }
+      ]
+    }
+  },
+  {
+    "name": "עסק ג׳ מתרגיל הכיתה: דירקטוריון רבעוני, דשבורד לכל מחלקה, עובדים משפרים תהליכים",
+    "answers": {
+      "strategy": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "management": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "systems": [
+        3,
+        3,
+        2,
+        3
+      ],
+      "people": [
+        3,
+        3,
+        2,
+        3
+      ],
+      "finance": [
+        3,
+        2,
+        3,
+        3
+      ]
+    },
+    "expected": {
+      "total": 57,
+      "max": 60,
+      "stage": "inspector",
+      "domains": [
+        {
+          "id": "strategy",
+          "name": "אסטרטגיה ויעדים",
+          "sum": 12,
+          "average": 3,
+          "stage": "inspector"
+        },
+        {
+          "id": "management",
+          "name": "הנהלה ומבנה ארגוני",
+          "sum": 12,
+          "average": 3,
+          "stage": "inspector"
+        },
+        {
+          "id": "systems",
+          "name": "תהליכים ומערכות מידע",
+          "sum": 11,
+          "average": 2.8,
+          "stage": "inspector"
+        },
+        {
+          "id": "people",
+          "name": "אנשים ותרבות ארגונית",
+          "sum": 11,
+          "average": 2.8,
+          "stage": "inspector"
+        },
+        {
+          "id": "finance",
+          "name": "פיננסים",
+          "sum": 11,
+          "average": 2.8,
+          "stage": "inspector"
+        }
+      ]
+    }
+  },
+  {
+    "name": "מקרה גבול: ציון 33, עדיין כבאי",
+    "answers": {
+      "strategy": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "management": [
+        2,
+        2,
+        2,
+        1
+      ],
+      "systems": [
+        2,
+        2,
+        1,
+        1
+      ],
+      "people": [
+        2,
+        2,
+        1,
+        1
+      ],
+      "finance": [
+        2,
+        2,
+        1,
+        1
+      ]
+    },
+    "expected": {
+      "total": 33,
+      "max": 60,
+      "stage": "firefighter",
+      "domains": [
+        {
+          "id": "strategy",
+          "name": "אסטרטגיה ויעדים",
+          "sum": 8,
+          "average": 2,
+          "stage": "builder"
+        },
+        {
+          "id": "management",
+          "name": "הנהלה ומבנה ארגוני",
+          "sum": 7,
+          "average": 1.8,
+          "stage": "builder"
+        },
+        {
+          "id": "systems",
+          "name": "תהליכים ומערכות מידע",
+          "sum": 6,
+          "average": 1.5,
+          "stage": "firefighter"
+        },
+        {
+          "id": "people",
+          "name": "אנשים ותרבות ארגונית",
+          "sum": 6,
+          "average": 1.5,
+          "stage": "firefighter"
+        },
+        {
+          "id": "finance",
+          "name": "פיננסים",
+          "sum": 6,
+          "average": 1.5,
+          "stage": "firefighter"
+        }
+      ]
+    }
+  },
+  {
+    "name": "מקרה גבול: ציון 47, כבר פקח",
+    "answers": {
+      "strategy": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "management": [
+        3,
+        3,
+        2,
+        2
+      ],
+      "systems": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "people": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "finance": [
+        3,
+        2,
+        2,
+        2
+      ]
+    },
+    "expected": {
+      "total": 47,
+      "max": 60,
+      "stage": "inspector",
+      "domains": [
+        {
+          "id": "strategy",
+          "name": "אסטרטגיה ויעדים",
+          "sum": 12,
+          "average": 3,
+          "stage": "inspector"
+        },
+        {
+          "id": "management",
+          "name": "הנהלה ומבנה ארגוני",
+          "sum": 10,
+          "average": 2.5,
+          "stage": "inspector"
+        },
+        {
+          "id": "systems",
+          "name": "תהליכים ומערכות מידע",
+          "sum": 8,
+          "average": 2,
+          "stage": "builder"
+        },
+        {
+          "id": "people",
+          "name": "אנשים ותרבות ארגונית",
+          "sum": 8,
+          "average": 2,
+          "stage": "builder"
+        },
+        {
+          "id": "finance",
+          "name": "פיננסים",
+          "sum": 9,
+          "average": 2.3,
+          "stage": "builder"
+        }
+      ]
+    }
+  },
+  {
+    "name": "all 1 (total 20)",
+    "answers": {
+      "strategy": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "management": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "systems": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "people": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "finance": [
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "expected": {
+      "total": 20,
+      "max": 60,
+      "stage": "firefighter",
+      "domains": [
+        {
+          "id": "strategy",
+          "name": "אסטרטגיה ויעדים",
+          "sum": 4,
+          "average": 1,
+          "stage": "firefighter"
+        },
+        {
+          "id": "management",
+          "name": "הנהלה ומבנה ארגוני",
+          "sum": 4,
+          "average": 1,
+          "stage": "firefighter"
+        },
+        {
+          "id": "systems",
+          "name": "תהליכים ומערכות מידע",
+          "sum": 4,
+          "average": 1,
+          "stage": "firefighter"
+        },
+        {
+          "id": "people",
+          "name": "אנשים ותרבות ארגונית",
+          "sum": 4,
+          "average": 1,
+          "stage": "firefighter"
+        },
+        {
+          "id": "finance",
+          "name": "פיננסים",
+          "sum": 4,
+          "average": 1,
+          "stage": "firefighter"
+        }
+      ]
+    }
+  },
+  {
+    "name": "all 3 (total 60)",
+    "answers": {
+      "strategy": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "management": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "systems": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "people": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "finance": [
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    "expected": {
+      "total": 60,
+      "max": 60,
+      "stage": "inspector",
+      "domains": [
+        {
+          "id": "strategy",
+          "name": "אסטרטגיה ויעדים",
+          "sum": 12,
+          "average": 3,
+          "stage": "inspector"
+        },
+        {
+          "id": "management",
+          "name": "הנהלה ומבנה ארגוני",
+          "sum": 12,
+          "average": 3,
+          "stage": "inspector"
+        },
+        {
+          "id": "systems",
+          "name": "תהליכים ומערכות מידע",
+          "sum": 12,
+          "average": 3,
+          "stage": "inspector"
+        },
+        {
+          "id": "people",
+          "name": "אנשים ותרבות ארגונית",
+          "sum": 12,
+          "average": 3,
+          "stage": "inspector"
+        },
+        {
+          "id": "finance",
+          "name": "פיננסים",
+          "sum": 12,
+          "average": 3,
+          "stage": "inspector"
+        }
+      ]
+    }
+  },
+  {
+    "name": "total 34",
+    "answers": {
+      "strategy": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "management": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "systems": [
+        2,
+        2,
+        1,
+        1
+      ],
+      "people": [
+        2,
+        2,
+        1,
+        1
+      ],
+      "finance": [
+        2,
+        2,
+        1,
+        1
+      ]
+    },
+    "expected": {
+      "total": 34,
+      "max": 60,
+      "stage": "builder",
+      "domains": [
+        {
+          "id": "strategy",
+          "name": "אסטרטגיה ויעדים",
+          "sum": 8,
+          "average": 2,
+          "stage": "builder"
+        },
+        {
+          "id": "management",
+          "name": "הנהלה ומבנה ארגוני",
+          "sum": 8,
+          "average": 2,
+          "stage": "builder"
+        },
+        {
+          "id": "systems",
+          "name": "תהליכים ומערכות מידע",
+          "sum": 6,
+          "average": 1.5,
+          "stage": "firefighter"
+        },
+        {
+          "id": "people",
+          "name": "אנשים ותרבות ארגונית",
+          "sum": 6,
+          "average": 1.5,
+          "stage": "firefighter"
+        },
+        {
+          "id": "finance",
+          "name": "פיננסים",
+          "sum": 6,
+          "average": 1.5,
+          "stage": "firefighter"
+        }
+      ]
+    }
+  },
+  {
+    "name": "total 46",
+    "answers": {
+      "strategy": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "management": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "systems": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "people": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "finance": [
+        2,
+        2,
+        3,
+        3
+      ]
+    },
+    "expected": {
+      "total": 46,
+      "max": 60,
+      "stage": "builder",
+      "domains": [
+        {
+          "id": "strategy",
+          "name": "אסטרטגיה ויעדים",
+          "sum": 12,
+          "average": 3,
+          "stage": "inspector"
+        },
+        {
+          "id": "management",
+          "name": "הנהלה ומבנה ארגוני",
+          "sum": 8,
+          "average": 2,
+          "stage": "builder"
+        },
+        {
+          "id": "systems",
+          "name": "תהליכים ומערכות מידע",
+          "sum": 8,
+          "average": 2,
+          "stage": "builder"
+        },
+        {
+          "id": "people",
+          "name": "אנשים ותרבות ארגונית",
+          "sum": 8,
+          "average": 2,
+          "stage": "builder"
+        },
+        {
+          "id": "finance",
+          "name": "פיננסים",
+          "sum": 10,
+          "average": 2.5,
+          "stage": "inspector"
+        }
+      ]
+    }
+  },
+  {
+    "name": "averages 1.25 1.5 1.75 2.25 2.5 (rounding)",
+    "answers": {
+      "strategy": [
+        1,
+        1,
+        1,
+        2
+      ],
+      "management": [
+        1,
+        1,
+        2,
+        2
+      ],
+      "systems": [
+        1,
+        2,
+        2,
+        2
+      ],
+      "people": [
+        2,
+        2,
+        2,
+        3
+      ],
+      "finance": [
+        2,
+        2,
+        3,
+        3
+      ]
+    },
+    "expected": {
+      "total": 37,
+      "max": 60,
+      "stage": "builder",
+      "domains": [
+        {
+          "id": "strategy",
+          "name": "אסטרטגיה ויעדים",
+          "sum": 5,
+          "average": 1.3,
+          "stage": "firefighter"
+        },
+        {
+          "id": "management",
+          "name": "הנהלה ומבנה ארגוני",
+          "sum": 6,
+          "average": 1.5,
+          "stage": "firefighter"
+        },
+        {
+          "id": "systems",
+          "name": "תהליכים ומערכות מידע",
+          "sum": 7,
+          "average": 1.8,
+          "stage": "builder"
+        },
+        {
+          "id": "people",
+          "name": "אנשים ותרבות ארגונית",
+          "sum": 9,
+          "average": 2.3,
+          "stage": "builder"
+        },
+        {
+          "id": "finance",
+          "name": "פיננסים",
+          "sum": 10,
+          "average": 2.5,
+          "stage": "inspector"
+        }
+      ]
+    }
+  },
+  {
+    "name": "averages 2.75 2.0 1.0 3.0 1.75",
+    "answers": {
+      "strategy": [
+        2,
+        3,
+        3,
+        3
+      ],
+      "management": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "systems": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "people": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "finance": [
+        2,
+        2,
+        2,
+        1
+      ]
+    },
+    "expected": {
+      "total": 42,
+      "max": 60,
+      "stage": "builder",
+      "domains": [
+        {
+          "id": "strategy",
+          "name": "אסטרטגיה ויעדים",
+          "sum": 11,
+          "average": 2.8,
+          "stage": "inspector"
+        },
+        {
+          "id": "management",
+          "name": "הנהלה ומבנה ארגוני",
+          "sum": 8,
+          "average": 2,
+          "stage": "builder"
+        },
+        {
+          "id": "systems",
+          "name": "תהליכים ומערכות מידע",
+          "sum": 4,
+          "average": 1,
+          "stage": "firefighter"
+        },
+        {
+          "id": "people",
+          "name": "אנשים ותרבות ארגונית",
+          "sum": 12,
+          "average": 3,
+          "stage": "inspector"
+        },
+        {
+          "id": "finance",
+          "name": "פיננסים",
+          "sum": 7,
+          "average": 1.8,
+          "stage": "builder"
+        }
+      ]
+    }
+  },
+  {
+    "name": "invalid: answer 4",
+    "answers": {
+      "strategy": [
+        4,
+        1,
+        1,
+        1
+      ],
+      "management": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "systems": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "people": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "finance": [
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "expected": {
+      "error": "Answers must be 1, 2 or 3 (got 4 in \"strategy\")"
+    }
+  },
+  {
+    "name": "invalid: answer 0",
+    "answers": {
+      "strategy": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "management": [
+        0,
+        1,
+        1,
+        1
+      ],
+      "systems": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "people": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "finance": [
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "expected": {
+      "error": "Answers must be 1, 2 or 3 (got 0 in \"management\")"
+    }
+  },
+  {
+    "name": "invalid: 3 answers in a domain",
+    "answers": {
+      "strategy": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "management": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "systems": [
+        1,
+        1,
+        1
+      ],
+      "people": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "finance": [
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "expected": {
+      "error": "Domain \"systems\" needs 4 answers"
+    }
+  }
+]
