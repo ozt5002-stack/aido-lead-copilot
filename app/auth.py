@@ -29,7 +29,7 @@ def password_ok(candidate: str) -> bool:
 def normalise_name(name: str) -> str:
     name = " ".join((name or "").split())
     if not _NAME_RE.match(name):
-        raise HTTPException(400, "Name must be 2-40 letters, digits or spaces.")
+        raise HTTPException(400, "השם צריך להיות 2-40 אותיות, ספרות או רווחים.")
     return name
 
 
@@ -74,8 +74,8 @@ def get_or_create_user(db: Session, name: str) -> User:
 def current_user(request: Request, db: Session) -> User:
     parsed = read_token(request.cookies.get(COOKIE_NAME))
     if parsed is None:
-        raise HTTPException(401, "Please sign in.")
+        raise HTTPException(401, "צריך להתחבר.")
     user = db.get(User, parsed[0])
     if user is None:
-        raise HTTPException(401, "Please sign in.")
+        raise HTTPException(401, "צריך להתחבר.")
     return user
