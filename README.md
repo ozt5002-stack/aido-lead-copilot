@@ -8,7 +8,7 @@
 
 A chat app for one bakery chain, built the Lesson 9 way: a chat UI, a backend with an agent loop and three tools, Postgres, and a morning digest, all on Railway for a few dollars a month. Staff ask about sales and log supplier invoices from a photo.
 
-The plan lives in five files: [spec.md](spec.md) (what), [docs/02-architecture.md](docs/02-architecture.md) (how and where), [CONTRIBUTING.md](CONTRIBUTING.md) (how we work), [runbook.md](runbook.md) (when it breaks), [docs/tickets.md](docs/tickets.md) (the work, as issues). `CLAUDE.md` points Claude Code at the first three.
+The plan lives in five files: [spec.md](spec.md) (what), [docs/02-architecture.md](docs/02-architecture.md) (how and where), [CONTRIBUTING.md](CONTRIBUTING.md) (how we work), [runbook.md](runbook.md) (when it breaks), [docs/03-plan.md](docs/03-plan.md) (the work, as issues on the [board](https://github.com/users/ozt5002-stack/projects/2)). `CLAUDE.md` points Claude Code at the first three.
 
 ## Run it locally
 
@@ -53,7 +53,7 @@ Tests prove the deterministic parts (parsing, dedup, limits, streaming, the tool
 
 The short version follows; the full walkthrough for macOS, Linux and Windows, with every variable and secret, the CLI commands, the dashboard path, day-two operations and troubleshooting, is [docs/deploy-railway.md](docs/deploy-railway.md).
 
-1. **Repo.** Push this folder to a private GitHub repo. Create the issues with `scripts/create_issues.sh` if you want the board (a bash script: on Windows, run it from Git Bash).
+1. **Repo.** Push this folder to a private GitHub repo.
 2. **Project and services.** With the CLI (`brew install railway` on macOS, `scoop install railway` on Windows): `railway login`, `railway init --name bakery-copilot`, `railway add --database postgres`, then `railway add --service web --repo <owner>/bakery-copilot --branch main` and the same with `--service digest`. Railway's GitHub app needs access to the repo (Railway → Account Settings → Integrations → GitHub), or builds from GitHub fail with "repository not accessible".
 3. **Settings from code.** Once: `npm install --prefix .railway`. Then from the repo root `railway config plan` and `railway config apply`: `.railway/railway.ts` sets both start commands, the `/health` check, restart policies and the digest's cron schedule (`30 4 * * *`, UTC; 07:30 Israel in summer, 06:30 in winter). Railpack builds from `requirements.txt` with the Python version in `.python-version`, no Dockerfile.
 4. **Variables** on the web service: `APP_ENV=production`, `APP_PASSWORD`, `APP_SECRET` (`openssl rand -hex 32`, or the PowerShell generator in the guide), `ANTHROPIC_API_KEY`, `DATABASE_URL` as a reference to `${{Postgres.DATABASE_URL}}`, `MODEL=claude-opus-5-5`, `DAILY_CAP_USD=3.00`, `CRON_SECRET`, optionally `DIGEST_WEBHOOK_URL`, `TIMEZONE=Asia/Jerusalem`. Redeploy.
@@ -83,5 +83,5 @@ static/         the chat UI (plain HTML, CSS, JS)
 data/           bakery_sales.csv (read-only dataset), suppliers.csv
 tests/          pytest, model mocked
 evals/          cases.yaml, run.py, history.csv
-docs/           tickets.md, watch.md, deploy-railway.md
+docs/           01-design.md, 02-architecture.md, 03-plan.md, watch.md, deploy-railway.md
 ```

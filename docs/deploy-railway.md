@@ -393,7 +393,6 @@ Expect `29115`. `railway ssh --service web -- python -m app.digest` prints the d
 | Windows: a `${{...}}` reference arrives empty or as `}` | it was in double quotes, and PowerShell expanded it as a variable | single quotes, as in step 4 |
 | Windows: `curl` prompts for parameters or fails with `Invoke-WebRequest` errors | Windows PowerShell 5.1 maps `curl` to `Invoke-WebRequest` | `Invoke-RestMethod` as in step 7, or `curl.exe` |
 | Windows: `UnicodeEncodeError: 'charmap' codec can't encode character '₪'` when `python -m app.digest` writes to a file or a pipe | redirected output uses the Windows code page, which has no ₪ | `$env:PYTHONUTF8 = '1'` in that window |
-| Windows: `$'\r': command not found` from `scripts/create_issues.sh` in Git Bash | the script was checked out with Windows line endings | `.gitattributes` now keeps `.sh` files LF; in an older clone, delete the file and run `git checkout -- scripts/create_issues.sh` |
 
 ## 8. Railway CLI cheat sheet
 
