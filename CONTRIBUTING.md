@@ -34,7 +34,7 @@ Name every file and every doc by what it really is.
 ## Never
 
 - Push to `main` directly, force-push, or rewrite or backdate history. Mistakes go in `docs/retrospective.md`.
-- Put a secret in a file, a commit, a PR or a chat. Secrets live in `.env` (gitignored, filled in by Oz) and in Railway Variables. `git grep -n "sk-ant"` must come back empty.
+- Put a secret in a file, a commit, a PR or a chat. Secrets live in `.env` (gitignored, filled in by Oz) and in Railway Variables. `git grep -nE "sk-ant-[A-Za-z0-9_-]{20,}"` (a real key, not the word) must come back empty.
 - Edit `data/leads.csv` by hand. It changes only by rerunning `python scripts/generate_leads.py` in a PR.
 - Put real client data in the repo. The repo is public, and the dataset is fictional.
 - Touch the customer-facing project `aido-final-project`, or copy code into it.
