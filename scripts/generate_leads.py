@@ -23,6 +23,8 @@ sys.path.insert(0, str(ROOT))
 
 from app.stage import DOMAIN_IDS, score_business  # noqa: E402
 
+# random.gauss, lognormvariate and choices can change between Python versions; .python-version and CI pin
+# 3.12, and tests/test_leads_dataset.py fails if the output ever changes, so a bump is noticed.
 SEED = 20261108
 ROWS = 300
 FIRST_DAY = date(2025, 11, 1)
@@ -38,8 +40,9 @@ COLUMNS = [
 INDUSTRIES = ["קמעונאות", "מסעדנות", "בנייה ושיפוצים", "הובלה ולוגיסטיקה", "קליניקות ובריאות", "משרד עורכי דין",
               "משרד רואי חשבון", "ייצור ותעשייה קלה", "סוכנות ביטוח", "נדל\"ן", "חינוך והדרכה", "שיווק ופרסום"]
 
-# Name parts are generic words combined at random, so no name points at a real business.
-NAME_FIRST = ["אופק", "גבעה", "נחל", "תמר", "ארז", "שקד", "רימון", "צפון", "דרום", "מגדל", "אלון", "ברוש",
+# Name parts are generic words combined at random, so no name points at a real business. Words that are
+# also well-known company names (for example a large insurer) are left out on purpose.
+NAME_FIRST = ["אופק", "גבעה", "נחל", "תמר", "ארז", "שקד", "רימון", "צפון", "דרום", "מעיין", "צאלון", "ברוש",
               "חצב", "כרמל", "יובל", "נוף", "סלע", "גפן", "דקל", "ערבה", "שחר", "אורן", "לוטם", "זית"]
 NAME_KIND = {
     "קמעונאות": ["חנויות", "מרכולים", "בוטיק"], "מסעדנות": ["מטבח", "ביסטרו", "קייטרינג"],

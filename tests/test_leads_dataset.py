@@ -14,11 +14,15 @@ CSV = Path(__file__).resolve().parent.parent / "data" / "leads.csv"
 ROWS = list(csv.DictReader(CSV.open(encoding="utf-8", newline="")))
 
 
-def test_generator_is_deterministic_and_matches_the_committed_file():
-    first = generate_leads.to_csv(generate_leads.generate())
-    second = generate_leads.to_csv(generate_leads.generate())
-    assert first == second
-    assert CSV.read_bytes() == first.encode("utf-8"), "data/leads.csv was edited by hand or not regenerated"
+def test_committed_file_is_exactly_what_the_generator_writes():
+    # The committed file was written by an earlier, separate run, so this also proves the seed is fixed.
+    fresh = generate_leads.to_csv(generate_leads.generate())
+    assert CSV.read_bytes() == fresh.encode("utf-8"), "data/leads.csv was edited by hand or not regenerated"
+
+
+def test_check_mode_passes_on_the_committed_file(monkeypatch):
+    monkeypatch.setattr("sys.argv", ["generate_leads.py", "--check"])
+    assert generate_leads.main() == 0
 
 
 def test_a_different_seed_gives_a_different_file():
@@ -77,6 +81,14 @@ def test_business_names_are_unique_by_key():
     ("אופק חנויות בעמ", "אופק חנויות."),
     ("Ofek Stores Ltd.", "ofek stores"),
     ('נחל עו"ד', "נחל עו״ד"),
+    ('נחל עו"ד', "נחל עוד"),
+    ('אופק נדל"ן', "אופק נדלן"),
+    ("אופק נדל״ן", "אופק נדל'ן"),
+    ('אופק בע"מ.', "אופק"),
+    ('אופק (בע"מ)', "אופק"),
+    ("אופק, בע״מ", "אופק"),
+    ("שָׁקֵד מטבח", "שקד מטבח"),
+    ("OFEK Stores (Ltd)", "ofek stores"),
 ])
 def test_business_key_treats_spellings_as_the_same_business(a, b):
     assert business_key(a) == business_key(b)
@@ -85,10 +97,19 @@ def test_business_key_treats_spellings_as_the_same_business(a, b):
 def test_business_key_keeps_different_businesses_apart():
     assert business_key("אופק חנויות") != business_key("אופק מרכולים")
     assert business_key("") == ""
+    assert business_key('בע"מ') == "" and business_key("Ltd.") == ""  # callers refuse an empty key
+    assert business_key("בעמק") == "בעמק"  # a word that only starts like the suffix stays
 
 
 def test_seeded_into_the_database_at_start(client, db):
     assert db.scalar(select(func.count()).select_from(Lead).where(Lead.origin == "seed")) == 300
     first = db.scalar(select(Lead).where(Lead.business_key == business_key(ROWS[0]["business_name"])))
     assert first is not None and first.fictional is True
-    assert client.app.state.init_report["leads_seeded"] in (0, 300)
+
+
+def test_init_db_seeds_an_empty_database_once(tmp_path):
+    from app.db import init_db, make_engine
+
+    engine = make_engine(f"sqlite:///{tmp_path / 'fresh.db'}")
+    assert init_db(engine)["leads_seeded"] == 300
+    assert init_db(engine)["leads_seeded"] == 0  # a second start does not seed again

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import csv
 import re
+import unicodedata
 from datetime import date, datetime, timezone
 from pathlib import Path
 
@@ -27,6 +28,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, relationship, sessionmaker
 
 from .config import ROOT, settings
+from .stage import DOMAIN_IDS
 
 SCHEMA_VERSION = 1
 
@@ -141,26 +143,31 @@ class Sale(Base):
     status: Mapped[str] = mapped_column(String(12), index=True)  # completed | refunded
 
 
-DOMAIN_IDS = ("strategy", "management", "systems", "people", "finance")
 PIPELINE_STATUSES = ("new", "contacted", "meeting", "diagnosed", "proposal", "won", "lost")
 
-# Legal suffixes are removed before punctuation, so every spelling of בע"מ goes (docs/02-architecture.md).
-_SUFFIXES = ('בע"מ', "בע״מ", "בע'מ", "בעמ", "ltd.", "ltd", "inc.", "inc")
-_PUNCT = re.compile(r"[^\w\s]", re.UNICODE)
+# business_key() order (docs/02-architecture.md, "Data shapes"): Unicode-normalise, drop vowel marks and
+# case; delete quote marks (so נדל"ן = נדלן and בע"מ = בעמ); remove a trailing legal suffix, even in
+# brackets or with a dot; then the remaining punctuation becomes a space.
+_QUOTES = re.compile("[\"'\u05f3\u05f4\u2018\u2019\u201c\u201d\u00b4`]")
+_SUFFIX = re.compile(r"(?:^|[\s,.\-]+)\(?\s*(בעמ|ltd|inc|limited)\s*\.?\s*\)?[\s,.\-]*$")
+_PUNCT = re.compile(r"[^\w\s]|_")
 
 
 def business_key(name: str | None) -> str:
-    """The dedup key for a business: 'אופק חנויות בע"מ' and 'אופק  חנויות' are the same business."""
-    text = " ".join((name or "").lower().split())
-    changed = True
-    while changed:
-        changed = False
-        for suffix in _SUFFIXES:
-            if text.endswith(" " + suffix) or text == suffix:
-                text = text[: -len(suffix)].rstrip(" ,.-")
-                changed = True
-    text = _PUNCT.sub(" ", text).replace("_", " ")
-    return " ".join(text.split())
+    """The dedup key for a business: 'אופק חנויות בע"מ.' and 'אופק  חנויות' are the same business.
+
+    Returns "" when nothing is left (a name that is only a suffix); callers must refuse an empty key.
+    """
+    text = unicodedata.normalize("NFKD", name or "")
+    text = "".join(ch for ch in text if unicodedata.category(ch) != "Mn")
+    text = unicodedata.normalize("NFKC", text).casefold()
+    text = _QUOTES.sub("", text)
+    text = " ".join(text.split())
+    previous = None
+    while previous != text:
+        previous = text
+        text = _SUFFIX.sub("", " " + text).strip()
+    return " ".join(_PUNCT.sub(" ", text).split())
 
 
 class Lead(Base):
