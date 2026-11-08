@@ -20,7 +20,7 @@ Written while everything works. Each entry is a sequence: click here, run this, 
 1. **Rotate first.** platform.claude.com → API keys → revoke the key, create a new one. For `APP_PASSWORD` or `APP_SECRET`: generate new values.
 2. Update the Railway Variables, redeploy. Sessions will be invalidated when `APP_SECRET` changes; users sign in again.
 3. Only then clean Git history (`git filter-repo` or a fresh repo for a small project) and force-push. Tell anyone who cloned.
-4. Add a `bug` issue describing how it leaked, and a rule to practice.md if one is missing.
+4. Add a `bug` issue describing how it leaked, and a rule to CONTRIBUTING.md if one is missing.
 
 ## Wrong rows written (an invoice logged twice, wrong amount, wrong supplier)
 
