@@ -6,7 +6,7 @@ An internal chat assistant for AIDO consultants, in Hebrew, right to left. Consu
 
 **Credit.** This project is built on [MaceTenth/bakery-copilot](https://github.com/MaceTenth/bakery-copilot), the AIDO course project, and keeps its structure and its Git history: FastAPI backend, agent loop, tools, Postgres, chat UI, morning digest, auth, limits, tests and evals, Railway config. The bakery domain was replaced by leads, step by step, in the PRs listed on the [board](https://github.com/users/ozt5002-stack/projects/2).
 
-Live app: see [docs/deploy-railway.md](docs/deploy-railway.md), section 9.
+Live app: the URL goes in [docs/deploy-railway.md](docs/deploy-railway.md), section 9, once plan task 9 has deployed it.
 
 ## Docs
 
@@ -53,7 +53,7 @@ These are two different things, and each is named for what it is (CONTRIBUTING.m
   .venv\Scripts\python -m pytest -q
   ```
 
-- **Evals** check the real model's answers to 21 cases in `evals/cases.yaml`. The result is a **pass rate**, appended to `evals/history.csv`. The baseline is 80%, and every case marked `must_pass` (the four where no score may be stored) must pass, whatever the rate. They cost about $0.30 a run. Run them whenever the prompt, a tool or the model changes, and before release. CI runs them when the `ANTHROPIC_API_KEY` secret is set.
+- **Evals** check the real model's answers to 21 cases in `evals/cases.yaml`. The result is a **pass rate**, appended to `evals/history.csv`. The baseline is 80%, and every case marked `must_pass` (the four where no score may be stored) must pass, whatever the rate. They cost about $0.30 a run (the `--judge` grading with a small model adds a cent or two). Run them whenever the prompt, a tool or the model changes, and before release. CI runs them when the `ANTHROPIC_API_KEY` secret is set.
 
   ```powershell
   .venv\Scripts\python -m evals.run --baseline 0.8
@@ -90,13 +90,13 @@ The full walkthrough is in [docs/deploy-railway.md](docs/deploy-railway.md): the
 |---|---|
 | Railway: web service, Postgres, cron | about $5 a month (the Hobby plan) |
 | Claude (Opus 5.5), a few hundred turns a month | a few dollars; `DAILY_CAP_USD` stops the app at $3 a day |
-| One eval run (21 cases) | about $0.30; about $0.60 with `--judge` |
+| One eval run (21 cases) | about $0.30, a cent or two more with `--judge` |
 
 ## Layout
 
 ```
 app/            main.py (API), agent.py (loop), stage.py (כבאי/בנאי/פקח), tools/ (leads.py, registry.py),
-                db.py, auth.py, limits.py, costs.py, digest.py
+                db.py, config.py, auth.py, limits.py, costs.py, digest.py
 app/prompts/    system.md - the assistant's instructions, in Hebrew
 static/         the chat UI: Hebrew, right to left
 data/           leads.csv (fictional, generated), README.md
@@ -104,4 +104,6 @@ scripts/        generate_leads.py
 tests/          pytest, model mocked; fixtures/score_js_cases.json from lesson 8's score.js
 evals/          cases.yaml, run.py, history.csv
 docs/           design, architecture, plan, deploy guide, watch
+.railway/       railway.ts - the Railway project as code (services, health check, cron)
+.github/        workflows/ci.yml - tests on every PR, evals when the key secret is set
 ```

@@ -1,6 +1,6 @@
 # Deploying AIDO Lead Copilot on Railway
 
-How to put this app on Railway from nothing, where every secret goes, and the Railway CLI commands for the first deploy and for day two. `docs/02-architecture.md` ("Hosting", "Secrets") records the decisions; `runbook.md` is for when it breaks; this file is the walkthrough. It describes the project as it runs on 2026-10-27, with Railway CLI 5.71.
+How to put this app on Railway from nothing, where every secret goes, and the Railway CLI commands for the first deploy and for day two. `docs/02-architecture.md` ("Hosting", "Secrets") records the decisions; `runbook.md` is for when it breaks; this file is the walkthrough. It was written for Railway CLI 5.71; section 9 records the live deployment once task 9 has done it.
 
 Commands are written for macOS and Linux (zsh or bash). On Windows, use PowerShell 7: the `railway`, `git`, `gh` and `npm` commands run there unchanged, and wherever Windows differs, a **Windows (PowerShell)** block follows the macOS and Linux one. Command Prompt (`cmd.exe`) is not covered, because it keeps single quotes as part of a value.
 
@@ -98,7 +98,7 @@ Optional in the code (`app/config.py` has the same defaults), but set them anywa
 | `DAILY_CAP_USD` | `3.00` | hard stop for the whole app per local day; raise it only with the team lead's agreement (runbook) |
 | `MAX_UPLOAD_MB` | `5` | meeting-notes photo size |
 | `TIMEZONE` | `Asia/Jerusalem` | the local day for the cap, and which day the digest calls "yesterday" |
-| `PYTHONUNBUFFERED` | `1` | so `print` reaches Railway's logs at once; the digest's six lines depend on it |
+| `PYTHONUNBUFFERED` | `1` | so `print` reaches Railway's logs at once; the digest's five or six lines depend on it |
 | `MAX_TOKENS` | not set (2048) | model output cap |
 | `SESSION_HOURS` | not set (72) | cookie lifetime |
 
@@ -240,6 +240,8 @@ To check what is set, open the Variables tab in the dashboard; the CLI listing p
 
 ### Step 5: service settings from code
 
+Until plan task 9 (issue #12) updates `.railway/railway.ts`, it still names the bakery-copilot repo and project: do not run `railway config apply` before that.
+
 ```bash
 npm install --prefix .railway
 railway config plan
@@ -307,7 +309,7 @@ railway cron list --service digest
 railway logs --service digest -d -n 20
 ```
 
-`cron run` enqueues the run and returns; it can take a few minutes to show in `cron list`. The log must end with the six digest lines and `[sent to webhook: True]` (or `False` when `DIGEST_WEBHOOK_URL` is not set).
+`cron run` enqueues the run and returns; it can take a few minutes to show in `cron list`. The log must end with the five or six digest lines and `[sent to webhook: True]` (or `False` when `DIGEST_WEBHOOK_URL` is not set).
 
 `web`'s first start seeds the 300 fictional leads from `data/leads.csv` (a second or two; the health timeout is 120 s). `railway logs --service web -d -n 50` shows it as one line, `seed report: schema_version: 2, leads_seeded: 300`. Later deploys print `leads_seeded: 0`: the seed only fills an empty table. Schema version 2 needs a fresh database; never point this app at a bakery-copilot database.
 
