@@ -42,9 +42,22 @@ def round1(value: float) -> float:
     return math.floor(value * 10 + 0.5) / 10
 
 
+def as_whole(value) -> int | None:
+    """1, 1.0 -> 1 (JSON from the model may send 41.0); 41.5, "41", True, NaN -> None."""
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, int):
+        return value
+    if isinstance(value, float) and math.isfinite(value) and value.is_integer():
+        return int(value)
+    return None
+
+
 def stage_for_total(total: int) -> str:
-    if isinstance(total, bool) or not isinstance(total, int) or not MIN_TOTAL <= total <= MAX_TOTAL:
+    whole = as_whole(total)
+    if whole is None or not MIN_TOTAL <= whole <= MAX_TOTAL:
         raise StageError(f"total must be a whole number from {MIN_TOTAL} to {MAX_TOTAL} (got {total!r})")
+    total = whole
     if total <= 33:
         return "firefighter"
     if total <= 46:
@@ -54,11 +67,12 @@ def stage_for_total(total: int) -> str:
 
 def stage_for_average(average: float) -> str:
     """Stage for a domain average. The average is rounded to one decimal first, as score.js does."""
-    if isinstance(average, bool) or not isinstance(average, (int, float)):
+    if isinstance(average, bool) or not isinstance(average, (int, float)) or not math.isfinite(average):
         raise StageError(f"average must be a number (got {average!r})")
-    avg = round1(float(average))
-    if not MIN_AVERAGE <= avg <= MAX_AVERAGE:
+    # The range is checked on the value as given (architecture rule 4), then it is rounded.
+    if not MIN_AVERAGE <= average <= MAX_AVERAGE:
         raise StageError(f"average must be from {MIN_AVERAGE} to {MAX_AVERAGE} (got {average!r})")
+    avg = round1(float(average))
     if avg < 1.7:
         return "firefighter"
     if avg < 2.4:
@@ -78,8 +92,9 @@ def score_business(answers: dict) -> dict:
         values = answers.get(domain["id"])
         if not isinstance(values, list) or len(values) != QUESTIONS_PER_DOMAIN:
             raise StageError(f'Domain "{domain["id"]}" needs {QUESTIONS_PER_DOMAIN} answers')
+        values = [as_whole(v) if as_whole(v) is not None else v for v in values]
         for v in values:
-            if isinstance(v, bool) or v not in (1, 2, 3):
+            if isinstance(v, bool) or not isinstance(v, int) or v not in (1, 2, 3):
                 raise StageError(f'Answers must be 1, 2 or 3 (got {v} in "{domain["id"]}")')
         total = sum(values)
         average = round1(total / len(values))

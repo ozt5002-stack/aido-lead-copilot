@@ -15,7 +15,7 @@ def test_total_boundaries(total, stage):
     assert stage_for_total(total) == stage
 
 
-@pytest.mark.parametrize("total", [19, 61, 0, -5, 75, 41.5, "41", None, True])
+@pytest.mark.parametrize("total", [19, 61, 0, -5, 75, 41.5, "41", None, True, float("nan"), float("inf"), 1e308])
 def test_total_out_of_range_or_not_a_whole_number(total):
     with pytest.raises(StageError):
         stage_for_total(total)
@@ -33,7 +33,7 @@ def test_average_is_rounded_to_one_decimal_before_the_cutoffs(average, stage):
     assert stage_for_average(average) == stage
 
 
-@pytest.mark.parametrize("average", [0.9, 3.1, 3.4, -1, None, "2"])
+@pytest.mark.parametrize("average", [0.9, 0.95, 3.04, 3.1, 3.4, -1, None, "2", float("nan"), float("inf"), 1e308])
 def test_average_out_of_range(average):
     with pytest.raises(StageError):
         stage_for_average(average)
@@ -80,5 +80,20 @@ def test_hebrew_stage_names():
 def test_bool_is_not_an_answer():
     answers = {d: [1, 1, 1, 1] for d in ["strategy", "management", "systems", "people", "finance"]}
     answers["people"] = [True, 1, 1, 1]
+    with pytest.raises(StageError):
+        score_business(answers)
+
+
+def test_whole_floats_from_json_are_accepted():
+    # The model's JSON may send 41.0 or an answer of 2.0; they mean 41 and 2.
+    assert stage_for_total(41.0) == "builder"
+    answers = {d: [2.0, 2, 2, 2] for d in ["strategy", "management", "systems", "people", "finance"]}
+    result = score_business(answers)
+    assert result["total"] == 40 and isinstance(result["total"], int)
+
+
+def test_fractional_answer_is_rejected():
+    answers = {d: [1, 1, 1, 1] for d in ["strategy", "management", "systems", "people", "finance"]}
+    answers["finance"] = [1.5, 1, 1, 1]
     with pytest.raises(StageError):
         score_business(answers)
