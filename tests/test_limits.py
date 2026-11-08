@@ -39,7 +39,7 @@ def test_daily_cap_stops_the_app(client, db, logged_in, fake):
 def test_oversized_image_is_refused(client, db, logged_in, fake):
     big = "A" * (6 * 1024 * 1024)  # ~4.5 MB decoded... make it clearly over 5 MB
     big = "A" * (8 * 1024 * 1024)
-    r = client.post("/api/chat", json={"message": "invoice", "image": {"media_type": "image/png", "data": big}})
+    r = client.post("/api/chat", json={"message": "meeting notes", "image": {"media_type": "image/png", "data": big}})
     assert r.status_code == 413
 
 

@@ -21,7 +21,7 @@ from .agent import get_model_client, run_turn
 from .config import ROOT, settings
 from .db import Conversation, Message, SessionLocal, engine, get_db, init_db
 from .digest import build_digest, send_digest
-from .tools.invoices import recent_invoices
+from .tools.leads import recent_leads
 
 
 @asynccontextmanager
@@ -138,7 +138,7 @@ def chat(payload: ChatIn, request: Request, db: Session = Depends(get_db)):
     """One turn. Checks the three limits, then streams the agent's events as SSE."""
     user = auth.current_user(request, db)
     if not payload.message.strip() and payload.image is None:
-        raise HTTPException(400, "Say something or attach an invoice.")
+        raise HTTPException(400, "Say something or attach a photo of meeting notes.")
     limits.check_rate_limit(db, user.id)
     limits.check_daily_cap(db)
     limits.check_upload_size(payload.image.data if payload.image else None)
@@ -166,13 +166,13 @@ def chat(payload: ChatIn, request: Request, db: Session = Depends(get_db)):
 
 
 # ---------------------------------------------------------------------------
-# Invoices, stats, digest
+# Leads, stats, digest
 # ---------------------------------------------------------------------------
 
-@app.get("/api/invoices")
-def invoices(request: Request, db: Session = Depends(get_db)):
+@app.get("/api/leads")
+def leads(request: Request, db: Session = Depends(get_db)):
     auth.current_user(request, db)
-    return recent_invoices(db, limit=50)
+    return recent_leads(db, limit=50)
 
 
 @app.get("/api/stats")

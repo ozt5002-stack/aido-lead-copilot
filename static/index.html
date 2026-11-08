@@ -28,7 +28,7 @@
       <button id="new-chat" class="primary wide">+ New chat</button>
       <nav id="conversations" class="conversations" aria-label="Conversations"></nav>
       <div class="sidebar-foot">
-        <button id="toggle-invoices" class="ghost">Invoices</button>
+        <button id="toggle-leads" class="ghost">Leads</button>
         <button id="logout" class="ghost">Sign out</button>
       </div>
     </aside>
@@ -42,21 +42,21 @@
       <section id="messages" class="messages" aria-live="polite"></section>
 
       <form id="composer" class="composer">
-        <label class="attach" title="Attach an invoice photo">
+        <label class="attach" title="Attach a photo of meeting notes">
           <input id="image" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
           <span>📎</span>
         </label>
-        <textarea id="input" rows="1" placeholder="Ask about sales, or attach an invoice…" required></textarea>
+        <textarea id="input" rows="1" placeholder="Ask about leads, or attach meeting notes…" required></textarea>
         <button id="send" type="submit" class="primary">Send</button>
       </form>
       <p id="attachment" class="attachment hidden"></p>
     </main>
 
-    <aside id="invoices" class="panel hidden" aria-label="Recent invoices">
-      <header><h3>Recent invoices</h3><button id="close-invoices" class="ghost">✕</button></header>
+    <aside id="leads" class="panel hidden" aria-label="Recent leads">
+      <header><h3>Recent leads</h3><button id="close-leads" class="ghost">✕</button></header>
       <table>
-        <thead><tr><th>Date</th><th>Supplier</th><th>Amount</th><th>Status</th></tr></thead>
-        <tbody id="invoice-rows"></tbody>
+        <thead><tr><th>Date</th><th>Business</th><th>Stage</th><th>Status</th></tr></thead>
+        <tbody id="lead-rows"></tbody>
       </table>
     </aside>
   </div>

@@ -29,7 +29,7 @@ from .config import ROOT, settings
 from .costs import Usage, cost_usd
 from .db import Conversation, Message, Run, User, utcnow
 from .tools import registry
-from .tools.sales import branches, data_range
+from .tools.leads import data_range, industries
 
 try:  # the SDK is optional at import time so tests run without it configured
     import anthropic
@@ -39,8 +39,8 @@ except ImportError:  # pragma: no cover
 MAX_TOOL_ROUNDS = 6
 SYSTEM_PATH = ROOT / "app" / "prompts" / "system.md"
 FALLBACK_MODELS = {"claude-opus-5-5", "claude-opus-5", "claude-sonnet-5-5", "claude-fable-5-1"}
-REFUSAL_TEXT = ("I can't help with that request. If it is about sales or invoices, try rephrasing it; "
-                "for anything else, ask Dana.")
+REFUSAL_TEXT = ("I can't help with that request. If it is about leads or diagnoses, try rephrasing it; "
+                "for anything else, ask the AIDO team lead.")
 
 
 # ---------------------------------------------------------------------------
@@ -138,7 +138,7 @@ def build_system(db: Session) -> list[dict]:
     today = datetime.now(ZoneInfo(settings.timezone)).date()
     text = (SYSTEM_PATH.read_text(encoding="utf-8")
             .replace("{{DATA_FROM}}", str(d_from or "unknown")).replace("{{DATA_TO}}", str(d_to or "unknown"))
-            .replace("{{BRANCHES}}", ", ".join(branches(db)) or "unknown")
+            .replace("{{INDUSTRIES}}", ", ".join(industries(db)) or "unknown")
             .replace("{{TODAY}}", today.isoformat()))
     # One cached block: tools + system form the stable prefix every turn reuses.
     return [{"type": "text", "text": text, "cache_control": {"type": "ephemeral"}}]
@@ -177,14 +177,19 @@ def _summarise_result(result_text: str) -> str:
         return result_text[:90]
     if "error" in r:
         return f"error: {str(r['error'])[:80]}"
-    if "status" in r and "created" in r:  # log_invoice
-        return f"{'created' if r['created'] else r.get('reason', 'existing')} · {r['status']}" + (" · flagged" if r.get("flagged") else "")
-    if "matches" in r:  # lookup_supplier
-        return f"{len(r['matches'])} match" + ("" if len(r["matches"]) == 1 else "es")
-    if "row_count" in r:  # sales_query grouped
+    if "action" in r and "row" in r:  # log_lead
+        row = r["row"] or {}
+        return f"{r['action']} · {r['record_status']}" + (f" · {row.get('stage_he')}" if row.get("stage_he") else "")
+    if "matches" in r:  # lookup_business
+        return ("known" if r.get("known") else f"{len(r['matches'])} similar") + (" business" if r.get("known") else "")
+    if "leads" in r:  # leads_query with list=true
+        return f"{r['listed']} of {r['matched']} leads"
+    if "row_count" in r:  # leads_query grouped
         return f"{r['row_count']} rows · {r['metric']} by {r['group_by']}"
-    if "value" in r:  # sales_query total
+    if "value" in r and "metric" in r:  # leads_query total
         return f"{r['metric']} = {r['value']}"
+    if "stage" in r or "domains" in r:  # calculate_stage
+        return f"stage {r.get('stage_he') or r.get('stage') or '-'}"
     return result_text[:90]
 
 
@@ -209,7 +214,7 @@ def run_turn(db: Session, *, user: User, conversation: Conversation | None, text
     image_ref = f"img_{hashlib.sha256(image['data'].encode()).hexdigest()[:10]}" if image else None
 
     if conversation is None:
-        conversation = Conversation(user_id=user.id, title=(text or "Invoice photo")[:60])
+        conversation = Conversation(user_id=user.id, title=(text or "Meeting notes photo")[:60])
         db.add(conversation)
         db.commit()
         db.refresh(conversation)
@@ -218,7 +223,7 @@ def run_turn(db: Session, *, user: User, conversation: Conversation | None, text
     # 1. The user's message is saved first: it counts for the rate limit even if the stream dies.
     stored = text + (f"\n[image {image_ref}]" if image_ref else "")
     user_msg = Message(conversation_id=conversation.id, user_id=user.id, role="user",
-                       content=stored or "(invoice photo)", has_image=bool(image))
+                       content=stored or "(meeting notes photo)", has_image=bool(image))
     db.add(user_msg)
     conversation.updated_at = utcnow()
     db.commit()
@@ -228,7 +233,7 @@ def run_turn(db: Session, *, user: User, conversation: Conversation | None, text
     content: list[dict] = []
     if image:
         content.append({"type": "image", "source": {"type": "base64", "media_type": image["media_type"], "data": image["data"]}})
-    prompt_text = text or "Please read this invoice and log it."
+    prompt_text = text or "Please read these meeting notes and log the lead."
     if image_ref:
         prompt_text += f"\n\n(image reference: {image_ref})"
     content.append({"type": "text", "text": prompt_text})

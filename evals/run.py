@@ -28,16 +28,16 @@ import yaml
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 
-# A fresh database per run so eval invoices never land in the real one.
-_tmp = Path(tempfile.mkdtemp(prefix="bakery-copilot-evals-"))
+# A fresh database per run so eval leads never land in the real one.
+_tmp = Path(tempfile.mkdtemp(prefix="aido-lead-copilot-evals-"))
 os.environ.setdefault("DATABASE_URL", f"sqlite:///{_tmp / 'evals.db'}")
 os.environ.setdefault("APP_ENV", "local")
 os.environ.setdefault("DAILY_CAP_USD", "1000")
 
 from app import agent as agent_module  # noqa: E402
 from app.config import settings  # noqa: E402
-from app.db import Conversation, Invoice, Message, SessionLocal, User, init_db  # noqa: E402
-from app.tools.invoices import log_invoice  # noqa: E402
+from app.db import Conversation, Lead, Message, SessionLocal, User, business_key, init_db  # noqa: E402
+from app.tools.leads import log_lead  # noqa: E402
 
 
 def git_sha() -> str:
@@ -63,10 +63,11 @@ def _seed_history(db, user: User, turns: list[dict]) -> Conversation | None:
 
 def run_case(case: dict, client) -> dict:
     with SessionLocal() as db:
-        db.query(Invoice).delete()
+        # Each case starts from the seeded, fictional leads: rows logged by earlier cases are removed.
+        db.query(Lead).filter(Lead.origin == "chat").delete()
         db.commit()
-        for inv in case.get("setup_invoices", []):
-            log_invoice(db, **inv)
+        for lead in case.get("setup_leads", []):
+            log_lead(db, **lead)
         user = db.query(User).filter_by(name="eval").one_or_none() or User(name="eval")
         if user.id is None:
             db.add(user)
@@ -84,9 +85,17 @@ def run_case(case: dict, client) -> dict:
             elif ev["type"] == "error":
                 status = "error"
                 text_parts.append(f"[error: {ev['message']}]")
-        invoices = [{"supplier": i.supplier, "invoice_number": i.invoice_number, "amount": i.amount, "status": i.status,
-                     "flagged": i.flagged, "source_ref": i.source_ref} for i in db.query(Invoice).all()]
-    return {"answer": "".join(text_parts), "tools": tools, "invoices": invoices, "usage": usage, "cost": cost, "status": status}
+        leads = [{"business_name": r.business_name, "business_key": r.business_key, "total_score": r.total_score,
+                  "stage": r.stage, "record_status": r.record_status, "source_ref": r.source_ref,
+                  "origin": r.origin, "id": r.id}
+                 for r in db.query(Lead).filter(Lead.origin == "chat").order_by(Lead.id).all()]
+        touched = {}
+        for key in case.get("expect", {}).get("watch_keys", []):
+            row = db.query(Lead).filter(Lead.business_key == business_key(key)).one_or_none()
+            touched[key] = None if row is None else {"total_score": row.total_score, "stage": row.stage,
+                                                     "record_status": row.record_status}
+    return {"answer": "".join(text_parts), "tools": tools, "leads": leads, "watched": touched, "usage": usage,
+            "cost": cost, "status": status}
 
 
 def grade_facts(case: dict, result: dict) -> list[str]:
@@ -103,24 +112,32 @@ def grade_facts(case: dict, result: dict) -> list[str]:
     for s in exp.get("answer_not_contains", []):
         if s.lower() in answer:
             failures.append(f"answer must not contain {s!r}")
-    if exp.get("no_invoice_rows") and result["invoices"]:
-        failures.append("invoice rows were written")
-    if "invoice" in exp:
-        want, rows = exp["invoice"], result["invoices"]
+    if exp.get("no_lead_rows") and result["leads"]:
+        failures.append("lead rows were written")
+    if "lead" in exp:
+        want, rows = exp["lead"], result["leads"]
         if not rows:
-            failures.append("no invoice row written")
+            failures.append("no lead row written")
         else:
             row = rows[-1]
-            if "supplier_contains" in want and want["supplier_contains"].lower() not in (row["supplier"] or "").lower():
-                failures.append(f"supplier {row['supplier']!r} does not contain {want['supplier_contains']!r}")
-            for key in ("status", "flagged", "amount"):
+            if "name_contains" in want and want["name_contains"].lower() not in (row["business_name"] or "").lower():
+                failures.append(f"business {row['business_name']!r} does not contain {want['name_contains']!r}")
+            for key in ("record_status", "total_score", "stage"):
                 if key in want and row.get(key) != want[key]:
-                    failures.append(f"invoice.{key} = {row.get(key)!r}, expected {want[key]!r}")
-    if "invoice_count_for_source_ref" in exp:
-        c = exp["invoice_count_for_source_ref"]
-        n = sum(1 for r in result["invoices"] if r["source_ref"] == c["source_ref"])
+                    failures.append(f"lead.{key} = {row.get(key)!r}, expected {want[key]!r}")
+    if "lead_count_for_name" in exp:
+        c = exp["lead_count_for_name"]
+        n = sum(1 for r in result["leads"] if r["business_key"] == business_key(c["name"]))
         if n != c["count"]:
-            failures.append(f"{n} rows for {c['source_ref']}, expected {c['count']}")
+            failures.append(f"{n} chat rows for {c['name']!r}, expected {c['count']}")
+    for key, want in exp.get("watched", {}).items():
+        got = result["watched"].get(key)
+        if got is None:
+            failures.append(f"no row for {key!r}")
+            continue
+        for k, v in want.items():
+            if got.get(k) != v:
+                failures.append(f"{key}.{k} = {got.get(k)!r}, expected {v!r}")
     if result["status"] != "ok":
         failures.append("turn ended in error")
     return failures

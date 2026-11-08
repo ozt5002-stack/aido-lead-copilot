@@ -1,4 +1,4 @@
-"""The morning digest: yesterday in six lines.
+"""The morning digest: yesterday's leads, hot leads waiting, and spend.
 
 Runs as a Railway cron service (`python -m app.digest`, schedule in README.md)
 or through POST /internal/digest. It only reads; the rows it reports were
@@ -13,7 +13,8 @@ from sqlalchemy import case, func, select
 from sqlalchemy.orm import Session
 
 from .config import settings
-from .db import Invoice, Message, Run, SessionLocal, init_db
+from .db import Lead, Message, Run, SessionLocal, init_db
+from .tools.leads import HOT_DEAL_VALUE, WAITING_STATUSES
 
 
 def _local_bounds(day: date) -> tuple[datetime, datetime]:
@@ -24,16 +25,17 @@ def _local_bounds(day: date) -> tuple[datetime, datetime]:
 
 
 def build_digest(db: Session, day: date | None = None) -> str:
+    """Minimal leads digest (plan task 3). Task 7 turns it into the Hebrew version."""
     tz = ZoneInfo(settings.timezone)
     day = day or (datetime.now(tz).date() - timedelta(days=1))
     start, end = _local_bounds(day)
 
-    invoices = db.scalars(select(Invoice).where(Invoice.created_at >= start, Invoice.created_at < end)
-                          .order_by(Invoice.created_at)).all()
-    logged = [i for i in invoices if i.status == "logged"]
-    needs = [i for i in invoices if i.status == "needs_a_look"]
-    flagged = [i for i in invoices if i.flagged]
-    total = sum(i.amount or 0 for i in logged)
+    new = db.scalars(select(Lead).where(Lead.origin == "chat", Lead.created_at >= start, Lead.created_at < end)
+                     .order_by(Lead.created_at)).all()
+    needs = [r for r in new if r.record_status == "needs_a_look"]
+    hot_waiting = db.scalars(select(Lead).where(Lead.deal_value >= HOT_DEAL_VALUE,
+                                                Lead.pipeline_status.in_(WAITING_STATUSES))
+                             .order_by(Lead.deal_value.desc())).all()
 
     messages = db.scalar(select(func.count()).select_from(Message)
                          .where(Message.role == "user", Message.created_at >= start, Message.created_at < end)) or 0
@@ -42,12 +44,12 @@ def build_digest(db: Session, day: date | None = None) -> str:
                       .where(Run.created_at >= start, Run.created_at < end)).one()
     run_count, cost, not_ok = int(runs[0] or 0), float(runs[1] or 0.0), int(runs[2] or 0)
 
-    lines = [f"Bakery Copilot — {day.strftime('%A %d %b %Y')}",
-             f"Invoices logged: {len(logged)} · total ₪{total:,.0f}",
-             f"Needs a look: {len(needs)}" + (" — " + "; ".join(f"{i.supplier} ({i.invoice_number or 'no number'})" for i in needs[:5]) if needs else ""),
-             f"Flagged over ₪5,000: {len(flagged)}" + (" — " + "; ".join(f"{i.supplier} ₪{i.amount:,.0f}" for i in flagged[:5]) if flagged else ""),
+    lines = [f"AIDO Lead Copilot - {day.isoformat()}",
+             f"New leads logged: {len(new)}",
+             f"Needs a look: {len(needs)}" + (" - " + "; ".join(r.business_name for r in needs[:5]) if needs else ""),
+             f"Hot leads waiting: {len(hot_waiting)}" + (" - " + "; ".join(f"{r.business_name} ₪{r.deal_value:,}" for r in hot_waiting[:5]) if hot_waiting else ""),
              f"Chat: {messages} messages · {run_count} model runs · ${cost:.2f} of ${settings.daily_cap_usd:.2f} cap",
-             f"Runs not OK: {not_ok}" + (" — check the runs table and runbook.md" if not_ok else "")]
+             f"Runs not OK: {not_ok}" + (" - check the runs table and runbook.md" if not_ok else "")]
     return "\n".join(lines)
 
 
