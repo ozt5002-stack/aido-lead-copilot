@@ -1,3 +1,9 @@
+# AIDO Lead Copilot
+
+> **Work in progress.** This repo is being turned from [MaceTenth/bakery-copilot](https://github.com/MaceTenth/bakery-copilot) (the AIDO course project, whose history is kept here) into an internal assistant for AIDO consultants. What it will do: [spec.md](spec.md) and [docs/01-design.md](docs/01-design.md). The sections below still describe the original bakery app until they are rewritten.
+
+---
+
 # Bakery Copilot
 
 A chat app for one bakery chain, built the Lesson 9 way: a chat UI, a backend with an agent loop and three tools, Postgres, and a morning digest, all on Railway for a few dollars a month. Staff ask about sales and log supplier invoices from a photo.
