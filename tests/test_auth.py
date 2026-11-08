@@ -41,3 +41,12 @@ def test_me_returns_the_user_when_signed_in(client):
     client.cookies.clear()
     assert client.post("/api/login", json={"name": "עוז", "password": "test-pass"}).status_code == 200
     assert client.get("/api/me").json()["name"] == "עוז"
+
+
+def test_me_is_null_when_the_cookie_points_at_a_deleted_user(client):
+    from app import auth
+
+    client.cookies.clear()
+    client.cookies.set("bc_session", auth.make_token(99999, "x"))  # signed correctly, but no such user row
+    assert client.get("/api/me").json() is None
+    assert client.get("/api/conversations").status_code == 401

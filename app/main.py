@@ -107,7 +107,7 @@ def logout(response: Response):
 @app.get("/api/me")
 def me(request: Request, db: Session = Depends(get_db)):
     """Who is signed in. Answers 200 with null when nobody is, so the page's boot check logs no error
-    (plan task 6: no console errors). Every other /api route still answers 401 without a session."""
+    (plan task 6: no console errors). Every data route still answers 401 without a session."""
     try:
         user = auth.current_user(request, db)
     except HTTPException:
