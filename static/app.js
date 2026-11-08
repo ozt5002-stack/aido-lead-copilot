@@ -13,13 +13,21 @@
     if (!res.ok) {
       let detail = res.statusText;
       try { detail = (await res.json()).detail || detail; } catch (_) {}
-      throw new Error(detail);
+      throw new Error(detailText(detail));
     }
     return res.status === 204 ? null : res.json();
   }
   function render(md) {
-    if (window.marked) { try { return marked.parse(md, { breaks: true }); } catch (_) {} }
+    // Model text can echo meeting notes or business names, so the HTML is always sanitised. If either library
+    // did not load (CDN blocked), the reply is shown as escaped plain text instead.
+    if (window.marked && window.DOMPurify) {
+      try { return DOMPurify.sanitize(marked.parse(md, { breaks: true }), { USE_PROFILES: { html: true } }); } catch (_) {}
+    }
     const div = document.createElement("div"); div.textContent = md; return div.innerHTML.replace(/\n/g, "<br>");
+  }
+  function detailText(detail) {
+    if (Array.isArray(detail)) return "חלק מהפרטים חסרים או לא תקינים. בדוק את השם והסיסמה.";
+    return typeof detail === "string" ? detail : "משהו השתבש. נסה שוב.";
   }
   function escapeHtml(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
   function setStatus(text) { $("status").textContent = text || ""; }
@@ -140,7 +148,7 @@
         method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ conversation_id: state.current, message: text, image: image ? { media_type: image.media_type, data: image.data } : null }),
       });
-      if (!res.ok) { let d = res.statusText; try { d = (await res.json()).detail || d; } catch (_) {} throw new Error(d); }
+      if (!res.ok) { let d = res.statusText; try { d = (await res.json()).detail || d; } catch (_) {} throw new Error(detailText(d)); }
       const reader = res.body.getReader(); const decoder = new TextDecoder(); let buffer = "";
       while (true) {
         const { value, done } = await reader.read(); if (done) break;
@@ -155,7 +163,12 @@
           else if (ev.type === "tool") {
             const label = TOOL_HE[ev.name] || ev.name;
             if (ev.status === "start") { setStatus(`${label}…`); }
-            else { const c = document.createElement("span"); c.className = "chip tool"; c.title = ev.summary || ""; c.textContent = `✓ ${label}`; meta.appendChild(c); }
+            else {
+              const c = document.createElement("span"); c.className = "chip tool"; c.title = ev.summary || "";
+              c.textContent = `✓ ${label} `;
+              const n = document.createElement("span"); n.className = "tool-name"; n.textContent = ev.name; c.appendChild(n);
+              meta.appendChild(c);
+            }
           }
           else if (ev.type === "done") { const u = ev.usage || {}; const c = document.createElement("span"); c.className = "chip"; c.textContent = `${u.input_tokens || 0} טוקנים פנימה · ${u.output_tokens || 0} החוצה · $${(ev.cost_usd || 0).toFixed(4)}`; meta.appendChild(c); }
           else if (ev.type === "error") { full += `\n\n**שגיאה:** ${ev.message}`; body.innerHTML = render(full); }
@@ -166,26 +179,38 @@
     } finally {
       body.classList.remove("cursor"); state.streaming = false; $("send").disabled = false; setStatus("");
       await loadConversationsQuiet();
+      if (!$("leads").classList.contains("hidden")) await loadLeads();
     }
   });
   async function loadConversationsQuiet() { try { state.conversations = await api("/api/conversations"); renderConversations(); } catch (_) {} }
 
   // ---------- leads panel ----------
+  const STAGES = new Set(["firefighter", "builder", "inspector"]);
+  function heDate(iso) {
+    if (!iso) return "";
+    const [y, m, d] = iso.split("-");
+    return d && m && y ? `${d}.${m}.${y}` : escapeHtml(iso);
+  }
   function stageCell(r) {
-    if (!r.stage) return '<span class="stage none">ללא אבחון</span>';
-    return `<span class="stage ${r.stage}">${escapeHtml(r.stage_he)}</span><span class="score">${r.total_score}</span>`;
+    if (!STAGES.has(r.stage)) return '<span class="stage none">ללא אבחון</span>';
+    return `<span class="stage ${r.stage}">${escapeHtml(r.stage_he || "")}</span><span class="score">${escapeHtml(String(r.total_score ?? ""))}</span>`;
   }
   async function loadLeads() {
     $("lead-rows").innerHTML = `<tr><td colspan="4"><small>טוען…</small></td></tr>`;
-    const rows = await api("/api/leads");
-    $("lead-rows").innerHTML = rows.map((r) => `<tr>
-        <td class="date">${escapeHtml(r.lead_date || "")}</td>
+    let rows;
+    try { rows = await api("/api/leads"); }
+    catch (err) { $("lead-rows").innerHTML = `<tr><td colspan="4"><small class="error">לא הצלחתי לטעון את הלידים: ${escapeHtml(err.message)}</small></td></tr>`; return; }
+    $("lead-rows").innerHTML = rows.map((r) => {
+      const rec = r.record_status === "needs_a_look" ? "needs_a_look" : "logged";
+      return `<tr>
+        <td class="date">${heDate(r.lead_date)}</td>
         <td><strong>${escapeHtml(r.business_name)}</strong><small>${escapeHtml(r.industry || "")}</small></td>
         <td>${stageCell(r)}</td>
-        <td><span class="badge ${r.record_status}">${RECORD_HE[r.record_status] || r.record_status}</span>${r.hot ? '<span class="badge hot">חם</span>' : ""}<span class="pipeline">${STATUS_HE[r.pipeline_status] || ""}</span></td>
-      </tr>`).join("") || `<tr><td colspan="4"><small>אין עדיין לידים.</small></td></tr>`;
+        <td><span class="badge ${rec}">${RECORD_HE[rec]}</span>${r.hot ? '<span class="badge hot">חם</span>' : ""}<span class="pipeline">${escapeHtml(STATUS_HE[r.pipeline_status] || "")}</span></td>
+      </tr>`;
+    }).join("") || `<tr><td colspan="4"><small>אין עדיין לידים.</small></td></tr>`;
   }
-  $("toggle-leads").addEventListener("click", async () => { $("leads").classList.toggle("hidden"); if (!$("leads").classList.contains("hidden")) await loadLeads().catch(() => {}); });
+  $("toggle-leads").addEventListener("click", async () => { $("leads").classList.toggle("hidden"); if (!$("leads").classList.contains("hidden")) await loadLeads(); });
   $("close-leads").addEventListener("click", () => $("leads").classList.add("hidden"));
 
   // ---------- boot ----------

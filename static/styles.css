@@ -7,19 +7,19 @@
   --line: #DDD8CC;
   --ink: #1D2A2E;
   --muted: #5E6B6E;
-  --dim: #8A9497;
+  --dim: #5F6B6E;
 
   --teal: #0F5C5C;
   --teal-2: #13797A;
   --teal-soft: #DCEDEA;
-  --gold: #C8902E;
+  --gold: #8F6418;
 
-  --firefighter: #C2452D;  --firefighter-bg: #FBE3DD;
-  --builder: #B7791F;      --builder-bg: #FBEFD6;
-  --inspector: #2F7D4F;    --inspector-bg: #DDF0E4;
+  --firefighter: #A3321D;  --firefighter-bg: #FBE3DD;
+  --builder: #7E520C;      --builder-bg: #FBEFD6;
+  --inspector: #22623C;    --inspector-bg: #DDF0E4;
   --hot: #B42318;          --hot-bg: #FDE2DF;
   --look: #8A5A00;         --look-bg: #FFF1C9;
-  --ok: #2F7D4F;           --ok-bg: #DDF0E4;
+  --ok: #22623C;           --ok-bg: #DDF0E4;
 
   --font: "Heebo", "Segoe UI", Arial, sans-serif;
   --mono: Consolas, "Courier New", monospace;
@@ -48,7 +48,7 @@ button:disabled { opacity: .55; cursor: default; }
 /* ---------- logo ---------- */
 .logo { width: 46px; height: 46px; border-radius: 14px; background: var(--teal); display: grid; place-items: center; margin-bottom: 14px; box-shadow: inset 0 -4px 0 rgba(0,0,0,.18); }
 .logo span { color: #fff; font-weight: 800; font-size: 22px; }
-.logo span::after { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); margin-inline-start: 2px; }
+.logo span::after { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #E0A93F; margin-inline-start: 2px; }
 .logo.small { width: 34px; height: 34px; border-radius: 10px; margin: 0; flex: none; }
 .logo.small span { font-size: 16px; }
 
