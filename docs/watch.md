@@ -1,4 +1,4 @@
-# Watch — the six numbers, every Friday
+# Watch - the six numbers for AIDO Lead Copilot, every Friday
 
 One row per week. The trend is the only early warning a small product gets (Lesson 9, slide 30).
 
@@ -8,8 +8,8 @@ One row per week. The trend is the only early warning a small product gets (Less
 
 Where each number comes from:
 
-- **Errors**: `SELECT count(*) FROM runs WHERE status <> 'ok' AND created_at > now() - interval '7 days'` (Railway → Postgres → Data), or the digest's "Runs not OK" line summed over the week.
+- **Errors**: `SELECT count(*) FROM runs WHERE status <> 'ok' AND created_at > now() - interval '7 days'` (Railway → Postgres → Data), or the digest's "ריצות לא תקינות" line summed over the week.
 - **Model spend**: platform.claude.com → Usage, or `SELECT sum(cost_usd) FROM runs` for the week.
 - **First token**: Railway logs (`/api/chat` request durations) or a stopwatch on three real questions.
 - **DB size**: Railway → Postgres → Metrics.
-- **Eval pass rate**: last row of `evals/history.csv` after a weekly `python -m evals.run`.
+- **Eval pass rate**: last row of `evals/history.csv` after a weekly `python -m evals.run --baseline 0.8` (every `must_pass` case must pass too).
