@@ -23,3 +23,6 @@ timestamp,git_sha,model,effort,passed,total,pass_rate,input_tokens,output_tokens
 20261108T162722Z,9de4107,claude-opus-5-5,medium,19,20,0.950,21201,8496,0.3185,True
 20261108T163952Z,573fd37,claude-opus-5-5,medium,20,20,1.000,15297,8341,0.2896,False
 20261108T164227Z,573fd37,claude-opus-5-5,medium,20,20,1.000,15099,7738,0.2798,False
+20261108T182351Z,962e8b7,claude-opus-5-5,medium,21,21,1.000,19051,8687,0.3143,False
+20261108T182634Z,962e8b7,claude-opus-5-5,medium,21,21,1.000,18364,8477,0.3393,False
+20261108T182912Z,962e8b7,claude-opus-5-5,medium,21,21,1.000,18417,8093,0.3072,True
