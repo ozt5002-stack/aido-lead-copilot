@@ -41,7 +41,10 @@ def build_digest(db: Session, day: date | None = None) -> str:
       settings.timezone. Seeded, fictional rows never count as new.
     - Hot leads waiting: every lead, seeded or logged, with a deal value of 25,000 or more whose status is
       new or contacted; the top five by deal value are named.
-    - Spend: messages, model runs and their cost during `day`, against the daily cap.
+    - Spend: messages, model runs and their cost during `day`, against the daily cap; runs that did not end
+      "ok" (error, refusal, aborted) are counted as not OK.
+    A seeded lead whose diagnosis was filled in through the chat is not "new": it was not created that day
+    (docs/02-architecture.md, created_at and origin), and the table keeps no fill-in time.
     """
     tz = ZoneInfo(settings.timezone)
     day = day or (datetime.now(tz).date() - timedelta(days=1))
@@ -67,9 +70,9 @@ def build_digest(db: Session, day: date | None = None) -> str:
     lines = [f"AIDO Lead Copilot · סיכום בוקר ל-{_he_date(day)}"]
     if new:
         lines.append(f"לידים חדשים אתמול: {len(new)}"
-                     + (f" (מתוכם {len(needs)} צריכים בדיקה)" if needs else "")
+                     + ((" (אחד מהם צריך בדיקה)" if len(needs) == 1 else f" (מתוכם {len(needs)} צריכים בדיקה)") if needs else "")
                      + " · " + "; ".join(f"{r.business_name} ({stage(r)})" for r in new[:5])
-                     + (" ועוד" if len(new) > 5 else ""))
+                     + (f" ועוד {len(new) - 5}" if len(new) > 5 else ""))
     else:
         lines.append("לידים חדשים אתמול: אין")
     if needs:
@@ -77,11 +80,13 @@ def build_digest(db: Session, day: date | None = None) -> str:
     if hot_waiting:
         lines.append(f"לידים חמים שמחכים לטיפול: {len(hot_waiting)} · "
                      + "; ".join(f"{r.business_name} ₪{r.deal_value:,} ({STATUS_HE.get(r.pipeline_status, r.pipeline_status)})"
-                                 for r in hot_waiting[:5]))
+                                 for r in hot_waiting[:5])
+                     + (f" ועוד {len(hot_waiting) - 5}" if len(hot_waiting) > 5 else ""))
     else:
         lines.append("לידים חמים שמחכים לטיפול: אין")
     lines.append(f"צ'אט: {messages} הודעות · {run_count} ריצות מודל · ${cost:.2f} מתוך תקרה של ${settings.daily_cap_usd:.2f}")
-    lines.append(f"ריצות שנכשלו: {not_ok}" + (" · כדאי לבדוק את טבלת runs ואת runbook.md" if not_ok else ""))
+    lines.append(f"ריצות לא תקינות (שגיאה, סירוב או ניתוק): {not_ok}"
+                 + (" · כדאי לבדוק את טבלת runs ואת runbook.md" if not_ok else ""))
     return "\n".join(lines)
 
 

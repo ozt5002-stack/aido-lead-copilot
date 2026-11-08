@@ -1,5 +1,5 @@
 """The morning digest: new = chat rows from the local yesterday only, hot-and-waiting, spend. Own empty database."""
-from datetime import date, datetime, timezone
+from datetime import date, datetime
 
 import pytest
 from sqlalchemy.orm import Session
@@ -43,18 +43,47 @@ def test_only_chat_rows_from_the_local_day_count_as_new(db):
     assert "ג מוקדם" not in text and "ד מאוחר" not in text and "ה בדיוני" not in text
 
 
-def test_the_full_seed_is_never_counted_as_new(db, tmp_path):
+def test_the_full_seed_is_never_counted_as_new(db):
     from pathlib import Path
 
     seed_leads(db, Path(__file__).resolve().parent.parent / "data" / "leads.csv")
-    today = datetime.now(timezone.utc).date()
-    assert line(build_digest(db, today), "לידים חדשים אתמול:") == "לידים חדשים אתמול: אין"
+    db.query(Lead).update({Lead.created_at: datetime(2026, 7, 15, 9, 0)})  # inside DAY: only the origin filter keeps them out
+    db.commit()
+    assert line(build_digest(db, DAY), "לידים חדשים אתמול:") == "לידים חדשים אתמול: אין"
+
+
+def test_a_seeded_lead_filled_in_by_chat_is_not_new(db):
+    from app.tools.leads import log_lead
+
+    lead(db, "ז מהזרע", origin="seed", created=datetime(2026, 1, 1), stage=None, score=None)
+    assert log_lead(db, business_name="ז מהזרע", total_score=40)["action"] == "filled"
+    assert line(build_digest(db, DAY), "לידים חדשים אתמול:") == "לידים חדשים אתמול: אין"
+
+
+@pytest.mark.parametrize("day, inside, outside", [
+    # winter, UTC+2: the local day is 22:00 to 22:00 UTC
+    (date(2026, 1, 15), [datetime(2026, 1, 14, 22, 30)], [datetime(2026, 1, 14, 21, 30), datetime(2026, 1, 15, 22, 30)]),
+    # 2026-03-27, clocks go forward at 02:00 local: the day starts at 22:00 UTC and ends at 21:00 UTC (23 hours)
+    (date(2026, 3, 27), [datetime(2026, 3, 26, 22, 30), datetime(2026, 3, 27, 20, 30)],
+     [datetime(2026, 3, 26, 21, 30), datetime(2026, 3, 27, 21, 30)]),
+    # 2026-10-25, clocks go back at 02:00 local: the day starts at 21:00 UTC and ends at 22:00 UTC (25 hours)
+    (date(2026, 10, 25), [datetime(2026, 10, 24, 21, 30), datetime(2026, 10, 25, 21, 30)],
+     [datetime(2026, 10, 24, 20, 30), datetime(2026, 10, 25, 22, 30)]),
+])
+def test_local_day_in_winter_and_on_clock_change_days(db, day, inside, outside):
+    for i, when in enumerate(inside):
+        lead(db, f"בפנים {i}", created=when)
+    for i, when in enumerate(outside):
+        lead(db, f"בחוץ {i}", created=when)
+    new = line(build_digest(db, day), "לידים חדשים אתמול:")
+    assert new.startswith(f"לידים חדשים אתמול: {len(inside)}")
+    assert "בחוץ" not in new
 
 
 def test_needs_a_look_is_named(db):
     lead(db, "ו בלי ציון", record="needs_a_look", stage=None, score=None)
     text = build_digest(db, DAY)
-    assert "(מתוכם 1 צריכים בדיקה)" in text
+    assert "(אחד מהם צריך בדיקה)" in text
     assert line(text, "צריכים בדיקה:") == "צריכים בדיקה: ו בלי ציון"
     assert "ו בלי ציון (ללא אבחון)" in text
 
@@ -89,11 +118,20 @@ def test_spend_and_failed_runs_for_the_day(db):
     db.commit()
     text = build_digest(db, DAY)
     assert "צ'אט: 1 הודעות · 2 ריצות מודל · $0.15 מתוך תקרה של $" in text
-    assert line(text, "ריצות שנכשלו:").startswith("ריצות שנכשלו: 1 · ")
+    assert line(text, "ריצות לא תקינות").startswith("ריצות לא תקינות (שגיאה, סירוב או ניתוק): 1 · ")
 
 
 def test_empty_day_says_so(db):
     text = build_digest(db, DAY)
     assert text.split("\n")[0] == "AIDO Lead Copilot · סיכום בוקר ל-15.07.2026"
     assert "לידים חדשים אתמול: אין" in text and "לידים חמים שמחכים לטיפול: אין" in text
-    assert line(text, "ריצות שנכשלו:") == "ריצות שנכשלו: 0"
+    assert line(text, "ריצות לא תקינות") == "ריצות לא תקינות (שגיאה, סירוב או ניתוק): 0"
+
+
+def test_more_than_five_are_counted_not_silently_cut(db):
+    for i in range(7):
+        lead(db, f"עסק {i}")
+        lead(db, f"חם {i}", origin="seed", created=datetime(2026, 1, 1), value=30000 + i)
+    text = build_digest(db, DAY)
+    assert line(text, "לידים חדשים אתמול:").endswith(" ועוד 2")
+    assert line(text, "לידים חמים שמחכים לטיפול:").endswith(" ועוד 2")
