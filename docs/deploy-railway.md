@@ -71,7 +71,7 @@ It opens the browser. On a machine without one, `railway login --browserless` pr
 
 ### 3.1 The secrets
 
-Six names are secrets or carry one. Their values live in Railway's Variables tab and nowhere else: not in `.env.example`, not in `railway.ts`, not in a commit message, not in a chat with Claude Code (practice.md, "Never").
+Six names are secrets or carry one. Their values live in Railway's Variables tab and nowhere else: not in `.env.example`, not in `railway.ts`, not in a commit message, not in a chat with Claude Code (CONTRIBUTING.md, "Never").
 
 | Name | What it is | Where the value comes from | Set on |
 |---|---|---|---|
@@ -91,7 +91,7 @@ Optional in the code (`app/config.py` has the same defaults), but set them anywa
 | Name | Production value | Meaning |
 |---|---|---|
 | `APP_ENV` | `production` | turns on the startup check for the three secrets and the `secure` flag on the cookie. Without it a missing `APP_PASSWORD` silently becomes `bakery` and a missing `APP_SECRET` becomes a new random value on every start, which signs everyone out at each deploy |
-| `MODEL` | `claude-opus-5-5` | the chat model. Change it only with an eval run before and after (practice.md) |
+| `MODEL` | `claude-opus-5-5` | the chat model. Change it only with an eval run before and after (CONTRIBUTING.md) |
 | `MODEL_EFFORT` | `medium` | `low`, `medium` or `high` |
 | `HISTORY_LIMIT` | `20` | messages resent per turn |
 | `RATE_LIMIT_PER_HOUR` | `30` | per user |
@@ -323,7 +323,7 @@ Do not set the start command, health check, cron schedule or restart policy by h
 
 **Ship a change.** Branch → PR → CI green → merge. Railway builds `main` on push once the GitHub app has access; `railway deployment list --service web` shows each deployment with its commit and status, and `railway logs --service web -b` follows the build, `-d` the running app.
 
-**Change a service setting** (schedule, health timeout, retries, replicas, region). Edit `.railway/railway.ts` in a ticket branch, run `railway config plan`, put the plan's output in the PR, merge, then `railway config apply --yes`. Railway never applies the file by itself; the apply is a deliberate step by a person with the CLI. If a decision changed, `docs/02-architecture.md` changes in the same commit (practice.md step 6).
+**Change a service setting** (schedule, health timeout, retries, replicas, region). Edit `.railway/railway.ts` in a ticket branch, run `railway config plan`, put the plan's output in the PR, merge, then `railway config apply --yes`. Railway never applies the file by itself; the apply is a deliberate step by a person with the CLI. If a decision changed, `docs/02-architecture.md` changes in the same commit (CONTRIBUTING.md step 6).
 
 **Change a variable.** Dashboard → edit → **Deploy**, or `railway variable set NAME=value --service web`, which redeploys `web` at once unless you pass `--skip-deploys`. The digest reads its `${{web.NAME}}` references at its next run. `MODEL` and `MODEL_EFFORT` need an eval run before and after.
 
@@ -347,7 +347,7 @@ Remove-Variable v
 
 It returns the text and whether it was sent to the webhook.
 
-**Look at the database.** Read only: rows are never edited by hand (practice.md). The database has no public address, because `railway add --database postgres` creates no TCP proxy, and that is the safer way to keep it. So every way in goes over SSH, and Railway must know your SSH key first. Once per machine:
+**Look at the database.** Read only: rows are never edited by hand (CONTRIBUTING.md). The database has no public address, because `railway add --database postgres` creates no TCP proxy, and that is the safer way to keep it. So every way in goes over SSH, and Railway must know your SSH key first. Once per machine:
 
 ```bash
 railway ssh keys add
@@ -393,7 +393,6 @@ Expect `29115`. `railway ssh --service web -- python -m app.digest` prints the d
 | Windows: a `${{...}}` reference arrives empty or as `}` | it was in double quotes, and PowerShell expanded it as a variable | single quotes, as in step 4 |
 | Windows: `curl` prompts for parameters or fails with `Invoke-WebRequest` errors | Windows PowerShell 5.1 maps `curl` to `Invoke-WebRequest` | `Invoke-RestMethod` as in step 7, or `curl.exe` |
 | Windows: `UnicodeEncodeError: 'charmap' codec can't encode character '₪'` when `python -m app.digest` writes to a file or a pipe | redirected output uses the Windows code page, which has no ₪ | `$env:PYTHONUTF8 = '1'` in that window |
-| Windows: `$'\r': command not found` from `scripts/create_issues.sh` in Git Bash | the script was checked out with Windows line endings | `.gitattributes` now keeps `.sh` files LF; in an older clone, delete the file and run `git checkout -- scripts/create_issues.sh` |
 
 ## 8. Railway CLI cheat sheet
 
