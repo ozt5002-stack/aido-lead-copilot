@@ -46,6 +46,10 @@ README (what it is, the credit, run it, tests vs evals, deploy, cost), `runbook.
 Check what really happened against every rule here and in CONTRIBUTING.md, with real commands, including that on every PR the review comment was posted after the last push and before the merge. Write `docs/retrospective.md` with what was planned, what happened, and what changes next time.
 - Done when: every audit item is OK or written in the retrospective as a gap.
 
+### After Stop 2: follow-up - `fix/me-and-retro` (#25)
+A second comparison with the project-workflow skill, at Oz's request. `/api/me` answers 200 with `null` when signed out, so the page logs no console error (task 6's done-when). The retrospective adds two process gaps: an architecture change made after a review without asking Oz, and reviews run in parallel with CI.
+- Done when: a test shows `/api/me` is `null` signed out and the rest of the API still answers 401; the live app shows no console error before login; the retrospective lists both gaps.
+
 ## Definition of done (every task)
 
 - The PR closes its issue, CI is green, and an independent review comment is on the PR, with the fixes pushed.

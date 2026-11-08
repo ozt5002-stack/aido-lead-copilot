@@ -215,7 +215,10 @@
 
   // ---------- boot ----------
   (async () => {
-    try { state.user = await api("/api/me"); showApp(); await loadConversations(); }
-    catch (_) { showLogin(); }
+    try {
+      state.user = await api("/api/me");  // null when signed out: no 401 in the console
+      if (!state.user) { showLogin(); return; }
+      showApp(); await loadConversations();
+    } catch (_) { showLogin(); }
   })();
 })();

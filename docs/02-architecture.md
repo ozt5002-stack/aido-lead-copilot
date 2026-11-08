@@ -18,7 +18,7 @@ This is the bakery-copilot architecture with the domain swapped. The layers, the
 | Data generator | `scripts/generate_leads.py` (new) | Seeded generator of the fictional dataset | New |
 | Dataset | `data/leads.csv`, `data/README.md` (new) | The fictional leads, committed | Replaces `bakery_sales.csv` and `suppliers.csv` |
 | Digest | `app/digest.py` | Morning lines, in Hebrew: new leads yesterday (`origin = chat`, created on the previous local `Asia/Jerusalem` day), hot leads waiting (all rows), spend | Rewritten queries |
-| Auth, limits, costs, config | `app/auth.py`, `limits.py`, `costs.py`, `config.py` | Shared password + name cookie; 30/hour per user; $3/day cap; token prices | Unchanged |
+| Auth, limits, costs, config | `app/auth.py`, `limits.py`, `costs.py`, `config.py` | Shared password + name cookie; 30/hour per user; $3/day cap; token prices | `/api/me` answers 200 with `null` when signed out (no console error at boot, #25); every data route still answers 401 |
 | Tests | `tests/` | Deterministic parts, model mocked (pass/fail) | New tests for stage, leads tools, generator, digest |
 | Evals | `evals/cases.yaml`, `evals/run.py`, `.github/workflows/ci.yml` | Real model answers scored against expectations (a pass rate) | New cases; `run.py` grades lead rows instead of invoices; a case can carry `must_pass: true` (every missing-score case does), and the run exits 1 if any of those fails, whatever the pass rate |
 | Hosting | `.railway/railway.ts` | Web service, digest cron, Postgres on Railway | Repo source and project name change |

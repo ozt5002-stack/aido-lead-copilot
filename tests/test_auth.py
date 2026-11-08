@@ -25,3 +25,28 @@ def test_tampered_token_is_rejected():
     assert auth.read_token(encode(other_user, sig)) is None
     assert auth.read_token(encode(payload, flipped)) is None
     assert auth.read_token("not-a-token") is None
+
+
+def test_me_answers_null_not_401_when_signed_out(client):
+    # Plan task 6: the page's boot check must not log a 401 in the console.
+    client.cookies.clear()
+    r = client.get("/api/me")
+    assert r.status_code == 200 and r.json() is None
+    assert client.get("/api/conversations").status_code == 401  # the rest of the API still needs a session
+    client.cookies.set("bc_session", "forged")  # a cookie that does not verify
+    assert client.get("/api/me").json() is None
+
+
+def test_me_returns_the_user_when_signed_in(client):
+    client.cookies.clear()
+    assert client.post("/api/login", json={"name": "עוז", "password": "test-pass"}).status_code == 200
+    assert client.get("/api/me").json()["name"] == "עוז"
+
+
+def test_me_is_null_when_the_cookie_points_at_a_deleted_user(client):
+    from app import auth
+
+    client.cookies.clear()
+    client.cookies.set("bc_session", auth.make_token(99999, "x"))  # signed correctly, but no such user row
+    assert client.get("/api/me").json() is None
+    assert client.get("/api/conversations").status_code == 401
